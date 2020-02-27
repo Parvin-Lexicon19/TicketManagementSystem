@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TicketManagementSystem.Core.Models;
+using TicketManagementSystem.Core.ViewModels;
 using TicketManagementSystem.Data;
 
 namespace TicketManagementSystem.Controllers
@@ -22,8 +23,23 @@ namespace TicketManagementSystem.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
-            return View(await applicationDbContext.ToListAsync());
+            // var applicationDbContext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
+            // return View(await applicationDbContext.ToListAsync());
+
+            var model = await _context.Tickets
+                 .Select(c => new CustomerIndexViewModel
+                  {
+                      RefNo = c.RefNo,
+                      Title = c.Title,
+                      Status = c.Status,
+                      ProjectName = c.Project.Name,
+                      CustomerPriority = c.CustomerPriority,
+                      DueDate = c.DueDate
+
+                  })
+                  .ToListAsync();
+
+            return View(model);
         }
 
         // GET: Tickets/Details/5
