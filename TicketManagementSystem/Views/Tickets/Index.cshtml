@@ -1,13 +1,13 @@
-﻿@model IEnumerable<TicketManagementSystem.Core.Models.Ticket>
+﻿@model IEnumerable<CustomerIndexViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>My Tickets</h1>
 
 <p>
-    <a asp-action="AddTicket">Create New</a>
+    <a asp-action="Create">Add Ticket</a>
 </p>
 <table class="table">
     <thead>
@@ -19,46 +19,16 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Problem)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HoursSpent)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CustomerPriority)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RealPriority)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.DueDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClosedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastUpdated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ResponseType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ResponseDesc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedUser)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AssignedUser)
             </th>
             <th></th>
         </tr>
@@ -73,46 +43,16 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Problem)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HoursSpent)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CustomerPriority)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RealPriority)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClosedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastUpdated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ResponseType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ResponseDesc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedUser.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AssignedUser.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
