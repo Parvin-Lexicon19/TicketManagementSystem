@@ -21,12 +21,24 @@ namespace TicketManagementSystem.Controllers
         }
 
         // GET: Tickets
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string title, int? status, int? priority)
         {
             //var applicationDbContext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
             //return View(await applicationDbContext.ToListAsync());
 
-            var model = await _context.Tickets
+            var model = string.IsNullOrWhiteSpace(title) ?
+                await _context.Tickets.ToListAsync() :
+                await _context.Tickets.Where(m => m.Title == title).ToListAsync();
+
+            model = status == null ?
+                model :
+                model.Where(m => m.Status == (Status)status).ToList();
+
+            model = priority == null ?
+                model :
+                model.Where(m => m.CustomerPriority == (Priority)priority).ToList();
+
+            var viewmodel = await _context.Tickets
                 .Select(c => new CustomerIndexViewModel
                {
                     RefNo = c.RefNo,
@@ -38,8 +50,21 @@ namespace TicketManagementSystem.Controllers
 
             }).ToListAsync();
 
-            return View(model);
+            return View(viewmodel);
         }
+
+        //private static CustomerIndexViewModel CreateIndexViewModel(Ticket ticket)
+        //{
+        //    var model = new CustomerIndexViewModel();
+        //    model.RefNo = ticket.RefNo;
+        //    model.Title = ticket.Title;
+        //    model.Status = ticket.Status;
+        //    model.ProjectName = ticket.Project.Name;
+        //    model.CustomerPriority = ticket.CustomerPriority;
+        //    model.DueDate = ticket.DueDate;
+
+        //    return model;
+        //}
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(long? id)
