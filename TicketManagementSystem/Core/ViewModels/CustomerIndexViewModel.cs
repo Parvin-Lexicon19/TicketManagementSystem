@@ -21,7 +21,9 @@ namespace TicketManagementSystem.Core.ViewModels
         public int ProjectId { get; set; }
         [DisplayName("Project")]
         public string ProjectName { get; set; }
+        [DisplayName("Customer Priority")]
         public Priority CustomerPriority { get; set; }
+        [DisplayName("Due Date")]
         public DateTime DueDate { get; set; }
 
     }
