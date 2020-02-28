@@ -12,7 +12,7 @@ namespace TicketManagementSystem.Core.Models
     {
         public Int64 Id { get; set; }
         [Required]
-        //[DisplayName("Ticket No.")]
+        [DisplayName("Ticket No.")]
         public string RefNo { get; set; }
         [Required]
         public string Title { get; set; }
@@ -27,9 +27,11 @@ namespace TicketManagementSystem.Core.Models
         public Status Status { get; set; }
         public int ProjectId { get; set; }
         [Required]
+        [DisplayName("Customer Priority")]
         public Priority CustomerPriority { get; set; }
         public Priority RealPriority { get; set; }
         [Required]
+        [DisplayName("Due Date")]
         public DateTime DueDate { get; set; }
         public DateTime ClosedDate { get; set; }
         public DateTime LastUpdated { get; set; }

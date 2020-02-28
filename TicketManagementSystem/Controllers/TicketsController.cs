@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using TicketManagementSystem.Core.Models;
 using TicketManagementSystem.Core.ViewModels;
 using TicketManagementSystem.Data;
@@ -24,50 +25,80 @@ namespace TicketManagementSystem.Controllers
 
         // GET: Tickets
         [Authorize]
-        public async Task<IActionResult> Index(string title, int? status, int? priority)
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            //var applicationDbContext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
-            //return View(await applicationDbContext.ToListAsync());
+            IQueryable<Ticket> applicationdbcontext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
 
-            var model = string.IsNullOrWhiteSpace(title) ?
-                await _context.Tickets.ToListAsync() :
-                await _context.Tickets.Where(m => m.Title == title).ToListAsync();
+            applicationdbcontext = SortList(sortOrder, applicationdbcontext);
+
+            return View(await applicationdbcontext.ToListAsync());
+        }
+
+        public async Task<IActionResult> Filter(string title, int? status, int? priority)
+        {
+            var model = await _context.Tickets.ToListAsync();
+            model = string.IsNullOrWhiteSpace(title) ?
+                model :
+                model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
             model = status == null ?
-                model :
-                model.Where(m => m.Status == (Status)status).ToList();
+              model :
+              model.Where(m => m.Status == (Status)status).ToList();
 
             model = priority == null ?
                 model :
                 model.Where(m => m.CustomerPriority == (Priority)priority).ToList();
 
-            var viewmodel = await _context.Tickets
-                .Select(c => new CustomerIndexViewModel
-               {
-                    RefNo = c.RefNo,
-                    Title = c.Title,
-                    Status = c.Status,
-                    ProjectName = c.Project.Name,
-                    CustomerPriority = c.CustomerPriority,
-                    DueDate = c.DueDate
-
-            }).ToListAsync();
-
-            return View(viewmodel);
+            return View(nameof(Index), model);
         }
 
-        //private static CustomerIndexViewModel CreateIndexViewModel(Ticket ticket)
-        //{
-        //    var model = new CustomerIndexViewModel();
-        //    model.RefNo = ticket.RefNo;
-        //    model.Title = ticket.Title;
-        //    model.Status = ticket.Status;
-        //    model.ProjectName = ticket.Project.Name;
-        //    model.CustomerPriority = ticket.CustomerPriority;
-        //    model.DueDate = ticket.DueDate;
+        private IQueryable<Ticket> SortList(string sortOrder, IQueryable<Ticket> ticket)
+        {
+            ViewBag.RefNoSortParm = String.IsNullOrEmpty(sortOrder) ? "RefNo_desc" : "";
+            ViewBag.TitleSortParm = sortOrder == "Title" ? "Title_desc" : "Title";
+            ViewBag.StatusSortParm = sortOrder == "Status" ? "Status_desc" : "Status";
+            ViewBag.ProjectIdSortParm = sortOrder == "ProjectId" ? "ProjectId_desc" : "ProjectId";
+            ViewBag.CustomerPrioritySortParm = sortOrder == "CustomerPriority" ? "CustomerPriority_desc" : "CustomerPriority";
+            ViewBag.DueDateSortParm = sortOrder == "DueDate" ? "DueDate_desc" : "DueDate";
 
-        //    return model;
-        //}
+            switch (sortOrder)
+            {
+                case "RefNo_desc":
+                    ticket = ticket.OrderByDescending(s => s.RefNo);
+                    break;
+
+                case "Title_desc":
+                    ticket = ticket.OrderByDescending(s => s.Title);
+                    break;
+
+                case "Status_desc":
+                    ticket = ticket.OrderByDescending(s => s.Status);
+                    break;
+
+                case "ProjectId_desc":
+
+                    ticket = ticket.OrderByDescending(s => s.ProjectId);
+                    break;
+
+                case "CustomerPriority_desc":
+
+                    ticket = ticket.OrderByDescending(s => s.CustomerPriority);
+                    break;
+
+                case "DueDate_desc":
+
+                    ticket = ticket.OrderByDescending(s => s.DueDate);
+                    break;
+
+                default:
+
+                    ticket = ticket.OrderBy(s => s.RefNo);
+                    break;
+
+            }
+
+            return ticket;
+        }
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(long? id)
