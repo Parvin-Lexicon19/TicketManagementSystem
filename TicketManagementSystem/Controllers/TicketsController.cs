@@ -103,8 +103,13 @@ namespace TicketManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddTicket([Bind("Id,RefNo,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket)
         {
+            //ticket.RefNo = "BITRQ12345";
+            //ticket.CreatedBy = "Developer1";
+            ticket.Status = Status.Draft;
+            ticket.DueDate = DateTime.Now;
+
             if (ModelState.IsValid)
-            {
+            {                
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
