@@ -5,6 +5,11 @@
     <UserSecretsId>aspnet-TicketManagementSystem-60CD32A3-AA20-4A42-B2C0-6DF9C2950332</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20200227123927_Enums.cs" />
+    <Compile Remove="Data\Migrations\20200227123927_Enums.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />

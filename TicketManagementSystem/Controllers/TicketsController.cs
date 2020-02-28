@@ -90,8 +90,8 @@ namespace TicketManagementSystem.Controllers
             return View(ticket);
         }
 
-        // GET: Tickets/Create
-        public IActionResult Create()
+        // GET: Tickets/AddTicket
+        public IActionResult AddTicket()
         {
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
@@ -99,15 +99,20 @@ namespace TicketManagementSystem.Controllers
             return View();
         }
 
-        // POST: Tickets/Create
+        // POST: Tickets/AddTicket
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RefNo,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket)
+        public async Task<IActionResult> AddTicket([Bind("Id,RefNo,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket)
         {
+            //ticket.RefNo = "BITRQ12345";
+            //ticket.CreatedBy = "Developer1";
+            ticket.Status = Status.Draft;
+            ticket.DueDate = DateTime.Now;
+
             if (ModelState.IsValid)
-            {
+            {                
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
