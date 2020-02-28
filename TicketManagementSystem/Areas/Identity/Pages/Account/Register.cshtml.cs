@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using TicketManagementSystem.Core.Models;
@@ -53,6 +54,9 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
         public string RoleName { get; set; }
 
+        public string CompanyNames { get; set; }
+        public SelectList CompanyOption { get; set; }
+
         public class InputModel
         {
             [Required]
@@ -75,11 +79,13 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             [Display(Name = "Role")]
             public string Role { get; set; }
 
-            //[Required]
-            //[Display(Name = "CompanyName")]
-            //public string CompanyName { get; set; }
+            [Required]
+            [Display(Name = "CompanyName")]
+            public string CompanyName { get; set; }
 
-            
+         
+
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -92,11 +98,10 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             var getAllRoles = _context.Roles.Select(x => x);
             ViewData["roles"] = getAllRoles.ToList();
 
-            // pass the Company List using ViewData
+            // pass the Company List.
             var getAllCompanyName = _context.Companies.Select(x => x.CompanyName);
-            ViewData["CompanyName"] = getAllCompanyName.ToList();
+            CompanyOption = new SelectList(_context.Companies.Select(x => x.CompanyName));
 
-          
 
 
 
@@ -109,13 +114,12 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             var role = _roleManager.FindByIdAsync(Input.Role).Result;
             if (ModelState.IsValid)
             {
-                // Get Company Name & CompanyId
-                // var userCompanyName = _context.Companies.FindAsync(Input.CompanyName).Result;
-                //var getCompanyId = userCompanyName.Id;
-                var getCompanyId =  _context.Companies.FirstOrDefault(c => c.CompanyName == "Bitoreq").Id;
+                // Get Company Name 
+                var userCompanyName = _context.Companies.FirstOrDefault(c => c.CompanyName == Input.CompanyName);
+              
+                // Assign the company id when you create user.
 
-
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email,CompanyId = getCompanyId};
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email,CompanyId = userCompanyName.Id};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -123,7 +127,7 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
                     // Assign Role to the user.
                     await _userManager.AddToRoleAsync(user, role.Name);
 
-                    // Link User with Company.
+                    
 
 
 
