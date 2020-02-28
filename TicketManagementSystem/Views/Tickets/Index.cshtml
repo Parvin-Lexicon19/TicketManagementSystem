@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CustomerIndexViewModel>
+﻿@model IEnumerable<Ticket>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,15 +6,14 @@
 
 <h1>My Tickets</h1>
 
-
 <form asp-action="Filter">
     <div class="input-group mb-3">
-        <input type="text" name="title" class="form-control" placeholder="Search By Title" />
+        <input type="text" name="title" class="form-control" placeholder="Search on Title" />
         <div class="input-group-append">
-            <select name="genre" asp-items="@Html.GetEnumSelectList<Status>()" class="form-control">
+            <select name="status" asp-items="@Html.GetEnumSelectList<Status>()" class="form-control">
                 <option selected="selected" value="">Status</option>
             </select>
-            <select name="genre" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
+            <select name="priority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
                 <option selected="selected" value="">Priority</option>
             </select>
         </div>
@@ -24,61 +23,68 @@
     </div>
 </form>
 
-<p>
-    <a asp-action="AddTicket">Add Ticket</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RefNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProjectName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerPriority)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DueDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <p>
+        <a asp-action="AddTicket">Add Ticket</a>
+    </p>
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RefNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProjectName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerPriority)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DueDate)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.RefNo)*@
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "Index", new { sortOrder = ViewBag.RefNoSortParm })
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.Title)*@
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.Title), "Index", new { sortOrder = ViewBag.TitleSortParm })
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.Status)*@
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.Project)*@
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.ProjectId), "Index", new { sortOrder = ViewBag.ProjectIdSortParm })
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.CustomerPriority)*@
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.CustomerPriority), "Index", new { sortOrder = ViewBag.CustomerPrioritySortParm })
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.DueDate)*@
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "Index", new { sortOrder = ViewBag.DueDateSortParm })
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RefNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Project.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerPriority)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DueDate)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
