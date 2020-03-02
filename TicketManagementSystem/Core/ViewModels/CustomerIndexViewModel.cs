@@ -17,12 +17,12 @@ namespace TicketManagementSystem.Core.ViewModels
         public string RefNo { get; set; }
         [Required]
         public string Title { get; set; }
-        public Status Status { get; set; }
+        public Status? Status { get; set; }
         public int ProjectId { get; set; }
         [DisplayName("Project")]
         public string ProjectName { get; set; }
         [DisplayName("Customer Priority")]
-        public Priority CustomerPriority { get; set; }
+        public Priority? CustomerPriority { get; set; }
         [DisplayName("Due Date")]
         public DateTime DueDate { get; set; }
 

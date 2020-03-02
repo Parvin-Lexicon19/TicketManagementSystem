@@ -31,16 +31,43 @@ namespace TicketManagementSystem.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string sortOrder)
         {
-            IQueryable<Ticket> applicationdbcontext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
+            //var applicationdbcontext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
+            // return View(await applicationdbcontext.ToListAsync());
 
-            applicationdbcontext = SortList(sortOrder, applicationdbcontext);
+            var model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                    .Select(s => new CustomerIndexViewModel
+                     {
+                         Id = s.Id,
+                         RefNo = s.RefNo,
+                         Title = s.Title,
+                         Status = s.Status,
+                         ProjectName = s.Project.Name,
+                         CustomerPriority = s.CustomerPriority,
+                         DueDate = s.DueDate
+                     })
+                    .ToListAsync();
 
-            return View(await applicationdbcontext.ToListAsync());
+            model = SortList(sortOrder, model);
+            return View(model);
+
         }
 
+        //Filter by Title, Status and Priority
         public async Task<IActionResult> Filter(string title, int? status, int? priority)
         {
-            var model = await _context.Tickets.ToListAsync();
+            var model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                   .Select(s => new CustomerIndexViewModel
+                   {
+                       Id = s.Id,
+                       RefNo = s.RefNo,
+                       Title = s.Title,
+                       Status = s.Status,
+                       ProjectName = s.Project.Name,
+                       CustomerPriority = s.CustomerPriority,
+                       DueDate = s.DueDate
+                   })
+                   .ToListAsync();
+
             model = string.IsNullOrWhiteSpace(title) ?
                 model :
                 model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
@@ -56,49 +83,45 @@ namespace TicketManagementSystem.Controllers
             return View(nameof(Index), model);
         }
 
-        private IQueryable<Ticket> SortList(string sortOrder, IQueryable<Ticket> ticket)
+        //Sort by Attributes
+        private List<CustomerIndexViewModel> SortList(string sortOrder, List<CustomerIndexViewModel> ticket)
         {
             ViewBag.RefNoSortParm = String.IsNullOrEmpty(sortOrder) ? "RefNo_desc" : "";
             ViewBag.TitleSortParm = sortOrder == "Title" ? "Title_desc" : "Title";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "Status_desc" : "Status";
-            ViewBag.ProjectIdSortParm = sortOrder == "ProjectId" ? "ProjectId_desc" : "ProjectId";
+            ViewBag.ProjectNameSortParm = sortOrder == "ProjectName" ? "ProjectName_desc" : "ProjectName";
             ViewBag.CustomerPrioritySortParm = sortOrder == "CustomerPriority" ? "CustomerPriority_desc" : "CustomerPriority";
             ViewBag.DueDateSortParm = sortOrder == "DueDate" ? "DueDate_desc" : "DueDate";
 
             switch (sortOrder)
             {
                 case "RefNo_desc":
-                    ticket = ticket.OrderByDescending(s => s.RefNo);
+                    ticket = ticket.OrderByDescending(s => s.RefNo).ToList();
                     break;
 
                 case "Title_desc":
-                    ticket = ticket.OrderByDescending(s => s.Title);
+                    ticket = ticket.OrderByDescending(s => s.Title).ToList();
                     break;
 
                 case "Status_desc":
-                    ticket = ticket.OrderByDescending(s => s.Status);
+                    ticket = ticket.OrderByDescending(s => s.Status).ToList();
                     break;
 
-                case "ProjectId_desc":
-
-                    ticket = ticket.OrderByDescending(s => s.ProjectId);
+                case "ProjectName_desc":
+                    ticket = ticket.OrderByDescending(s => s.ProjectName).ToList();
                     break;
 
                 case "CustomerPriority_desc":
-
-                    ticket = ticket.OrderByDescending(s => s.CustomerPriority);
+                    ticket = ticket.OrderByDescending(s => s.CustomerPriority).ToList();
                     break;
 
                 case "DueDate_desc":
-
-                    ticket = ticket.OrderByDescending(s => s.DueDate);
+                    ticket = ticket.OrderByDescending(s => s.DueDate).ToList();
                     break;
 
                 default:
-
-                    ticket = ticket.OrderBy(s => s.RefNo);
+                    ticket = ticket.OrderBy(s => s.RefNo).ToList();
                     break;
-
             }
 
             return ticket;
@@ -145,8 +168,12 @@ namespace TicketManagementSystem.Controllers
             ApplicationUser loggedInUser = await userManager.GetUserAsync(User);
             var companyAbbr = _context.Companies.Find(loggedInUser.CompanyId).CompanyAbbr;
             //var companyLastRefNo = _context.Tickets.LastOrDefault(t => t.RefNo.Contains(companyAbbr)).RefNo;
-            var companyLastRefNo = _context.Tickets.Where(t => t.RefNo.Contains(companyAbbr)).ToList().LastOrDefault().RefNo;
-
+            bool companyHasTicket = _context.Tickets.Any(t => t.RefNo.Contains(companyAbbr));
+            //if the company has no tickets, the last RefNo. is se to "00000", otherwise it continues from the last RefNo. for that company
+            string companyLastRefNo = companyHasTicket == true? 
+                _context.Tickets.Where(t => t.RefNo.Contains(companyAbbr)).ToList().LastOrDefault().RefNo
+                : companyLastRefNo = companyAbbr + "00000";
+                
             //Increasin that last RefNo by 1 and assigning it to the newly added ticket
             ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));

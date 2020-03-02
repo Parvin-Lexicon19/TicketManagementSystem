@@ -11,7 +11,6 @@ namespace TicketManagementSystem.Core.Models
     public class Ticket
     {
         public Int64 Id { get; set; }
-        [Required]
         [DisplayName("Ticket No.")]
         public string RefNo { get; set; }
         [Required]
