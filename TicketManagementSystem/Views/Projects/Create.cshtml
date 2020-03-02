@@ -1,10 +1,10 @@
 ﻿@model TicketManagementSystem.Core.Models.Project
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add new project";
 }
 
-<h1>Create</h1>
+    <h1>Add new project</h1>
 
 <h4>Project</h4>
 <hr />
@@ -12,23 +12,17 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CompanyId" class="control-label"></label>
-                <select asp-for="CompanyId" class ="form-control" asp-items="ViewBag.CompanyId"></select>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Developer1" class="control-label"></label>
-                <select asp-for="Developer1" class ="form-control" asp-items="ViewBag.Developer1"></select>
+                <label asp-for="CompanyId" class="control-label"></label>
+                <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyName"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="Developer2" class="control-label"></label>
-                <select asp-for="Developer2" class ="form-control" asp-items="ViewBag.Developer2"></select>
-            </div>
+
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
                 <input asp-for="ReleaseDate" class="form-control" />
@@ -39,21 +33,34 @@
                 <input asp-for="LastUpdate" class="form-control" />
                 <span asp-validation-for="LastUpdate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+            @*<div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
                 <label asp-for="SystemsUsed" class="control-label"></label>
                 <input asp-for="SystemsUsed" class="form-control" />
                 <span asp-validation-for="SystemsUsed" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                @Html.TextAreaFor(model => model.Description, 5, 1, new { @class = "form-control" })
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Developer1" class="control-label"></label>
+                <select asp-for="Developer1" class="form-control" asp-items="ViewBag.Developer1"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Developer2" class="control-label"></label>
+                <select asp-for="Developer2" class="form-control" asp-items="ViewBag.Developer2"></select>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
-    </div>
+</div>
 </div>
 
 <div>

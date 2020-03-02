@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TicketManagementSystem.Data;
 
 namespace TicketManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200228094958_update companies")]
+    partial class updatecompanies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -346,7 +348,6 @@ namespace TicketManagementSystem.Data.Migrations
                         .HasMaxLength(500);
 
                     b.Property<string>("Developer1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Developer2")
@@ -560,8 +561,7 @@ namespace TicketManagementSystem.Data.Migrations
                     b.HasOne("TicketManagementSystem.Core.Models.ApplicationUser", "Developer1User")
                         .WithMany("ProjectDeveloper1")
                         .HasForeignKey("Developer1")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TicketManagementSystem.Core.Models.ApplicationUser", "Developer2User")
                         .WithMany("ProjectDeveloper2")

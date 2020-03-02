@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using TicketManagementSystem.Data;
 
 namespace TicketManagementSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -50,9 +52,21 @@ namespace TicketManagementSystem.Controllers
         // GET: Projects/Create
         public IActionResult Create()
         {
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "CompanyAbbr");
-            ViewData["Developer1"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
-            ViewData["Developer2"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
+            var developerrole = _context.Roles.Where(r => r.Name == "Developer").FirstOrDefault().Id;
+            var developersid = _context.UserRoles.Where(ur => ur.RoleId == developerrole).Select(u => u.UserId).ToList();
+
+            var developers = _context.Users.Where(u => developersid.Contains(u.Id)).Select(i => new SelectListItem()
+            {
+                Text = i.UserName,
+                Value = i.Id
+            });
+
+
+
+
+            ViewData["CompanyName"] = new SelectList(_context.Companies, "Id", "CompanyName");
+            ViewData["Developer1"] = developers;
+            ViewData["Developer2"] = developers;
             return View();
         }
 
@@ -69,7 +83,7 @@ namespace TicketManagementSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "CompanyAbbr", project.CompanyId);
+            ViewData["CompanyName"] = new SelectList(_context.Companies, "Id", "CompanyName", project.CompanyId);
             ViewData["Developer1"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", project.Developer1);
             ViewData["Developer2"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", project.Developer2);
             return View(project);
