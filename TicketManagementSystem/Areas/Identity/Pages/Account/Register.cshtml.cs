@@ -98,9 +98,10 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             var getAllRoles = _context.Roles.Select(x => x);
             ViewData["roles"] = getAllRoles.ToList();
 
-            // pass the Company List.
-            var getAllCompanyName = _context.Companies.Select(x => x.CompanyName);
-            CompanyOption = new SelectList(_context.Companies.Select(x => x.CompanyName));
+            // pass the Company List.Sort by company Name.
+            var getAllCompanyName = _context.Companies.OrderBy(x => x.CompanyName);
+            
+            CompanyOption = new SelectList(getAllCompanyName.Select(x => x.CompanyName));
 
 
 
