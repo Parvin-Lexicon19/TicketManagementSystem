@@ -4,10 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
-    <table class="table" >
+    @*<table class="table" >
         <th width="90%"><h1>My Tickets</h1></th>
         <th><h1>Welcome </h1></th>
-    </table>
+    </table>*@
 @*<h1>My Tickets</h1>*@
 
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -56,12 +56,12 @@
             </div>
         </form>
 
-@*@if (User.IsInRole("Customer"))
-    {*@
+@if (User.IsInRole("Customer"))
+{
 <p>
     <a asp-action="AddTicket">Add Ticket</a>
 </p>
-@*}*@
+}
 <table class="table">
     <thead>
         <tr>
