@@ -16,6 +16,8 @@ namespace TicketManagementSystem.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        public static readonly string BITOREQNAME = "Bitoreq";
+
         public ProjectsController(ApplicationDbContext context)
         {
             _context = context;
@@ -64,7 +66,7 @@ namespace TicketManagementSystem.Controllers
 
 
 
-            ViewData["CompanyName"] = new SelectList(_context.Companies, "Id", "CompanyName");
+            ViewData["CompanyName"] = new SelectList(_context.Companies.Where(c=>c.CompanyName!= BITOREQNAME), "Id", "CompanyName");
             ViewData["Developer1"] = developers;
             ViewData["Developer2"] = developers;
             return View();
@@ -176,6 +178,16 @@ namespace TicketManagementSystem.Controllers
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult CheckLastUpdate(DateTime ReleaseDate, DateTime LastUpdate)
+        {
+            if (LastUpdate < ReleaseDate)
+            {
+                return Json($"{LastUpdate} is not valid.Should be greater than release date");
+            }
+
+            return Json(true);
         }
 
         private bool ProjectExists(int id)
