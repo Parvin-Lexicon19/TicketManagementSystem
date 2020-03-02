@@ -27,16 +27,43 @@ namespace TicketManagementSystem.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string sortOrder)
         {
-            IQueryable<Ticket> applicationdbcontext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
+            //var applicationdbcontext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
+            // return View(await applicationdbcontext.ToListAsync());
 
-            applicationdbcontext = SortList(sortOrder, applicationdbcontext);
+            var model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                    .Select(s => new CustomerIndexViewModel
+                     {
+                         Id = s.Id,
+                         RefNo = s.RefNo,
+                         Title = s.Title,
+                         Status = s.Status,
+                         ProjectName = s.Project.Name,
+                         CustomerPriority = s.CustomerPriority,
+                         DueDate = s.DueDate
+                     })
+                    .ToListAsync();
 
-            return View(await applicationdbcontext.ToListAsync());
+            model = SortList(sortOrder, model);
+            return View(model);
+
         }
 
+        //Filter by Title, Status and Priority
         public async Task<IActionResult> Filter(string title, int? status, int? priority)
         {
-            var model = await _context.Tickets.ToListAsync();
+            var model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                   .Select(s => new CustomerIndexViewModel
+                   {
+                       Id = s.Id,
+                       RefNo = s.RefNo,
+                       Title = s.Title,
+                       Status = s.Status,
+                       ProjectName = s.Project.Name,
+                       CustomerPriority = s.CustomerPriority,
+                       DueDate = s.DueDate
+                   })
+                   .ToListAsync();
+
             model = string.IsNullOrWhiteSpace(title) ?
                 model :
                 model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
@@ -52,7 +79,8 @@ namespace TicketManagementSystem.Controllers
             return View(nameof(Index), model);
         }
 
-        private IQueryable<Ticket> SortList(string sortOrder, IQueryable<Ticket> ticket)
+        //Sort by Attributes
+        private List<CustomerIndexViewModel> SortList(string sortOrder, List<CustomerIndexViewModel> ticket)
         {
             ViewBag.RefNoSortParm = String.IsNullOrEmpty(sortOrder) ? "RefNo_desc" : "";
             ViewBag.TitleSortParm = sortOrder == "Title" ? "Title_desc" : "Title";
@@ -64,37 +92,32 @@ namespace TicketManagementSystem.Controllers
             switch (sortOrder)
             {
                 case "RefNo_desc":
-                    ticket = ticket.OrderByDescending(s => s.RefNo);
+                    ticket = ticket.OrderByDescending(s => s.RefNo).ToList();
                     break;
 
                 case "Title_desc":
-                    ticket = ticket.OrderByDescending(s => s.Title);
+                    ticket = ticket.OrderByDescending(s => s.Title).ToList();
                     break;
 
                 case "Status_desc":
-                    ticket = ticket.OrderByDescending(s => s.Status);
+                    ticket = ticket.OrderByDescending(s => s.Status).ToList();
                     break;
 
                 case "ProjectId_desc":
-
-                    ticket = ticket.OrderByDescending(s => s.ProjectId);
+                    ticket = ticket.OrderByDescending(s => s.ProjectId).ToList();
                     break;
 
                 case "CustomerPriority_desc":
-
-                    ticket = ticket.OrderByDescending(s => s.CustomerPriority);
+                    ticket = ticket.OrderByDescending(s => s.CustomerPriority).ToList();
                     break;
 
                 case "DueDate_desc":
-
-                    ticket = ticket.OrderByDescending(s => s.DueDate);
+                    ticket = ticket.OrderByDescending(s => s.DueDate).ToList();
                     break;
 
                 default:
-
-                    ticket = ticket.OrderBy(s => s.RefNo);
+                    ticket = ticket.OrderBy(s => s.RefNo).ToList();
                     break;
-
             }
 
             return ticket;

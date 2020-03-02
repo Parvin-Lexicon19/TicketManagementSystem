@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Ticket>
+﻿@model IEnumerable<CustomerIndexViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,19 +6,19 @@
 
 <h1>My Tickets</h1>
 
-<form asp-action="Filter">
+<form asp-action="filter">
     <div class="input-group mb-3">
-        <input type="text" name="title" class="form-control" placeholder="Search on Title" />
+        <input type="text" name="title" class="form-control" placeholder="search on title" />
         <div class="input-group-append">
             <select name="status" asp-items="@Html.GetEnumSelectList<Status>()" class="form-control">
-                <option selected="selected" value="">Status</option>
+                <option selected="selected" value="">status</option>
             </select>
             <select name="priority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
-                <option selected="selected" value="">Priority</option>
+                <option selected="selected" value="">priority</option>
             </select>
         </div>
         <div class="input-group-append">
-            <button type="submit" class="btn btn-primary"><i class="fa fa-search">&emsp;Search</i></button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search">&emsp;search</i></button>
         </div>
     </div>
 </form>
@@ -31,28 +31,22 @@
         <thead>
             <tr>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.RefNo)*@
                     @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "Index", new { sortOrder = ViewBag.RefNoSortParm })
                 </th>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.Title)*@
                     @Html.ActionLink(Html.DisplayNameFor(model => model.Title), "Index", new { sortOrder = ViewBag.TitleSortParm })
                 </th>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.Status)*@
                     @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
                 </th>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.Project)*@
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.ProjectId), "Index", new { sortOrder = ViewBag.ProjectIdSortParm })
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectIdSortParm })
                 </th>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.CustomerPriority)*@
                     @Html.ActionLink(Html.DisplayNameFor(model => model.CustomerPriority), "Index", new { sortOrder = ViewBag.CustomerPrioritySortParm })
                 </th>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.DueDate)*@
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "Index", new { sortOrder = ViewBag.DueDateSortParm })
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.duedatesortparm })
                 </th>
                 <th></th>
             </tr>
@@ -71,7 +65,8 @@
                         @Html.DisplayFor(modelItem => item.Status)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Project.Name)
+                        @Html.DisplayFor(modelItem => item.ProjectName)
+                       
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CustomerPriority)
