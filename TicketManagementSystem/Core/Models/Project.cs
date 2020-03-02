@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,12 +19,13 @@ namespace TicketManagementSystem.Core.Models
         public string Name { get; set; }
         public string Developer1 { get; set; }
         public string Developer2 { get; set; }
-        [DataType(DataType.Date)]
+        [DataType(DataType.Date)] 
         [Required]
         public DateTime ReleaseDate { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime LastUpdate { get; set; }
+        [Remote(action: "CheckLastUpdate", controller: "Projects", AdditionalFields = "ReleaseDate")]
+        public DateTime? LastUpdate { get; set; }
         [StringLength(500)]
         public string Description { get; set; }
         [StringLength(100)]
