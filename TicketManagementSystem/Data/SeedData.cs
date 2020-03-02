@@ -12,7 +12,7 @@ namespace TicketManagementSystem.Data
 {
     public static class SeedData
     {
-        private static readonly string BITOREQNAME="Bitoreq";
+        public static readonly string BITOREQNAME="Bitoreq";
 
         internal static async Task InitializeAsync(IServiceProvider services, string adminPW)
         {
