@@ -56,6 +56,7 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
 
         public string CompanyNames { get; set; }
         public SelectList CompanyOption { get; set; }
+        public SelectList RoleOption { get; set; }
 
         public class InputModel
         {
@@ -95,15 +96,14 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
 
 
             // pass the Role List using ViewData
-            var getAllRoles = _context.Roles.Select(x => x);
+            var getAllRoles = _context.Roles.OrderBy(x => x.Name);
+
             ViewData["roles"] = getAllRoles.ToList();
 
             // pass the Company List.Sort by company Name.
             var getAllCompanyName = _context.Companies.OrderBy(x => x.CompanyName);
             
             CompanyOption = new SelectList(getAllCompanyName.Select(x => x.CompanyName));
-
-
 
 
         }
@@ -113,6 +113,8 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             var role = _roleManager.FindByIdAsync(Input.Role).Result;
+           // var role = _roleManager.FindByIdAsync(Input.Role).Result;
+
             if (ModelState.IsValid)
             {
                 // Get Company Name 
@@ -128,10 +130,7 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
                     // Assign Role to the user.
                     await _userManager.AddToRoleAsync(user, role.Name);
 
-                    
-
-
-
+          
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -149,7 +148,7 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                     //   await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }
