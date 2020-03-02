@@ -89,7 +89,7 @@ namespace TicketManagementSystem.Controllers
             ViewBag.RefNoSortParm = String.IsNullOrEmpty(sortOrder) ? "RefNo_desc" : "";
             ViewBag.TitleSortParm = sortOrder == "Title" ? "Title_desc" : "Title";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "Status_desc" : "Status";
-            ViewBag.ProjectIdSortParm = sortOrder == "ProjectId" ? "ProjectId_desc" : "ProjectId";
+            ViewBag.ProjectNameSortParm = sortOrder == "ProjectName" ? "ProjectName_desc" : "ProjectName";
             ViewBag.CustomerPrioritySortParm = sortOrder == "CustomerPriority" ? "CustomerPriority_desc" : "CustomerPriority";
             ViewBag.DueDateSortParm = sortOrder == "DueDate" ? "DueDate_desc" : "DueDate";
 
@@ -107,8 +107,8 @@ namespace TicketManagementSystem.Controllers
                     ticket = ticket.OrderByDescending(s => s.Status).ToList();
                     break;
 
-                case "ProjectId_desc":
-                    ticket = ticket.OrderByDescending(s => s.ProjectId).ToList();
+                case "ProjectName_desc":
+                    ticket = ticket.OrderByDescending(s => s.ProjectName).ToList();
                     break;
 
                 case "CustomerPriority_desc":
