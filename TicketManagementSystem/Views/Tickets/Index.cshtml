@@ -6,6 +6,7 @@
 
 @*<h1>My Tickets</h1>*@
 
+<<<<<<< HEAD
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
             <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>My Tickets</h1></a>
@@ -34,6 +35,21 @@
     </nav>
 
 
+    <form asp-action="Filter">
+        <div class="input-group mb-3">
+            <input type="text" name="title" class="form-control" placeholder="Search on Title" />
+            <div class="input-group-append">
+                <select name="status" asp-items="@Html.GetEnumSelectList<Status>()" class="form-control">
+                    <option selected="selected" value="">Status</option>
+                </select>
+                <select name="priority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
+                    <option selected="selected" value="">Priority</option>
+                </select>
+            </div>
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search">&emsp;Search</i></button>
+            </div>
+=======
 <form asp-action="filter">
     <div class="input-group mb-3">
         <input type="text" name="title" class="form-control" placeholder="search on title" />
@@ -47,9 +63,9 @@
         </div>
         <div class="input-group-append">
             <button type="submit" class="btn btn-primary"><i class="fa fa-search">&emsp;search</i></button>
+>>>>>>> aa75ed4252919877c247c7a768109162e628b35e
         </div>
-    </div>
-</form>
+    </form>
 
  @*@if (User.IsInRole("Customer"))
 {*@
