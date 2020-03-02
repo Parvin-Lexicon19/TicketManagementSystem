@@ -145,8 +145,12 @@ namespace TicketManagementSystem.Controllers
             ApplicationUser loggedInUser = await userManager.GetUserAsync(User);
             var companyAbbr = _context.Companies.Find(loggedInUser.CompanyId).CompanyAbbr;
             //var companyLastRefNo = _context.Tickets.LastOrDefault(t => t.RefNo.Contains(companyAbbr)).RefNo;
-            var companyLastRefNo = _context.Tickets.Where(t => t.RefNo.Contains(companyAbbr)).ToList().LastOrDefault().RefNo;
-
+            bool companyHasTicket = _context.Tickets.Any(t => t.RefNo.Contains(companyAbbr));
+            //if the company has no tickets, the last RefNo. is se to "00000", otherwise it continues from the last RefNo. for that company
+            string companyLastRefNo = companyHasTicket == true? 
+                _context.Tickets.Where(t => t.RefNo.Contains(companyAbbr)).ToList().LastOrDefault().RefNo
+                : companyLastRefNo = companyAbbr + "00000";
+                
             //Increasin that last RefNo by 1 and assigning it to the newly added ticket
             ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
