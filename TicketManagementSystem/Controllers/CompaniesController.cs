@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using TicketManagementSystem.Data;
 
 namespace TicketManagementSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CompaniesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,12 +21,14 @@ namespace TicketManagementSystem.Controllers
             _context = context;
         }
 
+        
         // GET: Companies
         public async Task<IActionResult> Index()
         {
             return View(await _context.Companies.ToListAsync());
         }
 
+        
         // GET: Companies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -43,6 +47,7 @@ namespace TicketManagementSystem.Controllers
             return View(company);
         }
 
+        
         // GET: Companies/Create
         public IActionResult Create()
         {
@@ -52,6 +57,7 @@ namespace TicketManagementSystem.Controllers
         // POST: Companies/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CompanyAbbr,CompanyName,ContactPerson,Email,Address,City,PostalCode,Country,PhoneNumber")] Company company)
@@ -65,6 +71,7 @@ namespace TicketManagementSystem.Controllers
             return View(company);
         }
 
+        
         // GET: Companies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -84,6 +91,7 @@ namespace TicketManagementSystem.Controllers
         // POST: Companies/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyAbbr,CompanyName,ContactPerson,Email,Address,City,PostalCode,Country,PhoneNumber")] Company company)

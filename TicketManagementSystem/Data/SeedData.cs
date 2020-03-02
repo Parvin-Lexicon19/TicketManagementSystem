@@ -73,6 +73,7 @@ namespace TicketManagementSystem.Data
                     }
                 }
 
+
                 // Assigning roles for the admin users
                 foreach (var email in adminEmails)
                 {
@@ -81,17 +82,55 @@ namespace TicketManagementSystem.Data
                     if (adminUserRole.Count > 0) continue;
                     else
                     {
-                        
+
                         var addToRoleResult = await userManager.AddToRoleAsync(adminUser, "Admin");
 
                         if (!addToRoleResult.Succeeded)
-                        { 
+                        {
                             throw new Exception(string.Join("\n", addToRoleResult.Errors));
                         }
-                      
+
                     }
 
                 }
+
+
+
+                ////creating Developers
+                //var developersEmails = new[] { "developer1@bitoreq.se", "developer2@bitoreq.se", "developer3@bitoreq.se", "developer4@bitoreq.se" };
+
+                //foreach (var email in developersEmails)
+                //{
+                //    var foundUser = await userManager.FindByEmailAsync(email);
+                //    var companyid = await context.Companies.FirstOrDefaultAsync(c => c.CompanyName == BITOREQNAME);
+                //    if (foundUser != null) continue;
+                //    else
+                //    {
+                //        await NewUser(adminPW, userManager, email, companyid.Id);
+                //    }
+                //}
+
+
+                
+                //foreach (var email in developersEmails)
+                //{
+                //    var developerUser = await userManager.FindByEmailAsync(email);
+                //    var developerUserRole = await userManager.GetRolesAsync(developerUser);
+                //    if (developerUserRole.Count > 0) continue;
+                //    else
+                //    {
+
+                //        var addToRoleResult = await userManager.AddToRoleAsync(developerUser, "Developer");
+
+                //        if (!addToRoleResult.Succeeded)
+                //        {
+                //            throw new Exception(string.Join("\n", addToRoleResult.Errors));
+                //        }
+
+                //    }
+
+                //}
+
 
             }
         }

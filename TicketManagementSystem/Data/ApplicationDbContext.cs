@@ -43,6 +43,7 @@ namespace TicketManagementSystem.Data
                     .HasOne(m => m.Developer1User)
                     .WithMany(t => t.ProjectDeveloper1)
                     .HasForeignKey(m => m.Developer1)
+                    .IsRequired(true)
                     .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Project>()
