@@ -58,6 +58,7 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
         public SelectList CompanyOption { get; set; }
         public SelectList RoleOption { get; set; }
 
+
         public class InputModel
         {
             [Required]
@@ -84,7 +85,9 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             [Display(Name = "CompanyName")]
             public string CompanyName { get; set; }
 
-         
+      
+
+
 
 
         }
@@ -130,7 +133,6 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
                     // Assign Role to the user.
                     await _userManager.AddToRoleAsync(user, role.Name);
 
-          
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -148,7 +150,8 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                     //   await _signInManager.SignInAsync(user, isPersistent: false);
+                        //   await _signInManager.SignInAsync(user, isPersistent: false);
+                        TempData["alertMessage"] = "User created Sucessfully";
                         return LocalRedirect(returnUrl);
                     }
                 }
@@ -159,6 +162,8 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             }
 
             // If we got this far, something failed, redisplay form
+
+             OnGetAsync();
             return Page();
         }
     }
