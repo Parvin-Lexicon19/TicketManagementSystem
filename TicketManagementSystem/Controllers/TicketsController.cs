@@ -33,10 +33,6 @@ namespace TicketManagementSystem.Controllers
         {
             //var applicationdbcontext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
             // return View(await applicationdbcontext.ToListAsync());
-            //ViewBag.TotalStudents = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-            //                      .Select(m => m.CreatedBy);
-
-
 
             var model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
                     .Select(s => new CustomerIndexViewModel
