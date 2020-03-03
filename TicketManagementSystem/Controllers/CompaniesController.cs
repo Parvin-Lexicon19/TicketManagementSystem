@@ -49,7 +49,7 @@ namespace TicketManagementSystem.Controllers
 
         
         // GET: Companies/Create
-        public IActionResult Create()
+        public IActionResult AddCompany()
         {
             return View();
         }
@@ -60,7 +60,7 @@ namespace TicketManagementSystem.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyAbbr,CompanyName,ContactPerson,Email,Address,City,PostalCode,Country,PhoneNumber")] Company company)
+        public async Task<IActionResult> AddCompany([Bind("Id,CompanyAbbr,CompanyName,ContactPerson,Email,Address,City,PostalCode,Country,PhoneNumber")] Company company)
         {
             if (ModelState.IsValid)
             {

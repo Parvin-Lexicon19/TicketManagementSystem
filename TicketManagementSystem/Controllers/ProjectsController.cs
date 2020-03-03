@@ -52,7 +52,7 @@ namespace TicketManagementSystem.Controllers
         }
 
         // GET: Projects/Create
-        public IActionResult Create()
+        public IActionResult AddProject()
         {
             var developerrole = _context.Roles.Where(r => r.Name == "Developer").FirstOrDefault().Id;
             var developersid = _context.UserRoles.Where(ur => ur.RoleId == developerrole).Select(u => u.UserId).ToList();
@@ -77,7 +77,7 @@ namespace TicketManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,Developer1,Developer2,ReleaseDate,LastUpdate,Description,SystemsUsed")] Project project)
+        public async Task<IActionResult> AddProject([Bind("Id,CompanyId,Name,Developer1,Developer2,ReleaseDate,LastUpdate,Description,SystemsUsed")] Project project)
         {
             if (ModelState.IsValid)
             {
