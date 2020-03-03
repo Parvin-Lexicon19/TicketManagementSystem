@@ -50,10 +50,8 @@ namespace TicketManagementSystem.Controllers
                      })
                     .ToListAsync();
 
-
             model = SortList(sortOrder, model);
             return View(model);
-
         }
 
         //Filter by Title, Status and Priority
@@ -186,6 +184,7 @@ namespace TicketManagementSystem.Controllers
             var companyAbbr = _context.Companies.Find(loggedInUser.CompanyId).CompanyAbbr;
             //var companyLastRefNo = _context.Tickets.LastOrDefault(t => t.RefNo.Contains(companyAbbr)).RefNo;
             bool companyHasTicket = _context.Tickets.Any(t => t.RefNo.Contains(companyAbbr));
+
             //if the company has no tickets, the last RefNo. is se to "00000", otherwise it continues from the last RefNo. for that company
             string companyLastRefNo = companyHasTicket == true? 
                 _context.Tickets.Where(t => t.RefNo.Contains(companyAbbr)).ToList().LastOrDefault().RefNo
@@ -208,27 +207,7 @@ namespace TicketManagementSystem.Controllers
                     throw new Exception();
             }
 
-            
-            
 
-
-
-            //var userId = userManager.GetUserAsync(User);
-            //var user = userManager.FindByIdAsync(ticket.CreatedBy);
-
-            //var companyLastRefNo = await _context.Tickets
-            //    .LastOrDefaultAsync(m => m.RefNo == id)
-            //var companyLastRefNo = User.
-            //var companyLastRefNo =  _context.Users
-            //    .Where(u => u.Id == ticket.CreatedBy);
-            //    .Include(a => a.CreatedUser)
-            //    .ThenInclude(m => m.Company)
-            //    .LastOrDefaultAsync(a => a.RefNo.Substring(0,5) == );
-
-            //_context.Tickets.(ticket.CreatedUser.CompanyId)
-            //var newString = Regex.Replace(x, "\\d+",
-            //    m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
-            //ticket.RefNo
             if (ModelState.IsValid)
             {                
                 _context.Add(ticket);
