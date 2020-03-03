@@ -10,7 +10,6 @@ namespace TicketManagementSystem.Core.ViewModels
 {
     public class CustomerIndexViewModel
     {
-
         public Int64 Id { get; set; }
         [Required]
         [DisplayName("Ticket No.")]
@@ -25,6 +24,5 @@ namespace TicketManagementSystem.Core.ViewModels
         public Priority? CustomerPriority { get; set; }
         [DisplayName("Due Date")]
         public DateTime DueDate { get; set; }
-
     }
 }

@@ -8,8 +8,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20200227123927_Enums.cs" />
     <Compile Remove="Data\Migrations\20200227123927_Enums.Designer.cs" />
-    <Compile Remove="Data\Migrations\20200303093848_checking.cs" />
-    <Compile Remove="Data\Migrations\20200303093848_checking.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200302102833_TicketProjectIdIsRequired.cs" />
+    <Compile Remove="Data\Migrations\20200302102833_TicketProjectIdIsRequired.Designer.cs" />
   </ItemGroup>
 
 
