@@ -22,7 +22,6 @@ namespace TicketManagementSystem.Core.Models
         [DataType(DataType.Date)] 
         [Required]
         public DateTime ReleaseDate { get; set; }
-
         [DataType(DataType.Date)]
         [Remote(action: "CheckLastUpdate", controller: "Projects", AdditionalFields = "ReleaseDate")]
         public DateTime? LastUpdate { get; set; }
