@@ -20,11 +20,14 @@ namespace TicketManagementSystem.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ApplicationDbContext _context;
+        static ApplicationUser loggedInUser;
+        List<SelectListItem> selectListItems;
 
         public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             this.userManager = userManager;
+            selectListItems = new List<SelectListItem>();
         }
 
         // GET: Tickets
@@ -150,11 +153,25 @@ namespace TicketManagementSystem.Controllers
         }
 
         // GET: Tickets/AddTicket
-        public IActionResult AddTicket()
+        public async Task<IActionResult> AddTicketAsync()
         {
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+
+            loggedInUser = await userManager.GetUserAsync(User);
+            
+            var loggedInUserProjects = _context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId);
+            foreach (var project in loggedInUserProjects)
+            {
+                var selectItem = new SelectListItem
+                {
+                    Text = project.Name,
+                    Value = project.Id.ToString()
+                };
+                selectListItems.Add(selectItem);
+            }
+            ViewData["ProjectId"] = selectListItems;
             return View();
         }
 
@@ -163,10 +180,9 @@ namespace TicketManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddTicket([Bind("Id,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket)
+        public async Task<IActionResult> AddTicket([Bind("Id,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket, string submit)
         {
             //Getting LoggedInUser's ComapnyId & then CompanyAbbr & Last RefNo of that company
-            ApplicationUser loggedInUser = await userManager.GetUserAsync(User);
             var companyAbbr = _context.Companies.Find(loggedInUser.CompanyId).CompanyAbbr;
             //var companyLastRefNo = _context.Tickets.LastOrDefault(t => t.RefNo.Contains(companyAbbr)).RefNo;
             bool companyHasTicket = _context.Tickets.Any(t => t.RefNo.Contains(companyAbbr));
@@ -179,8 +195,21 @@ namespace TicketManagementSystem.Controllers
             ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
 
-            ticket.Status = Status.Draft;
-            ticket.DueDate = DateTime.Now;
+            switch (submit)
+            {
+                case "Submit":
+                    ticket.Status = Status.Submitted;
+                    break;
+                case "Save as Draft":
+                    ticket.Status = Status.Draft;
+                    ticket.DueDate = DateTime.Now;
+                    break;
+                default:
+                    throw new Exception();
+            }
+
+            
+            
 
 
 
@@ -208,7 +237,8 @@ namespace TicketManagementSystem.Controllers
             }
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
+            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
+            ViewData["ProjectId"] = selectListItems;
             return View(ticket);
         }
 
