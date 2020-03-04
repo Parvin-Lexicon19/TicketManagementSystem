@@ -36,15 +36,10 @@ namespace TicketManagementSystem.Data
                     context.SaveChanges();
                 }
 
-                //seed 2 companies data to database
-
+                //Seed 2 companies data to database
                 var companies = await context.Companies.CountAsync(c => c.CompanyName != BITOREQNAME);
                 var fake = new Faker();
                 var random = new Random();
-
-
-
-
 
 
                 if (companies == 0)
@@ -71,8 +66,6 @@ namespace TicketManagementSystem.Data
 
                         context.AddRange(newcompanies);
                         context.SaveChanges();
-                   
-                   
                 }
 
 
@@ -113,8 +106,7 @@ namespace TicketManagementSystem.Data
                         await NewUser(adminPW, userManager, email, companyid.Id);
                     }
                 }
-
-
+                
                 // Assigning roles for the admin users
                 foreach (var email in adminEmails)
                 {
@@ -135,8 +127,6 @@ namespace TicketManagementSystem.Data
 
                 }
 
-
-
                 //creating Developers
                 var developersEmails = new[] { "developer1@bitoreq.se", "developer2@bitoreq.se", "developer3@bitoreq.se", "developer4@bitoreq.se" };
 
@@ -150,7 +140,6 @@ namespace TicketManagementSystem.Data
                         await NewUser(adminPW, userManager, email, companyid.Id);
                     }
                 }
-
 
 
                 foreach (var email in developersEmails)
@@ -210,7 +199,6 @@ namespace TicketManagementSystem.Data
                         {
                             throw new Exception(string.Join("\n", addToRoleResult.Errors));
                         }
-
                     }
 
                 }
@@ -246,22 +234,13 @@ namespace TicketManagementSystem.Data
 
                     context.AddRange(newprojects);
                     context.SaveChanges();
-
                 }
-
-
-
-
-
-
             }
         }
 
 
         private static async Task NewUser(string adminPW, UserManager<ApplicationUser> userManager, string email, int companyid)
         {
-
-
             var user = new ApplicationUser
             {
                 UserName = email,
@@ -277,6 +256,4 @@ namespace TicketManagementSystem.Data
             }
         }
     }
-
-
 }

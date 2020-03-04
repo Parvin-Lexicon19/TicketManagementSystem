@@ -1,14 +1,10 @@
 ﻿@model TicketManagementSystem.Core.Models.Ticket
-@inject UserManager<ApplicationUser>  userManager
+@inject UserManager<ApplicationUser> userManager
 
 @{
     //var userId = userManager.GetUserId(User);
     //var loggedInUser = await userManager.GetUserAsync(User);
-    //var loggedInUserProjects = loggedInUser.Projects.Select(m => m.CompanyId);
-    //@foreach (var project in loggedInUser.Projects.Select(m => m.CompanyId == loggedInUser.CompanyId))
-    //    {
-    //    }
-    //var loggedInUserProjects = loggedInUser.Company.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId).Select(m => m.Name);
+    
     ViewData["Title"] = "Add Ticket";
     }
 

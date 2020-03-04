@@ -11,7 +11,6 @@ namespace TicketManagementSystem.Core.Models
         public int Id { get; set; }
         [Required]
         [StringLength(5)]
-
         [Display(Name = "Company Abbr")]
         public string CompanyAbbr { get; set; }
         [Required]
@@ -23,7 +22,6 @@ namespace TicketManagementSystem.Core.Models
         public string Address { get; set; }
         public string City { get; set; }
         [Range(10000, 99999)]
-
         [Display(Name = "Postal Code")]
         public int? PostalCode { get; set; }
         public string Country { get; set; }

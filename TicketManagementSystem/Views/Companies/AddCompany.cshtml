@@ -1,16 +1,16 @@
 ﻿@model TicketManagementSystem.Core.Models.Company
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "AddCompany";
 }
 
 <h1>Add New Comapany</h1>
 
-<h4>Company</h4>
+@*<h4>Company</h4>*@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="AddCompany">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CompanyAbbr" class="control-label"></label>
