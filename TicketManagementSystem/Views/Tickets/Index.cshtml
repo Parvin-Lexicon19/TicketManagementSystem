@@ -8,11 +8,11 @@
     <div class="container">
         @if (User.IsInRole("Admin"))
         {
-            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h2>All Tickets</h2></a>
+            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>All Tickets</h1></a>
         }
         else
         {
-            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h2>My Tickets</h2></a>
+            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>My Tickets</h1></a>
         }
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -26,10 +26,10 @@
                 <ul class="navbar-nav flex-grow-1">
 
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index"><h2>&nbsp;Companies</h2></a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">&nbsp;Companies</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index"><h2>&nbsp;Projects</h2></a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">&nbsp;Projects</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Customer">Customers</a>
@@ -157,7 +157,7 @@
                 </td>
             }
             <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
+                @Html.DisplayFor(modelItem => item.DueDate )
             </td>
             @if (User.IsInRole("Admin"))
             {

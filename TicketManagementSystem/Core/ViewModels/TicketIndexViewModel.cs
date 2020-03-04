@@ -31,7 +31,10 @@ namespace TicketManagementSystem.Core.ViewModels
         public string UserEmail { get; set; }
 
         [DisplayName("Due Date")]
+        [DataType(DataType.Date), DisplayFormat(DataFormatString = @"{0:dd\/MM\/yyyy HH:mm}",
+            ApplyFormatInEditMode = true)]
         public DateTime DueDate { get; set; }
+        
     }
 
 }
