@@ -52,19 +52,16 @@ namespace TicketManagementSystem.Controllers
         }
 
         // GET: Projects/Create
-        public IActionResult Create()
+        public IActionResult AddProject()
         {
-            var developerrole = _context.Roles.Where(r => r.Name == "Developer").FirstOrDefault().Id;
-            var developersid = _context.UserRoles.Where(ur => ur.RoleId == developerrole).Select(u => u.UserId).ToList();
+            var developerRole = _context.Roles.Where(r => r.Name == "Developer").FirstOrDefault().Id;
+            var developersId = _context.UserRoles.Where(ur => ur.RoleId == developerRole).Select(u => u.UserId).ToList();
 
-            var developers = _context.Users.Where(u => developersid.Contains(u.Id)).Select(i => new SelectListItem()
+            var developers = _context.Users.Where(u => developersId.Contains(u.Id)).Select(i => new SelectListItem()
             {
                 Text = i.UserName,
                 Value = i.Id
             });
-
-
-
 
             ViewData["CompanyName"] = new SelectList(_context.Companies.Where(c=>c.CompanyName!= BITOREQNAME), "Id", "CompanyName");
             ViewData["Developer1"] = developers;
@@ -77,7 +74,7 @@ namespace TicketManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,Developer1,Developer2,ReleaseDate,LastUpdate,Description,SystemsUsed")] Project project)
+        public async Task<IActionResult> AddProject([Bind("Id,CompanyId,Name,Developer1,Developer2,ReleaseDate,LastUpdate,Description,SystemsUsed")] Project project)
         {
             if (ModelState.IsValid)
             {

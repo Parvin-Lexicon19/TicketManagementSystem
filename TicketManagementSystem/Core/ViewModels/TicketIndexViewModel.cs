@@ -10,7 +10,6 @@ namespace TicketManagementSystem.Core.ViewModels
 {
     public class TicketIndexViewModel
     {
-
         public Int64 Id { get; set; }
         [Required]
         [DisplayName("Ticket No.")]
@@ -33,7 +32,6 @@ namespace TicketManagementSystem.Core.ViewModels
 
         [DisplayName("Due Date")]
         public DateTime DueDate { get; set; }
-
     }
 
 }

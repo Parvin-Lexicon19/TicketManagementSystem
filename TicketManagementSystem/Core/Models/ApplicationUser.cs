@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 namespace TicketManagementSystem.Core.Models
 {
     public class ApplicationUser:IdentityUser
-    {
-        
+    {        
         public int CompanyId { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public string FullName { get => FirstName + " " + LastName; }
         public String JobTitle { get; set; }
         public String Country { get; set; }
-
         public ICollection<Ticket> TicketCreatedBy { get; set; }
         public ICollection<Ticket> TicketAssignedTo { get; set; }
         public ICollection<Comment> Comments { get; set; }

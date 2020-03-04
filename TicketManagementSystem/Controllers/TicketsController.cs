@@ -65,7 +65,6 @@ namespace TicketManagementSystem.Controllers
 
             model = SortList(sortOrder, model);
             return View(model);
-
         }
 
         //Filter by Title, Status and Priority
@@ -214,6 +213,7 @@ namespace TicketManagementSystem.Controllers
             var companyAbbr = _context.Companies.Find(loggedInUser.CompanyId).CompanyAbbr;
             //var companyLastRefNo = _context.Tickets.LastOrDefault(t => t.RefNo.Contains(companyAbbr)).RefNo;
             bool companyHasTicket = _context.Tickets.Any(t => t.RefNo.Contains(companyAbbr));
+
             //if the company has no tickets, the last RefNo. is se to "00000", otherwise it continues from the last RefNo. for that company
             string companyLastRefNo = companyHasTicket == true? 
                 _context.Tickets.Where(t => t.RefNo.Contains(companyAbbr)).ToList().LastOrDefault().RefNo

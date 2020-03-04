@@ -34,7 +34,7 @@
 
 
 <p>
-    <a asp-action="Create">Create New Company</a>
+    <a asp-action="AddCompany">Add New Company</a>
 </p>
 <table class="table">
     <thead>
@@ -51,21 +51,21 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Address)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.City)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.PostalCode)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Country)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -85,21 +85,21 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Address)
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.City)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.PostalCode)
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.Country)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
+                </td>*@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
