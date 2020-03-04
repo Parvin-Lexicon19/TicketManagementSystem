@@ -19,22 +19,20 @@ namespace TicketManagementSystem.Core.ViewModels
         public string Title { get; set; }
         [DisplayName("Status")]
         public Status? Status { get; set; }
-       // [DisplayName("Status")]
-       // public Status? AdminStatus { get; set; }
-
-       // public Status? Status { get; set; }
         public int ProjectId { get; set; }
         [DisplayName("Project")]
         public string ProjectName { get; set; }
         [DisplayName("Customer Priority")]
         public Priority? CustomerPriority { get; set; }
         [DisplayName("Real Priority")]
-        public Priority? RealPriority { get; set; }
-        [DisplayName("Assigned To")]
+        public Priority? RealPriority { get; set; }  
         public string AssignedTo { get; set; }
+
+        [DisplayName("Assigned To")]
+        public string UserEmail { get; set; }
+
         [DisplayName("Due Date")]
         public DateTime DueDate { get; set; }
-        public virtual ApplicationUser AssignedUser { get; set; }
 
     }
 

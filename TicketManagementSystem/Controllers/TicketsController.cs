@@ -59,7 +59,7 @@ namespace TicketManagementSystem.Controllers
                          CustomerPriority = s.CustomerPriority,
                          RealPriority = s.RealPriority,
                          DueDate = s.DueDate,
-                         AssignedTo = s.AssignedTo
+                         UserEmail = s.AssignedUser.Email
                     })
                     .ToListAsync();
 
@@ -82,7 +82,7 @@ namespace TicketManagementSystem.Controllers
                        CustomerPriority = s.CustomerPriority,
                        RealPriority = s.RealPriority,
                        DueDate = s.DueDate,
-                       AssignedTo = s.AssignedTo
+                       UserEmail = s.AssignedUser.Email
                    })
                    .ToListAsync();
 
@@ -93,10 +93,6 @@ namespace TicketManagementSystem.Controllers
             model = Status == null ?
               model :
               model.Where(m => m.Status == (Status)Status).ToList();
-
-            //model = customerStatus == null ?
-            //  model :
-            //  model.Where(m => m.CustomerStatus == (CustomerStatus)customerStatus).ToList();
 
             model = customerPriority == null ?
                 model :
@@ -152,7 +148,7 @@ namespace TicketManagementSystem.Controllers
                     break;
 
                 case "AssignedTo_desc":
-                    ticket = ticket.OrderByDescending(s => s.AssignedTo).ToList();
+                    ticket = ticket.OrderByDescending(s => s.UserEmail).ToList();
                     break;
 
                 default:

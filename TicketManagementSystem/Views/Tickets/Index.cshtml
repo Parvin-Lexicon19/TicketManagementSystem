@@ -117,7 +117,7 @@
             @if (User.IsInRole("Admin"))
             {
                 <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.AssignedTo), "index", new { sortorder = ViewBag.AssignedToSortParm })
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.UserEmail), "index", new { sortorder = ViewBag.AssignedToSortParm })
                 </th>
             }
             <th></th>
@@ -128,7 +128,9 @@
         {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.RefNo)
+                @*@Html.DisplayFor(modelItem => item.RefNo)*@
+                <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
@@ -154,15 +156,18 @@
             @if (User.IsInRole("Admin"))
             {
                 <td>
-                    @Html.DisplayFor(modelItem => item.AssignedTo)
+                    @Html.DisplayFor(modelItem => item.UserEmail)
                 </td>
             }
+            @if (User.IsInRole("Customer"))
+            {
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
-            </tr>
+            }
+        </tr>
         }
     </tbody>
 </table>
