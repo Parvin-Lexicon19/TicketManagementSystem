@@ -106,6 +106,7 @@ namespace TicketManagementSystem.Data
                 {
                     var foundUser = await userManager.FindByEmailAsync(email);
                     var companyid = await context.Companies.FirstOrDefaultAsync(c => c.CompanyName == BITOREQNAME);
+                    
                     if (foundUser != null) continue;
                     else
                     {
@@ -265,8 +266,8 @@ namespace TicketManagementSystem.Data
             {
                 UserName = email,
                 Email = email,
-                CompanyId = companyid
-
+                CompanyId = companyid,
+                EmailConfirmed = true
             };
 
             var result = await userManager.CreateAsync(user, adminPW);
