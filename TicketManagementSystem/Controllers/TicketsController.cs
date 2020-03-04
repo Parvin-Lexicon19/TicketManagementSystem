@@ -299,17 +299,16 @@ namespace TicketManagementSystem.Controllers
                     "A New Ticket Submitted",
                     $"A new ticket submitted by {loggedInUser.Email}. " +
                     $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
-
-                    //ViewBag.EmailSentMessage = "Email sent.";
-                    //return RedirectToAction("Sent");
-                    //}
+                    return RedirectToAction(nameof(EmailSent));
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
             ViewData["ProjectId"] = selectListItems;
+
             return View(ticket);
         }
 
@@ -405,6 +404,11 @@ namespace TicketManagementSystem.Controllers
         private bool TicketExists(long id)
         {
             return _context.Tickets.Any(e => e.Id == id);
+        }
+
+        public ActionResult EmailSent()
+        {
+            return View();
         }
     }
 }
