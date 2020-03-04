@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,12 @@ namespace TicketManagementSystem.Controllers
     public class CompaniesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public CompaniesController(ApplicationDbContext context)
+        public CompaniesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            this.userManager = userManager;
         }
 
         
@@ -138,6 +141,18 @@ namespace TicketManagementSystem.Controllers
             {
                 return NotFound();
             }
+            var anyprojects = _context.Projects.Where(p => p.CompanyId == id).Count();
+            var anycompanyusers = userManager.Users.Where(u => u.CompanyId == id).Count(); ;
+
+            if(anyprojects==0 && anycompanyusers ==0 )
+            {
+                ViewData["formhide"] = "Show";
+            }
+            else
+            {
+                ViewData["formhide"] = "Hide";
+            }
+
 
             return View(company);
         }
