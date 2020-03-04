@@ -4,9 +4,38 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+@*<h1>Delete</h1>*@
 
-<h3>Are you sure you want to delete this user?</h3>
+
+@if (@ViewBag.formhide == "Show")
+{
+   <h3>Are you sure you want to delete this user?</h3>
+}
+else if (@ViewBag.formhide == "Hide")
+{
+
+    @if (@ViewBag.PageName == "Developer")
+    {
+
+        <p class="bg-warning"><b>Cannot delete this User.There are related Projects for this developer.</b></p>
+    }
+    else
+    {
+
+        <p class="bg-warning"><b>Cannot delete this User.There are related tickets for this customer</b></p>
+
+    }
+
+   
+}
+else if (@ViewBag.formhide == "Admin")
+{
+
+    <p class="bg-warning"><b>cannot delete Admin user</b></p>
+    
+}
+
+
 <div>
     <h4>Company</h4>
     <hr />
@@ -60,12 +89,19 @@
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
     </dl>
-
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" asp-route-name=@ViewData["PageName"]  />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+    @if (@ViewBag.formhide == "Show")
+    {
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" asp-route-name=@ViewData["PageName"] />
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            <a asp-action="Index" asp-route-name=@ViewData["PageName"]>Back to List</a>
+        </form>
+    }
+    else
+    {
         <a asp-action="Index" asp-route-name=@ViewData["PageName"]>Back to List</a>
-    </form>
+    }
+
 </div>
 
 

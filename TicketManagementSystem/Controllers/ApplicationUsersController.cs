@@ -33,8 +33,7 @@ namespace TicketManagementSystem.Controllers
             if(name=="Developer")
             {
                  users = GetUsersBasedonRoles("Developer");
-                indexname = "Admin/Developers";
-               
+                 indexname = "Admin/Developers";
             }
             else if(name=="Customer")
             {
@@ -196,6 +195,24 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
             ViewData["PageName"] = name;
+
+            if(name=="Developer")
+            {
+                var anyprojects = _context.Projects.Where(p => p.Developer1==id || p.Developer2 == id).Count();
+                var adminroleid = _context.Roles.Where(r => r.Name == "Admin").Select(r => r.Id).FirstOrDefault();
+
+                var adminusersid = _context.UserRoles.Where(ur => ur.RoleId == adminroleid).Select(ur => ur.UserId).ToList();
+
+
+                ViewData["formhide"] = (anyprojects == 0) ?  (adminusersid.Contains(id)) ? "Admin" :  "Show" :  "Hide";
+            }
+            else if (name == "Customer")
+            {
+                var anytickets = _context.Tickets.Where(t => t.CreatedBy == id).Count();
+                var t= (anytickets == 0) ? "Show" : "Hide";
+                ViewData["formhide"] =(anytickets == 0) ? "Show" : "Hide";
+            }
+
             return View(user);
         }
 
