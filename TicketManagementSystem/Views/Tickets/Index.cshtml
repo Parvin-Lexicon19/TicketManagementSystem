@@ -132,52 +132,51 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @*@Html.DisplayFor(modelItem => item.RefNo)*@
-                <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+            <tr>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.RefNo)*@
+                    <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
 
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerPriority)
-            </td>
-            @if (User.IsInRole("Admin"))
-            {
-                <td>
-                    @Html.DisplayFor(modelItem => item.RealPriority)
                 </td>
-            }
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
-            @if (User.IsInRole("Admin"))
-            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.UserEmail)
+                    @Html.DisplayFor(modelItem => item.Title)
                 </td>
-            }
-            @if (User.IsInRole("Customer"))
-            {
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @Html.DisplayFor(modelItem => item.ProjectName)
                 </td>
-            }
-        </tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerPriority)
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RealPriority)
+                    </td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserEmail)
+                    </td>
+                }
+                @if (User.IsInRole("Customer"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                }
+            </tr>
         }
     </tbody>
 </table>
-<span style="color:green">@ViewBag.Message</span>
 @if(null != TempData["alertMessage"])
    {
 <script type="text/javascript">

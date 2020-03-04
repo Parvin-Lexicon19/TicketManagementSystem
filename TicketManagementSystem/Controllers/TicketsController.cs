@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,12 +26,14 @@ namespace TicketManagementSystem.Controllers
         private readonly ApplicationDbContext _context;
         static ApplicationUser loggedInUser;
         List<SelectListItem> selectListItems;
+        private readonly IEmailSender _emailSender;
 
-        public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _context = context;
             this.userManager = userManager;
             selectListItems = new List<SelectListItem>();
+            _emailSender = emailSender;
         }
 
         // GET: Tickets
@@ -225,43 +229,18 @@ namespace TicketManagementSystem.Controllers
             ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
 
+            ticket.DueDate = DateTime.Now;
+
             switch (submit)
             {
                 case "Submit":
-                    ticket.Status = Status.Submitted;
-
-
-                    var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
-                    var message = new MailMessage();
-                    message.To.Add(new MailAddress("parvin.shafiee@bitoreq.se"));  // replace with valid value 
-                    message.From = new MailAddress("parvin.shafiee.m@gmail.com");  // replace with valid value
-                    message.Subject = "A New Ticket Submitted";
-                    message.Body = string.Format(body, loggedInUser.FirstName, loggedInUser.Email, "A new ticket has been submitted recently." +
-                        "Please login to see it on your home page.");
-                    message.IsBodyHtml = true;
-
-                    using (var smtp = new SmtpClient())
-                    {
-                        //var credential = new NetworkCredential
-                        //{
-                        //    UserName = loggedInUser.Email,  // replace with valid value
-                        //    Password = loggedInUser.PasswordHash  // replace with valid value
-                        //};
-                        //smtp.Credentials = credential;
-                        smtp.UseDefaultCredentials = false;
-                        smtp.Host = "smtp.gmail.com";
-                        smtp.Port = 587;
-                        smtp.EnableSsl = true;
-                        await smtp.SendMailAsync(message);
-                        ViewBag.Message = "Email sent.";
-                        //return RedirectToAction("Sent");
-                    }
+                    ticket.Status = Status.Submitted;                    
                     break;
 
                 case "Save as Draft":
-                    ticket.Status = Status.Draft;
-                    ticket.DueDate = DateTime.Now;
+                    ticket.Status = Status.Draft;                    
                     break;
+
                 default:
                     throw new Exception();
             }
@@ -270,6 +249,21 @@ namespace TicketManagementSystem.Controllers
             {                
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
+
+                if(ticket.Status.Equals(Status.Submitted))
+                {
+                    var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
+
+                    await _emailSender.SendEmailAsync(
+                    "admin@bitoreq.se",
+                    "A New Ticket Submitted",
+                    $"A new ticket submitted by {loggedInUser.Email}. " +
+                    $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+
+                    //ViewBag.EmailSentMessage = "Email sent.";
+                    //return RedirectToAction("Sent");
+                    //}
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
