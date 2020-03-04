@@ -29,17 +29,21 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> Index(string name)
         {
             var users=userManager.Users;
+            string indexname="";
             if(name=="Developer")
             {
                  users = GetUsersBasedonRoles("Developer");
+                indexname = "Admin/Developers";
                
             }
             else if(name=="Customer")
             {
                  users = GetUsersBasedonRoles("Customer");
-                
+                indexname = "Customer";
             }
+
             ViewData["PageName"] = name;
+            ViewData["Name"] = indexname;
             return View(await users.ToListAsync());
 
 
@@ -220,8 +224,19 @@ namespace TicketManagementSystem.Controllers
 
 
         private IQueryable<ApplicationUser> GetUsersBasedonRoles(string rolename)
-        {
-            var roleId = _context.Roles.Where(r => r.Name == rolename).Select(r => r.Id).ToList();
+        { 
+
+            var roleId = _context.Roles.Select(r => r.Id).ToList();
+            if (rolename == "Developer")
+            {
+                 roleId = _context.Roles.Where(r => r.Name == "Developer" || r.Name == "Admin").Select(r => r.Id).ToList();
+            }
+            else if (rolename=="Customer")
+            {
+                roleId = _context.Roles.Where(r => r.Name == rolename).Select(r => r.Id).ToList();
+            }
+
+           
             var useridList = _context.UserRoles.Where(x => roleId.Contains(x.RoleId)).Select(c => c.UserId).ToList();
             var users = userManager.Users.Include(c=>c.Company).Where(t => useridList.Contains(t.Id));
             return users;

@@ -11,59 +11,71 @@
     <h4>Project</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ReleaseDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ReleaseDate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LastUpdate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LastUpdate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.SystemsUsed)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.SystemsUsed)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Company)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Company.CompanyAbbr)
-        </dd class>
-        <dt class = "col-sm-2">
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Developer1User)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Developer1User.Id)
-        </dd class>
-        <dt class = "col-sm-2">
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Developer2User)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Developer2User.Id)
-        </dd class>
+        </dd>
     </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+
+    @if (@ViewBag.formhide == "Show")
+    {
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            <a asp-action="Index">Back to List</a>
+        </form>
+ 
+    }
+    else
+    {
+        <p class=" bg-warning"><b>cannot delete this Projects. There are some connected Tickets to this project</b> </p>
         <a asp-action="Index">Back to List</a>
-    </form>
+    }
 </div>
+
+

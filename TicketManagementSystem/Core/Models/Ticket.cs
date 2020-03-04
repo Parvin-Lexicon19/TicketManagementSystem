@@ -45,11 +45,12 @@ namespace TicketManagementSystem.Core.Models
 
     public enum Status
     {
-        Draft,     //for customer
-        Submitted, //for customer
-        Received,  //for developer
-        Started,   //for developer
-        Closed     //for both
+        Draft,
+        Submitted,
+        //Received,
+        Started,
+        Closed 
+
     }
     public enum Priority
     {
