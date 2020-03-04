@@ -142,7 +142,7 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
             var anyprojects = _context.Projects.Where(p => p.CompanyId == id).Count();
-            var anycompanyusers = userManager.Users.Where(u => u.CompanyId == id).Count(); ;
+            var anycompanyusers = userManager.Users.Where(u => u.CompanyId == id).Count();
 
             if(anyprojects==0 && anycompanyusers ==0 )
             {

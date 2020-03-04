@@ -6,30 +6,30 @@
 
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
-        @if (User.IsInRole("Admin"))
+        @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
         {
-            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h2>All Tickets</h2></a>
+            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>All Tickets</h1></a>
         }
         else
         {
-            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h2>My Tickets</h2></a>
+            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>My Tickets</h1></a>
         }
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        @if (User.IsInRole("Admin"))
+        @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
         {
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 @*<partial name="_LoginPartial" />*@
                 <ul class="navbar-nav flex-grow-1">
 
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index"><h2>&nbsp;Companies</h2></a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">&nbsp;Companies</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index"><h2>&nbsp;Projects</h2></a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">&nbsp;Projects</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Customer">Customers</a>
@@ -47,9 +47,9 @@
             <div class="input-group mb-3">
                 <input type="text" name="title" class="form-control" placeholder="Search on Title" />
                 <div class="input-group-append">
-                    @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin")  || User.IsInRole("Developer"))
                     {          
-                        <select name="Status" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Draft" ))" class="form-control">
+                        <select name="StatusSearch" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Draft" ))" class="form-control">
                             <option selected="selected" value="">Status</option>
                         </select>
                         <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
@@ -61,7 +61,7 @@
                     }
                     else
                     {
-                        <select name="Status" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
+                        <select name="StatusSearch" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
                             <option selected="selected" value="">Status</option>
                         </select>
                         <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
@@ -96,7 +96,7 @@
             <th>
                 @Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectNameSortParm })
             </th>
-            @if (User.IsInRole("Admin"))
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 <th>
                     @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
@@ -111,7 +111,7 @@
             <th>
                 @Html.ActionLink(Html.DisplayNameFor(model => model.CustomerPriority), "Index", new { sortOrder = ViewBag.CustomerPrioritySortParm })
             </th>
-            @if (User.IsInRole("Admin"))
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 <th>
                     @Html.ActionLink(Html.DisplayNameFor(model => model.RealPriority), "Index", new { sortOrder = ViewBag.RealPrioritySortParm })
@@ -120,7 +120,7 @@
             <th>
                 @Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.DueDateSortParm })
             </th>
-            @if (User.IsInRole("Admin"))
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 <th>
                     @Html.ActionLink(Html.DisplayNameFor(model => model.UserEmail), "index", new { sortorder = ViewBag.AssignedToSortParm })
@@ -137,43 +137,61 @@
                     @*@Html.DisplayFor(modelItem => item.RefNo)*@
                     <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProjectName)
-                </td>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
+            </td>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
                 <td>
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
+            }
+            else
+            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.CustomerPriority)
+                    @Html.DisplayFor(modelItem => item.Status)
                 </td>
-                @if (User.IsInRole("Admin"))
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RealPriority)
-                    </td>
-                }
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPriority)
+            </td>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.DueDate)
+                    @Html.DisplayFor(modelItem => item.RealPriority)
                 </td>
-                @if (User.IsInRole("Admin"))
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.DueDate)
+            </td>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserEmail)
+                </td>
+            }
+            @if (User.IsInRole("Customer"))
+            {
+                @if (item.Status == Status.Draft)
                 {
                     <td>
-                        @Html.DisplayFor(modelItem => item.UserEmail)
-                    </td>
-                }
-                @if (User.IsInRole("Customer"))
-                {
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     </td>
                 }
-            </tr>
+                else
+                {
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    </td>
+                }
+            }
+                </tr>
         }
     </tbody>
 </table>
