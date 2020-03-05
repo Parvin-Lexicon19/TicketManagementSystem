@@ -338,8 +338,23 @@ namespace TicketManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,RefNo,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,RefNo,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket, string submit)
         {
+
+            switch (submit)
+            {
+                case "Submit":
+                    ticket.Status = Status.Submitted;
+                    break;
+
+                case "Save as Draft":
+                    ticket.Status = Status.Draft;
+                    break;
+
+                default:
+                    throw new Exception();
+            }
+
             if (id != ticket.Id)
             {
                 return NotFound();
@@ -358,13 +373,27 @@ namespace TicketManagementSystem.Controllers
                     {
                         return NotFound();
                     }
-                    else
+
+                    if (ticket.Status.Equals(Status.Submitted))
                     {
-                        throw;
+                        var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
+
+                        await _emailSender.SendEmailAsync(
+                        "admin@bitoreq.se",
+                        "A New Ticket Submitted",
+                        $"A new ticket submitted by {loggedInUser.Email}. " +
+                        $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+                        return RedirectToAction(nameof(EmailSent));
                     }
+
+                    //else
+                    //{
+                    //    throw;
+                    //}
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
