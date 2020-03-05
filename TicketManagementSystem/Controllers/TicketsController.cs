@@ -46,6 +46,7 @@ namespace TicketManagementSystem.Controllers
             //var loggedInUser = await userManager.GetUserAsync(User);
             //var UserRole = await userManager.GetRolesAsync(loggedInUser);
 
+
             List<TicketIndexViewModel> model;
 
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
