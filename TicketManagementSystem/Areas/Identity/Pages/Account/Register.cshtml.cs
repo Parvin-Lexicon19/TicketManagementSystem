@@ -54,7 +54,6 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
         public string RoleName { get; set; }
 
-        public string CompanyNames { get; set; }
         public SelectList CompanyOption { get; set; }
         public SelectList RoleOption { get; set; }
 
@@ -80,9 +79,24 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Role")]
             public string Role { get; set; }
+            [Required]
+            [Display(Name = "FirstName")]
+            public string FirstName { get; set; }
+            [Required]
+            [Display(Name = "LastName")]
+            public string LastName { get; set; }
+
+            [Display(Name = "Country")]
+            public string Country { get; set; }
+
+            [Display(Name = "PhoneNumber")]
+            public string PhoneNumber { get; set; }
+
+            [Display(Name = "JobTitle")]
+            public string JobTitle { get; set; }
 
             [Required]
-            [Display(Name = "CompanyName")]
+
             public string CompanyName { get; set; }
 
       
@@ -101,10 +115,13 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             // pass the Role List using ViewData
             var getAllRoles = _context.Roles.OrderBy(x => x.Name);
 
+
             ViewData["roles"] = getAllRoles.ToList();
 
             // pass the Company List.Sort by company Name.
+
             var getAllCompanyName = _context.Companies.OrderBy(x => x.CompanyName);
+
             
             CompanyOption = new SelectList(getAllCompanyName.Select(x => x.CompanyName));
 
@@ -125,7 +142,8 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
               
                 // Assign the company id when you create user.
 
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email,CompanyId = userCompanyName.Id};
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email,CompanyId = userCompanyName.Id,PhoneNumber = Input.PhoneNumber,
+                                                 Country = Input.Country,FirstName = Input.FirstName,LastName = Input.LastName,JobTitle = Input.JobTitle};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

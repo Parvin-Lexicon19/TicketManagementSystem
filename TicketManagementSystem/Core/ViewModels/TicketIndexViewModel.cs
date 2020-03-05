@@ -10,6 +10,7 @@ namespace TicketManagementSystem.Core.ViewModels
 {
     public class TicketIndexViewModel
     {
+
         public Int64 Id { get; set; }
         [Required]
         [DisplayName("Ticket No.")]
@@ -24,7 +25,7 @@ namespace TicketManagementSystem.Core.ViewModels
         [DisplayName("Customer Priority")]
         public Priority? CustomerPriority { get; set; }
         [DisplayName("Real Priority")]
-        public Priority? RealPriority { get; set; }  
+        public Priority? RealPriority { get; set; }
         public string AssignedTo { get; set; }
 
         [DisplayName("Assigned To")]
@@ -34,7 +35,5 @@ namespace TicketManagementSystem.Core.ViewModels
         [DataType(DataType.Date), DisplayFormat(DataFormatString = @"{0:dd\/MM\/yyyy HH:mm}",
             ApplyFormatInEditMode = true)]
         public DateTime DueDate { get; set; }
-        
     }
-
 }
