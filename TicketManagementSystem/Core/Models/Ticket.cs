@@ -54,9 +54,9 @@ namespace TicketManagementSystem.Core.Models
     }
     public enum Priority
     {
-        A,
-        B,
-        C
+        A_2days,
+        B_5days,
+        C_9days
     }
     public enum ResponseType
     {

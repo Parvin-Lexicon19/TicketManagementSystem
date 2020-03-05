@@ -14,8 +14,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="RefNo" class="control-label"></label>
-                <input asp-for="RefNo" class="form-control" />
+                @*<label asp-for="RefNo" class="control-label"></label>*@
+                <input type="hidden" asp-for="RefNo" class="form-control" />
                 <span asp-validation-for="RefNo" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,77 +24,95 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Problem" class="control-label"></label>
-                <input asp-for="Problem" class="form-control" />
-                <span asp-validation-for="Problem" class="text-danger"></span>
+                <label asp-for="Project" class="control-label"></label>
+                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
+                    @*(IEnumerable<SelectListItem>)loggedInUserProjects*@
+                    <option value="">Select Project</option>
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <select asp-for="CreatedBy" class="form-control" asp-items="ViewBag.CreatedBy"></select>
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AssignedTo" class="control-label"></label>
-                <select asp-for="AssignedTo" class="form-control" asp-items="ViewBag.AssignedTo"></select>
-                <span asp-validation-for="AssignedTo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HoursSpent" class="control-label"></label>
-                <input asp-for="HoursSpent" class="form-control" />
-                <span asp-validation-for="HoursSpent" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProjectId" class="control-label"></label>
-                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-                <span asp-validation-for="ProjectId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CustomerPriority" class="control-label"></label>
-                <input asp-for="CustomerPriority" class="form-control" />
+                <label asp-for="CustomerPriority" class="control-label">Priority</label>
+                <select asp-for="CustomerPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control">
+                    <option value="">Select Priority</option>
+                </select>
                 <span asp-validation-for="CustomerPriority" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RealPriority" class="control-label"></label>
-                <input asp-for="RealPriority" class="form-control" />
-                <span asp-validation-for="RealPriority" class="text-danger"></span>
+                <label asp-for="Problem" class="control-label"></label>
+                <textarea asp-for="Problem" rows="8" class="form-control"></textarea>
+                <span asp-validation-for="Problem" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DueDate" class="control-label"></label>
-                <input asp-for="DueDate" class="form-control" />
-                <span asp-validation-for="DueDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClosedDate" class="control-label"></label>
-                <input asp-for="ClosedDate" class="form-control" />
-                <span asp-validation-for="ClosedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastUpdated" class="control-label"></label>
-                <input asp-for="LastUpdated" class="form-control" />
-                <span asp-validation-for="LastUpdated" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ResponseType" class="control-label"></label>
-                <input asp-for="ResponseType" class="form-control" />
-                <span asp-validation-for="ResponseType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ResponseDesc" class="control-label"></label>
-                <input asp-for="ResponseDesc" class="form-control" />
-                <span asp-validation-for="ResponseDesc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            @*<div class="form-group">
+            <label asp-for="CreatedBy" class="control-label"></label>
+            <select asp-for="CreatedBy" class="form-control" asp-items="ViewBag.CreatedBy"></select>
+            <span asp-validation-for="CreatedBy" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CreatedDate" class="control-label"></label>
+            <input asp-for="CreatedDate" class="form-control" />
+            <span asp-validation-for="CreatedDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="AssignedTo" class="control-label"></label>
+            <select asp-for="AssignedTo" class="form-control" asp-items="ViewBag.AssignedTo"></select>
+            <span asp-validation-for="AssignedTo" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="HoursSpent" class="control-label"></label>
+            <input asp-for="HoursSpent" class="form-control" />
+            <span asp-validation-for="HoursSpent" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Status" class="control-label"></label>
+            <input asp-for="Status" class="form-control" />
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ProjectId" class="control-label"></label>
+            <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+            <span asp-validation-for="ProjectId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CustomerPriority" class="control-label"></label>
+            <input asp-for="CustomerPriority" class="form-control" />
+            <span asp-validation-for="CustomerPriority" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RealPriority" class="control-label"></label>
+            <input asp-for="RealPriority" class="form-control" />
+            <span asp-validation-for="RealPriority" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DueDate" class="control-label"></label>
+            <input asp-for="DueDate" class="form-control" />
+            <span asp-validation-for="DueDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ClosedDate" class="control-label"></label>
+            <input asp-for="ClosedDate" class="form-control" />
+            <span asp-validation-for="ClosedDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastUpdated" class="control-label"></label>
+            <input asp-for="LastUpdated" class="form-control" />
+            <span asp-validation-for="LastUpdated" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ResponseType" class="control-label"></label>
+            <input asp-for="ResponseType" class="form-control" />
+            <span asp-validation-for="ResponseType" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ResponseDesc" class="control-label"></label>
+            <input asp-for="ResponseDesc" class="form-control" />
+            <span asp-validation-for="ResponseDesc" class="text-danger"></span>
+        </div>*@
+            @*<div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+            </div>*@
+            <div class="form-group" align="center">
+                <input name="submit" type="submit" id="submit" value="Save as Draft" class="btn btn-primary" />
+                <input name="submit" type="submit" id="submit" value="Submit" class="btn btn-primary" />
             </div>
         </form>
     </div>
