@@ -88,7 +88,7 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "Index", new { sortOrder = ViewBag.RefNoSortParm })
+                @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "index", new { sortorder = ViewBag.RefNoSortParm })
             </th>
             <th>
                 @Html.ActionLink(Html.DisplayNameFor(model => model.Title), "Index", new { sortOrder = ViewBag.TitleSortParm })
@@ -134,7 +134,6 @@
         {
         <tr>
             <td>
-                @*@Html.DisplayFor(modelItem => item.RefNo)*@
                 <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
 
             </td>
