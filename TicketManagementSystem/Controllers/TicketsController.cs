@@ -37,8 +37,19 @@ namespace TicketManagementSystem.Controllers
             //var applicationdbcontext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
             // return View(await applicationdbcontext.ToListAsync());
 
+            //var loggedInUser = await userManager.GetUserAsync(User);
+            //var UserRole = await userManager.GetRolesAsync(loggedInUser);
+
+           //if ( User.IsInRole("Admin"))
+           // {
+
+
+           // }
+           
+
+
             var model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                    .Select(s => new CustomerIndexViewModel
+                    .Select(s => new TicketIndexViewModel
                      {
                          Id = s.Id,
                          RefNo = s.RefNo,
@@ -46,8 +57,10 @@ namespace TicketManagementSystem.Controllers
                          Status = s.Status,
                          ProjectName = s.Project.Name,
                          CustomerPriority = s.CustomerPriority,
-                         DueDate = s.DueDate
-                     })
+                         RealPriority = s.RealPriority,
+                         DueDate = s.DueDate,
+                         UserEmail = s.AssignedUser.Email
+                    })
                     .ToListAsync();
 
             model = SortList(sortOrder, model);
@@ -55,10 +68,10 @@ namespace TicketManagementSystem.Controllers
         }
 
         //Filter by Title, Status and Priority
-        public async Task<IActionResult> Filter(string title, int? status, int? priority)
+        public async Task<IActionResult> Filter(string title, int? Status, int? customerPriority, int? adminPriority)
         {
             var model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                   .Select(s => new CustomerIndexViewModel
+                   .Select(s => new TicketIndexViewModel
                    {
                        Id = s.Id,
                        RefNo = s.RefNo,
@@ -66,7 +79,9 @@ namespace TicketManagementSystem.Controllers
                        Status = s.Status,
                        ProjectName = s.Project.Name,
                        CustomerPriority = s.CustomerPriority,
-                       DueDate = s.DueDate
+                       RealPriority = s.RealPriority,
+                       DueDate = s.DueDate,
+                       UserEmail = s.AssignedUser.Email
                    })
                    .ToListAsync();
 
@@ -74,26 +89,32 @@ namespace TicketManagementSystem.Controllers
                 model :
                 model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
-            model = status == null ?
+            model = Status == null ?
               model :
-              model.Where(m => m.Status == (Status)status).ToList();
+              model.Where(m => m.Status == (Status)Status).ToList();
 
-            model = priority == null ?
+            model = customerPriority == null ?
                 model :
-                model.Where(m => m.CustomerPriority == (Priority)priority).ToList();
+                model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
+
+            model = adminPriority == null ?
+                model :
+                model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
 
             return View(nameof(Index), model);
         }
 
         //Sort by Attributes
-        private List<CustomerIndexViewModel> SortList(string sortOrder, List<CustomerIndexViewModel> ticket)
+        private List<TicketIndexViewModel> SortList(string sortOrder, List<TicketIndexViewModel> ticket)
         {
             ViewBag.RefNoSortParm = String.IsNullOrEmpty(sortOrder) ? "RefNo_desc" : "";
             ViewBag.TitleSortParm = sortOrder == "Title" ? "Title_desc" : "Title";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "Status_desc" : "Status";
             ViewBag.ProjectNameSortParm = sortOrder == "ProjectName" ? "ProjectName_desc" : "ProjectName";
             ViewBag.CustomerPrioritySortParm = sortOrder == "CustomerPriority" ? "CustomerPriority_desc" : "CustomerPriority";
+            ViewBag.RealrPrioritySortParm = sortOrder == "RealrPriority" ? "RealrPriority_desc" : "RealrPriority";
             ViewBag.DueDateSortParm = sortOrder == "DueDate" ? "DueDate_desc" : "DueDate";
+            ViewBag.AssignedToSortParm = sortOrder == "AssignedTo" ? "AssignedTo_desc" : "AssignedTo";
 
             switch (sortOrder)
             {
@@ -117,8 +138,16 @@ namespace TicketManagementSystem.Controllers
                     ticket = ticket.OrderByDescending(s => s.CustomerPriority).ToList();
                     break;
 
+                case "RealrPriority_desc":
+                    ticket = ticket.OrderByDescending(s => s.RealPriority).ToList();
+                    break;
+
                 case "DueDate_desc":
                     ticket = ticket.OrderByDescending(s => s.DueDate).ToList();
+                    break;
+
+                case "AssignedTo_desc":
+                    ticket = ticket.OrderByDescending(s => s.UserEmail).ToList();
                     break;
 
                 default:
@@ -208,6 +237,22 @@ namespace TicketManagementSystem.Controllers
             }
 
 
+            //var userId = userManager.GetUserAsync(User);
+            //var user = userManager.FindByIdAsync(ticket.CreatedBy);
+
+            //var companyLastRefNo = await _context.Tickets
+            //    .LastOrDefaultAsync(m => m.RefNo == id)
+            //var companyLastRefNo = User.
+            //var companyLastRefNo =  _context.Users
+            //    .Where(u => u.Id == ticket.CreatedBy);
+            //    .Include(a => a.CreatedUser)
+            //    .ThenInclude(m => m.Company)
+            //    .LastOrDefaultAsync(a => a.RefNo.Substring(0,5) == );
+
+            //_context.Tickets.(ticket.CreatedUser.CompanyId)
+            //var newString = Regex.Replace(x, "\\d+",
+            //    m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
+            //ticket.RefNo
             if (ModelState.IsValid)
             {                
                 _context.Add(ticket);

@@ -163,6 +163,21 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
+            var anytickets= _context.Tickets.Where(t=>t.ProjectId==id).Count();
+            
+
+            if (anytickets == 0)
+            {
+                ViewData["formhide"] = "Show";
+            }
+            else
+            {
+                ViewData["formhide"] = "Hide";
+            }
+
+
+
+
             return View(project);
         }
 
