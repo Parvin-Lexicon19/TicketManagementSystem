@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +26,14 @@ namespace TicketManagementSystem.Controllers
         private readonly ApplicationDbContext _context;
         static ApplicationUser loggedInUser;
         List<SelectListItem> selectListItems;
+        private readonly IEmailSender _emailSender;
 
-        public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _context = context;
             this.userManager = userManager;
             selectListItems = new List<SelectListItem>();
+            _emailSender = emailSender;
         }
 
         // GET: Tickets
@@ -37,19 +43,8 @@ namespace TicketManagementSystem.Controllers
             //var applicationdbcontext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
             // return View(await applicationdbcontext.ToListAsync());
 
-            //var loggedInUser = await userManager.GetUserAsync(User);
-            //var UserRole = await userManager.GetRolesAsync(loggedInUser);
-
-           //if ( User.IsInRole("Admin"))
-           // {
-
-
-           // }
-           
-
-
             var model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                    .Select(s => new TicketIndexViewModel
+                    .Select(s => new CustomerIndexViewModel
                      {
                          Id = s.Id,
                          RefNo = s.RefNo,
@@ -57,45 +52,82 @@ namespace TicketManagementSystem.Controllers
                          Status = s.Status,
                          ProjectName = s.Project.Name,
                          CustomerPriority = s.CustomerPriority,
-                         RealPriority = s.RealPriority,
-                         DueDate = s.DueDate,
-                         UserEmail = s.AssignedUser.Email
-                    })
+                         DueDate = s.DueDate
+                     })
                     .ToListAsync();
+
+            }
+            else
+            {
+                model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                        .Select(s => new TicketIndexViewModel
+                        {
+                            Id = s.Id,
+                            RefNo = s.RefNo,
+                            Title = s.Title,
+                            Status = s.Status,
+                            ProjectName = s.Project.Name,
+                            CustomerPriority = s.CustomerPriority,
+                            RealPriority = s.RealPriority,
+                            DueDate = s.DueDate,
+                            UserEmail = s.AssignedUser.Email
+                        })
+                        .ToListAsync();
+            }
 
             model = SortList(sortOrder, model);
             return View(model);
         }
 
         //Filter by Title, Status and Priority
-        public async Task<IActionResult> Filter(string title, int? Status, int? customerPriority, int? adminPriority)
+        public async Task<IActionResult> Filter(string title, int? StatusSearch, int? customerPriority, int? adminPriority)
         {
-            var model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                   .Select(s => new TicketIndexViewModel
-                   {
-                       Id = s.Id,
-                       RefNo = s.RefNo,
-                       Title = s.Title,
-                       Status = s.Status,
-                       ProjectName = s.Project.Name,
-                       CustomerPriority = s.CustomerPriority,
-                       RealPriority = s.RealPriority,
-                       DueDate = s.DueDate,
-                       UserEmail = s.AssignedUser.Email
-                   })
-                   .ToListAsync();
+            List<TicketIndexViewModel> model;
+
+            if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                    .Where(s => s.Status != Status.Draft)
+                    .Select(s => new TicketIndexViewModel
+                    {
+                        Id = s.Id,
+                        RefNo = s.RefNo,
+                        Title = s.Title,
+                        Status = s.Status,
+                        ProjectName = s.Project.Name,
+                        CustomerPriority = s.CustomerPriority,
+                        RealPriority = s.RealPriority,
+                        DueDate = s.DueDate,
+                        UserEmail = s.AssignedUser.Email
+                    })
+                    .ToListAsync();
+
+            }
+            else
+            {
+                model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                        .Select(s => new TicketIndexViewModel
+                        {
+                            Id = s.Id,
+                            RefNo = s.RefNo,
+                            Title = s.Title,
+                            Status = s.Status,
+                            ProjectName = s.Project.Name,
+                            CustomerPriority = s.CustomerPriority,
+                            RealPriority = s.RealPriority,
+                            DueDate = s.DueDate,
+                            UserEmail = s.AssignedUser.Email
+                        })
+                        .ToListAsync();
+            }
 
             model = string.IsNullOrWhiteSpace(title) ?
                 model :
                 model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
-            model = Status == null ?
+            model = status == null ?
               model :
-              model.Where(m => m.Status == (Status)Status).ToList();
-
-            model = customerPriority == null ?
-                model :
-                model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
+              model.Where(m => m.Status == (Status)status).ToList();
 
             model = adminPriority == null ?
                 model :
@@ -219,50 +251,51 @@ namespace TicketManagementSystem.Controllers
                 _context.Tickets.Where(t => t.RefNo.Contains(companyAbbr)).ToList().LastOrDefault().RefNo
                 : companyLastRefNo = companyAbbr + "00000";
                 
-            //Increasin that last RefNo by 1 and assigning it to the newly added ticket
+            //Increasing that last RefNo by 1 and assigning it to the newly added ticket
             ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
+
+            ticket.DueDate = DateTime.Now;
 
             switch (submit)
             {
                 case "Submit":
-                    ticket.Status = Status.Submitted;
+                    ticket.Status = Status.Submitted;                    
                     break;
+
                 case "Save as Draft":
-                    ticket.Status = Status.Draft;
-                    ticket.DueDate = DateTime.Now;
+                    ticket.Status = Status.Draft;                    
                     break;
+
                 default:
                     throw new Exception();
             }
 
 
-            //var userId = userManager.GetUserAsync(User);
-            //var user = userManager.FindByIdAsync(ticket.CreatedBy);
-
-            //var companyLastRefNo = await _context.Tickets
-            //    .LastOrDefaultAsync(m => m.RefNo == id)
-            //var companyLastRefNo = User.
-            //var companyLastRefNo =  _context.Users
-            //    .Where(u => u.Id == ticket.CreatedBy);
-            //    .Include(a => a.CreatedUser)
-            //    .ThenInclude(m => m.Company)
-            //    .LastOrDefaultAsync(a => a.RefNo.Substring(0,5) == );
-
-            //_context.Tickets.(ticket.CreatedUser.CompanyId)
-            //var newString = Regex.Replace(x, "\\d+",
-            //    m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
-            //ticket.RefNo
             if (ModelState.IsValid)
             {                
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
+
+                if(ticket.Status.Equals(Status.Submitted))
+                {
+                    var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
+
+                    await _emailSender.SendEmailAsync(
+                    "admin@bitoreq.se",
+                    "A New Ticket Submitted",
+                    $"A new ticket submitted by {loggedInUser.Email}. " +
+                    $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+                    return RedirectToAction(nameof(EmailSent));
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
             ViewData["ProjectId"] = selectListItems;
+
             return View(ticket);
         }
 
@@ -358,6 +391,11 @@ namespace TicketManagementSystem.Controllers
         private bool TicketExists(long id)
         {
             return _context.Tickets.Any(e => e.Id == id);
+        }
+
+        public ActionResult EmailSent()
+        {
+            return View();
         }
     }
 }
