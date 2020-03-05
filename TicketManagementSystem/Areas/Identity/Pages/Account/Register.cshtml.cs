@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -142,9 +143,17 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
               
                 // Assign the company id when you create user.
 
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email,CompanyId = userCompanyName.Id,PhoneNumber = Input.PhoneNumber,
-                                                 Country = Input.Country,FirstName = Input.FirstName,LastName = Input.LastName,JobTitle = Input.JobTitle};
+                var user = new ApplicationUser {
+                    UserName = Input.Email, Email = Input.Email,CompanyId = userCompanyName.Id,PhoneNumber = Input.PhoneNumber,
+                    Country = Input.Country,FirstName = Input.FirstName,LastName = Input.LastName,JobTitle = Input.JobTitle
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+                // Add First Name and last name to claims to access in _login partial view.
+
+                await _userManager.AddClaimAsync(user, new Claim("FirstName", user.FirstName));
+                await _userManager.AddClaimAsync(user, new Claim("LastName", user.LastName));
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
