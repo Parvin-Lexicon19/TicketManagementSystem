@@ -24,7 +24,7 @@ namespace TicketManagementSystem.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ApplicationDbContext _context;
-        static ApplicationUser loggedInUser;
+        private static ApplicationUser loggedInUser;
         List<SelectListItem> selectListItems;
         private readonly IEmailSender _emailSender;
 
@@ -256,7 +256,8 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> AddTicket([Bind("Id,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket, string submit)
         {
             //Getting LoggedInUser's ComapnyId & then CompanyAbbr & Last RefNo of that company
-            var companyAbbr = _context.Companies.Find(loggedInUser.CompanyId).CompanyAbbr;
+            Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
+            var companyAbbr = loggedInUserCompany.CompanyAbbr;
             //var companyLastRefNo = _context.Tickets.LastOrDefault(t => t.RefNo.Contains(companyAbbr)).RefNo;
             bool companyHasTicket = _context.Tickets.Any(t => t.RefNo.Contains(companyAbbr));
 
@@ -269,7 +270,21 @@ namespace TicketManagementSystem.Controllers
             ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
 
-            ticket.DueDate = DateTime.Now;
+            switch (ticket.CustomerPriority)
+            {
+                case Priority.A_2days:
+                    ticket.DueDate = DateTime.Now.AddDays(2);
+                    break;
+                case Priority.B_5days:
+                    ticket.DueDate = DateTime.Now.AddDays(5);
+                    break;
+                case Priority.C_9days:
+                    ticket.DueDate = DateTime.Now.AddDays(9);
+                    break;
+
+                default:
+                    throw new Exception();
+            }            
 
             switch (submit)
             {
@@ -297,8 +312,8 @@ namespace TicketManagementSystem.Controllers
                     await _emailSender.SendEmailAsync(
                     "admin@bitoreq.se",
                     "A New Ticket Submitted",
-                    $"A new ticket submitted by {loggedInUser.Email}. " +
-                    $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+                    $"A new ticket submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. "  +
+                    $"<br/>See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details.");
                     return RedirectToAction(nameof(EmailSent));
                 }
 
