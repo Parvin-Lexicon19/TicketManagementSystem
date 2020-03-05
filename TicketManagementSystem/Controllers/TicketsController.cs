@@ -286,6 +286,7 @@ namespace TicketManagementSystem.Controllers
                     throw new Exception();
             }
 
+
             if (ModelState.IsValid)
             {                
                 _context.Add(ticket);
