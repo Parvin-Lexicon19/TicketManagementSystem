@@ -181,7 +181,7 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
 
-             OnGetAsync();
+             await OnGetAsync();
             return Page();
         }
     }
