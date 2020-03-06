@@ -98,6 +98,18 @@
             @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
         </dd>
     </dl>
+    <!--If Ticket status not closed. and want to show the Ticket status -->
+    @if ((int)Model.Ticket.Status != 3)
+    { 
+        <dl class="row hidestatus">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Ticket.Status)
+            </dt>
+            <dd class="col-sm-3">
+                @Html.DisplayFor(model => model.Ticket.Status)
+            </dd>
+        </dl>
+    }
     <!--If Ticket status is closed show every details.-->
     @if ((int)Model.Ticket.Status == 3)
     {
@@ -131,8 +143,8 @@
                 @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
             </dd>
         </dl>
-    } 
-    <!-- If Ticket status is not closed Hide the field and show them only when Edit button is clicked .-->
+    }
+    <!-- If Ticket status is not closed Hide the fields below and show them only when Edit button is clicked .-->
     <dl class="row hide collapse">
 
         <dt class="col-sm-3">
@@ -147,7 +159,7 @@
         <dd class="col-sm-3">
             <input asp-for="Ticket.ResponseType" class="form-control" />
         </dd>
-     
+
     </dl>
     <dl class="row hide collapse">
         <dt class="col-sm-3">
@@ -225,6 +237,7 @@
      $("#SaveEditbtn").click(function() {
         if ($(this).text() == "Edit") {
             $(this).text("Save");
+            $('.hidestatus').hide();
         } else {
             $(this).text("Edit");
         };
