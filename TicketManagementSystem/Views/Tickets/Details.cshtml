@@ -1,4 +1,5 @@
-﻿@model TicketManagementSystem.Core.Models.Ticket
+﻿@*@model TicketManagementSystem.Core.Models.Ticket*@
+@model TicketManagementSystem.Core.ViewModels.TicketDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -10,105 +11,152 @@
     <h4>Ticket</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RefNo)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.RefNo)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RefNo)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.RefNo)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.Title)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.Title)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Problem)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.Problem)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Problem)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.Problem)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.CreatedDate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HoursSpent)
+        @*<dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.HoursSpent)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.HoursSpent)
+            </dd>*@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.Status)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HoursSpent)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.Status)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.CustomerPriority)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.CustomerPriority)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerPriority)
+        @*<dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.RealPriority)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.RealPriority)
+            </dd>*@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.DueDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CustomerPriority)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.DueDate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RealPriority)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.ClosedDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RealPriority)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.ClosedDate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DueDate)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.LastUpdated)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DueDate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.LastUpdated)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ClosedDate)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.ResponseType)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ClosedDate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.ResponseType)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastUpdated)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.ResponseDesc)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastUpdated)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.ResponseDesc)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ResponseType)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.Project)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ResponseType)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.Project.Name)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ResponseDesc)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.CreatedUser)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ResponseDesc)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.CreatedUser.Email)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Project)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Project.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedUser)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedUser.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AssignedUser)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AssignedUser.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
     <a asp-action="Index">Back to List</a>
 </div>
+
+<br />
+<br />
+
+<div class="form-group">
+    <!--Button trigger modal-->
+    <div>
+        <button type="button" id="commentPopUp" class="btn btn-primary" data-toggle="modal" data-target="commentModalCenter">Add Comment</button>
+    </div>
+    <br />
+    <b><label asp-for="Ticket.Comments" class="control-label"></label></b>
+    <div style="height: 55vh; overflow:auto;">
+        @await Html.PartialAsync("_CommentsPartial", Model.Ticket.Comments)
+    </div>
+</div>
+
+<!--Modal-->
+<div class="modal fade" id="commentModalCenter" tabindex="-1" role="dialog" aria-labelledby="commentModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Module for @Model.Ticket.Title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("CommentModalPopUpPartial", Model.Comment)
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+
+</script>
+
+<script type="text/javascript">
+    $("#commentPopUp").click(function () {
+        $("#commentModalCenter").modal('show');
+    });
+
+    $("#btnHideModal").click(function () {
+        $("#commentModalCenter").modal('hide');
+    });
+</script>

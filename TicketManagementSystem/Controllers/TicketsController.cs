@@ -315,7 +315,18 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
-            return View(ticket);
+            ticket.Comments = await _context.Comments.Where(m => m.TicketId == id).ToListAsync();
+
+                var model = new TicketDetailsViewModel
+                {
+                    Ticket = ticket,
+                    Comment = new Comment
+                    {
+                        TicketId = ticket.Id
+                    }
+                 };
+
+            return View(model);
         }
 
         // GET: Tickets/AddTicket
@@ -363,6 +374,8 @@ namespace TicketManagementSystem.Controllers
             //Increasing that last RefNo by 1 and assigning it to the newly added ticket
             ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
+
+            ticket.CreatedBy = loggedInUser.Id;
 
             switch (ticket.CustomerPriority)
             {
@@ -563,6 +576,19 @@ namespace TicketManagementSystem.Controllers
         public ActionResult EmailSent()
         {
             return View();
+        }
+
+        public async Task<IActionResult> AddComment([Bind("Id,CommentTime,CommentBy,CommentText,TicketId")] Comment comment)
+        {
+            comment.CommentTime = DateTime.Now;
+            loggedInUser = await userManager.GetUserAsync(User);
+            comment.CommentBy = loggedInUser.Id;
+            if (ModelState.IsValid)
+            {
+                _context.Add(comment);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Details", new { id = comment.TicketId });
         }
     }
 }
