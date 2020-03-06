@@ -43,7 +43,7 @@ namespace TicketManagementSystem.Controllers
             //var applicationdbcontext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
             // return View(await applicationdbcontext.ToListAsync());
 
-            //var loggedInUser = await userManager.GetUserAsync(User);
+            var loggedInUser = await userManager.GetUserAsync(User);
             //var UserRole = await userManager.GetRolesAsync(loggedInUser);
 
 
@@ -71,6 +71,7 @@ namespace TicketManagementSystem.Controllers
             else
             {
                 model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                        //.Where(u => u.AssignedUser.Id == loggedInUser.Id)
                         .Select(s => new TicketIndexViewModel
                         {
                             Id = s.Id,
@@ -117,6 +118,7 @@ namespace TicketManagementSystem.Controllers
             else
             {
                 model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                        //.Where(u => u.AssignedUser.Id == loggedInUser.Id)
                         .Select(s => new TicketIndexViewModel
                         {
                             Id = s.Id,
@@ -335,6 +337,7 @@ namespace TicketManagementSystem.Controllers
                 };
                 selectListItems.Add(selectItem);
             }
+
             ViewData["ProjectId"] = selectListItems;
             return View();
         }
