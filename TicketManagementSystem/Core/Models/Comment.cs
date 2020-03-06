@@ -11,6 +11,8 @@ namespace TicketManagementSystem.Core.Models
     {
         public Int64 Id { get; set; }
         [Required]
+        [DataType(DataType.Date), DisplayFormat(DataFormatString = @"{0:dd\/MM\/yyyy HH:mm}",
+            ApplyFormatInEditMode = true)]
         public DateTime CommentTime { get; set; }
         [ForeignKey("ApplicationUser")]
         public string CommentBy { get; set; }

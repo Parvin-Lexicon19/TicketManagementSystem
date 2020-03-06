@@ -313,14 +313,14 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
-            ticket.Comments = await _context.Comments.Where(m => m.TicketId == id).ToListAsync();
+            ticket.Comments = await _context.Comments.Where(m => m.TicketId == id).Include(c => c.ApplicationUser).ToListAsync();
 
                 var model = new TicketDetailsViewModel
                 {
                     Ticket = ticket,
                     Comment = new Comment
                     {
-                        TicketId = ticket.Id
+                        TicketId = ticket.Id,
                     }
                  };
 
@@ -373,6 +373,7 @@ namespace TicketManagementSystem.Controllers
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
 
             ticket.CreatedBy = loggedInUser.Id;
+            ticket.CreatedDate = DateTime.Now;
 
             switch (ticket.CustomerPriority)
             {

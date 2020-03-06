@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<TicketManagementSystem.Core.Models.Comment>
+@inject UserManager<ApplicationUser> userManager
 
 <table class="table">
-    <thead>
+    @*<thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.CommentTime)
@@ -14,25 +15,28 @@
             </th>
             <th></th>
         </tr>
-    </thead>
+    </thead>*@
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CommentTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CommentText)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.Id)
-            </td>
-            <td>
-                <a asp-controller="Comments" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-controller="Comments" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr class="row">
+                <td class="col-sm-2 font-weight-lighter small border-right active ml-1">
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
+                    <br/> 
+                    @Html.DisplayFor(modelItem => item.CommentTime)
+                </td>
+                <td class="col-sm-8">
+                    @Html.DisplayFor(modelItem => item.CommentText)
+                </td>
+                @*<td class="col-sm-4 mb-0 text-right">
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
+                </td>*@
+                <td class="col-sm-1">
+                    <a asp-controller="Comments" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    @*<a asp-controller="Comments" asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                    <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
