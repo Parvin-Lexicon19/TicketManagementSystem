@@ -19,6 +19,7 @@ namespace TicketManagementSystem.Core.Models
         [StringLength(500)]
         public string Problem { get; set; }
         public string CreatedBy { get; set; }
+        [DisplayName("Created Date")]
         public DateTime CreatedDate { get; set; }
         public string AssignedTo { get; set; }
         public double HoursSpent { get; set; }

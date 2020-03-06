@@ -205,6 +205,96 @@ namespace TicketManagementSystem.Controllers
             return ticket;
         }
 
+        // GET: Tickets/DetailsDraft
+        public async Task<IActionResult> DetailsDraft(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var ticket = await _context.Tickets
+                .Include(t => t.AssignedUser)
+                .Include(t => t.CreatedUser)
+                .Include(t => t.Project)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            return View(ticket);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DetailsDraft(long? id, string submit)
+        {
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var ticket = await _context.Tickets
+                .Include(t => t.AssignedUser)
+                .Include(t => t.CreatedUser)
+                .Include(t => t.Project)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            if(submit == "Submit")
+            {
+                ticket.Status = Status.Submitted;
+              
+            }
+
+            if (id != ticket.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(ticket);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TicketExists(ticket.Id))
+                    {
+                        return NotFound();
+                    }
+
+                    if (ticket.Status.Equals(Status.Submitted))
+                    {
+                        var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
+
+                        await _emailSender.SendEmailAsync(
+                        "admin@bitoreq.se",
+                        "A New Ticket Submitted",
+                        $"A new ticket submitted by {loggedInUser.Email}. " +
+                        $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+                        return RedirectToAction(nameof(EmailSent));
+                    }
+
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
+            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
+
+            return View(ticket);
+        }
+
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(long? id)
         {
@@ -366,8 +456,38 @@ namespace TicketManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,RefNo,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,RefNo,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket, string submit)
         {
+            switch (ticket.CustomerPriority)
+            {
+                case Priority.A_2days:
+                    ticket.DueDate = DateTime.Now.AddDays(2);
+                    break;
+                case Priority.B_5days:
+                    ticket.DueDate = DateTime.Now.AddDays(5);
+                    break;
+                case Priority.C_9days:
+                    ticket.DueDate = DateTime.Now.AddDays(9);
+                    break;
+
+                default:
+                    throw new Exception();
+            }
+
+            switch (submit)
+            {
+                case "Submit":
+                    ticket.Status = Status.Submitted;
+                    break;
+
+                case "Save as Draft":
+                    ticket.Status = Status.Draft;
+                    break;
+
+                default:
+                    throw new Exception();
+            }
+
             if (id != ticket.Id)
             {
                 return NotFound();
@@ -386,13 +506,27 @@ namespace TicketManagementSystem.Controllers
                     {
                         return NotFound();
                     }
-                    else
+
+                    if (ticket.Status.Equals(Status.Submitted))
                     {
-                        throw;
+                        var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
+
+                        await _emailSender.SendEmailAsync(
+                        "admin@bitoreq.se",
+                        "A New Ticket Submitted",
+                        $"A new ticket submitted by {loggedInUser.Email}. " +
+                        $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+                        return RedirectToAction(nameof(EmailSent));
                     }
+
+                    //else
+                    //{
+                    //    throw;
+                    //}
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
