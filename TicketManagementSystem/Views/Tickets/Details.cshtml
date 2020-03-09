@@ -100,7 +100,7 @@
     </dl>
     <!--If Ticket status not closed. and want to show the Ticket status -->
     @if ((int)Model.Ticket.Status != 3)
-    { 
+    {
         <dl class="row hidestatus">
             <dt class="col-sm-3">
                 @Html.DisplayNameFor(model => model.Ticket.Status)
@@ -177,6 +177,24 @@
     </dl>
 
 </div>
+@if (Model.Documents != null)
+{
+
+    @foreach (var item in Model.Documents)
+    { 
+        <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Documents)
+        </dt>
+        <dd class="col-sm-3">
+            <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+        </dd>
+  
+     </dl>
+    }
+}
+
+<br />
 <div>
     @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -7,6 +8,7 @@ using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -316,10 +318,12 @@ namespace TicketManagementSystem.Controllers
             }
 
             ticket.Comments = await _context.Comments.Where(m => m.TicketId == id).Include(c => c.ApplicationUser).ToListAsync();
+            ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
 
                 var model = new TicketDetailsViewModel
                 {
                     Ticket = ticket,
+                    Documents= ticket.Documents,
                     Comment = new Comment
                     {
                         TicketId = ticket.Id,
@@ -349,8 +353,13 @@ namespace TicketManagementSystem.Controllers
                 selectListItems.Add(selectItem);
             }
 
+            var model = new AddTicketViewModel();
+            //model.File = new List<IFormFile>(3);
+
+
             ViewData["ProjectId"] = selectListItems;
-            return View();
+
+            return View(model);
         }
 
         // POST: Tickets/AddTicket
@@ -358,8 +367,9 @@ namespace TicketManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddTicket([Bind("Id,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket, string submit)
+        public async Task<IActionResult> AddTicket(AddTicketViewModel model, string submit)
         {
+
             //Getting LoggedInUser's ComapnyId & then CompanyAbbr & Last RefNo of that company
             Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
             var companyAbbr = loggedInUserCompany.CompanyAbbr;
@@ -370,24 +380,24 @@ namespace TicketManagementSystem.Controllers
             string companyLastRefNo = companyHasTicket == true? 
                 _context.Tickets.Where(t => t.RefNo.Contains(companyAbbr)).ToList().LastOrDefault().RefNo
                 : companyLastRefNo = companyAbbr + "00000";
-                
+
             //Increasing that last RefNo by 1 and assigning it to the newly added ticket
-            ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
+            model.Ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
 
-            ticket.CreatedBy = loggedInUser.Id;
-            ticket.CreatedDate = DateTime.Now;
+            model.Ticket.CreatedBy = loggedInUser.Id;
+            model.Ticket.CreatedDate = DateTime.Now;
 
-            switch (ticket.CustomerPriority)
+            switch (model.Ticket.CustomerPriority)
             {
                 case Priority.A_2days:
-                    ticket.DueDate = DateTime.Now.AddDays(2);
+                    model.Ticket.DueDate = DateTime.Now.AddDays(2);
                     break;
                 case Priority.B_5days:
-                    ticket.DueDate = DateTime.Now.AddDays(5);
+                    model.Ticket.DueDate = DateTime.Now.AddDays(5);
                     break;
                 case Priority.C_9days:
-                    ticket.DueDate = DateTime.Now.AddDays(9);
+                    model.Ticket.DueDate = DateTime.Now.AddDays(9);
                     break;
 
                 default:
@@ -397,11 +407,11 @@ namespace TicketManagementSystem.Controllers
             switch (submit)
             {
                 case "Submit":
-                    ticket.Status = Status.Submitted;                    
+                    model.Ticket.Status = Status.Submitted;                    
                     break;
 
                 case "Save as Draft":
-                    ticket.Status = Status.Draft;                    
+                    model.Ticket.Status = Status.Draft;                    
                     break;
 
                 default:
@@ -411,12 +421,29 @@ namespace TicketManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {                
-                _context.Add(ticket);
+                _context.Add(model.Ticket);
                 await _context.SaveChangesAsync();
 
-                if(ticket.Status.Equals(Status.Submitted))
+
+
+                if (model.File!=null)
                 {
-                    var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
+                    foreach (var item in model.File)
+                    {
+                        if (item != null)
+                        {
+                            Fileupload(item, model.Ticket.Id, model.Ticket.CreatedBy);
+                        }
+
+                    }
+                }
+                
+                
+
+
+                if (model.Ticket.Status.Equals(Status.Submitted))
+                {
+                    var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(
                     "admin@bitoreq.se",
@@ -429,11 +456,11 @@ namespace TicketManagementSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
-            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
+            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.AssignedTo);
+            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.CreatedBy);
             ViewData["ProjectId"] = selectListItems;
 
-            return View(ticket);
+            return View(model);
         }
 
         // GET: Tickets/Edit/5
@@ -591,5 +618,63 @@ namespace TicketManagementSystem.Controllers
             }
             return RedirectToAction("Details", new { id = comment.TicketId });
         }
+
+        private void Fileupload(IFormFile inputFile, long ticketid,string userid)
+        {
+            string FileName = null;
+            string filePath = null;
+
+            if (inputFile != null)
+            {
+
+                string projectDir = System.IO.Directory.GetCurrentDirectory();
+                var uploadsFolder = Path.Combine(projectDir, "wwwroot/Docs");
+                FileName = Path.GetFileName(inputFile.FileName);
+                filePath = Path.Combine(uploadsFolder, FileName);
+
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                using (FileStream f = new FileStream(filePath, FileMode.Create))
+                {
+                    inputFile.CopyTo(f);
+                    f.Close();
+                }
+
+
+            }
+
+            
+            var document = new Document
+            {
+
+                Name = FileName,
+                UploadTime = DateTime.Now,
+                Path = filePath,
+                ApplicationUserId = userid,
+                TicketId=ticketid
+
+            };
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(document);
+                try
+                {
+                    
+                    _context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+               
+                
+            }
+
+            
+        }
+
     }
 }
