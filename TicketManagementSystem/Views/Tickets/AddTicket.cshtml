@@ -41,23 +41,16 @@
             </div>
 
 
-            @for (int i = 0; i < 3; i++)
-            {
-                if (i == 0)
-                {
-                    <div class="col-sm-10"><label>Documents if any:</label></div>
-                }
-                else
-                {
-                    <div class="col-sm-2"><label></label></div>
-                }
-                <div class="form-group form-row">
-                    <div class="col-sm-10">
-                        <input asp-for="File[i]" class="custom-file-input">
+            <div class="form-group row">
+                <label asp-for="File" class="col-md-2 col-form-label"></label>
+                <div class="col-md-10">
+                    <div class="custom-file">
+                        <input asp-for="File" class="form-control custom-file-input">
                         <label class="custom-file-label">Choose File...</label>
                     </div>
                 </div>
-            }
+            </div>
+                            
 
 
 

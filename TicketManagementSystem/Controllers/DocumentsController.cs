@@ -59,6 +59,7 @@ namespace TicketManagementSystem.Controllers
                 {".jpg", "image/jpeg"},
                 {".jpeg", "image/jpeg"},
                 {".gif", "image/gif"},
+                {".jfif","image/jfif" },
                 {".csv", "text/csv"}
             };
         }

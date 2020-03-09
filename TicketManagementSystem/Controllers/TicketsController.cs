@@ -226,8 +226,16 @@ namespace TicketManagementSystem.Controllers
             {
                 return NotFound();
             }
+            ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
+            var model = new TicketDetailsViewModel
+            {
+                Ticket = ticket,
+                Documents = ticket.Documents,
+               
+            };
 
-            return View(ticket);
+
+            return View(model);
         }
 
         [HttpPost]
@@ -428,14 +436,7 @@ namespace TicketManagementSystem.Controllers
 
                 if (model.File!=null)
                 {
-                    foreach (var item in model.File)
-                    {
-                        if (item != null)
-                        {
-                            Fileupload(item, model.Ticket.Id, model.Ticket.CreatedBy);
-                        }
-
-                    }
+                            Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy);
                 }
                 
                 
