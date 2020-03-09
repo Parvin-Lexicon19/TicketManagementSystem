@@ -48,7 +48,6 @@ namespace TicketManagementSystem.Controllers
             var loggedInUser = await userManager.GetUserAsync(User);
             //var UserRole = await userManager.GetRolesAsync(loggedInUser);
 
-
             List<TicketIndexViewModel> model;
 
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
@@ -173,32 +172,64 @@ namespace TicketManagementSystem.Controllers
                     ticket = ticket.OrderByDescending(s => s.RefNo).ToList();
                     break;
 
+                case "RefNo":
+                    ticket = ticket.OrderBy(s => s.RefNo).ToList();
+                    break;
+
                 case "Title_desc":
                     ticket = ticket.OrderByDescending(s => s.Title).ToList();
+                    break;
+
+                case "Title":
+                    ticket = ticket.OrderBy(s => s.Title).ToList();
                     break;
 
                 case "Status_desc":
                     ticket = ticket.OrderByDescending(s => s.Status).ToList();
                     break;
 
+                case "Status":
+                    ticket = ticket.OrderBy(s => s.Status).ToList();
+                    break;
+
                 case "ProjectName_desc":
                     ticket = ticket.OrderByDescending(s => s.ProjectName).ToList();
+                    break;
+
+                case "ProjectName":
+                    ticket = ticket.OrderBy(s => s.ProjectName).ToList();
                     break;
 
                 case "CustomerPriority_desc":
                     ticket = ticket.OrderByDescending(s => s.CustomerPriority).ToList();
                     break;
 
+                case "CustomerPriority":
+                    ticket = ticket.OrderBy(s => s.CustomerPriority).ToList();
+                    break;
+
                 case "RealrPriority_desc":
                     ticket = ticket.OrderByDescending(s => s.RealPriority).ToList();
+                    break;
+
+                case "RealrPriority":
+                    ticket = ticket.OrderBy(s => s.RealPriority).ToList();
                     break;
 
                 case "DueDate_desc":
                     ticket = ticket.OrderByDescending(s => s.DueDate).ToList();
                     break;
 
+                case "DueDate":
+                    ticket = ticket.OrderBy(s => s.DueDate).ToList();
+                    break;
+
                 case "AssignedTo_desc":
                     ticket = ticket.OrderByDescending(s => s.UserEmail).ToList();
+                    break;
+
+                case "AssignedTo":
+                    ticket = ticket.OrderBy(s => s.UserEmail).ToList();
                     break;
 
                 default:
