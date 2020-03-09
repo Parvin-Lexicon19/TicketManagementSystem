@@ -58,7 +58,7 @@ namespace TicketManagementSystem.Controllers
 
         [Route("Edit/{id}/{name}")]
         // GET: ApplicationUser/Edit/5
-        public async Task<IActionResult> Edit(string? id,string name)
+        public async Task<IActionResult> Edit(string id,string name)
         {
             if (id == null)
             {
@@ -130,7 +130,7 @@ namespace TicketManagementSystem.Controllers
                     
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException e)
+                catch (DbUpdateConcurrencyException)
                 {
                     if (!ApplicationUserExists(applicationuser.Id))
                     {
@@ -161,7 +161,7 @@ namespace TicketManagementSystem.Controllers
         }
 
         [Route("Details/{id}/{name}")]
-        public async Task<IActionResult> Details(string? id,string name)
+        public async Task<IActionResult> Details(string id,string name)
         {
             if (id == null)
             {
@@ -182,7 +182,7 @@ namespace TicketManagementSystem.Controllers
         }
 
         [Route("Delete/{id}/{name}")]
-        public async Task<IActionResult> Delete(string? id,string name)
+        public async Task<IActionResult> Delete(string id,string name)
         {
             if (id == null)
             {
