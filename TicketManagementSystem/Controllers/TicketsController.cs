@@ -73,7 +73,7 @@ namespace TicketManagementSystem.Controllers
             else
             {
                 model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                        .Where(u => u.CreatedUser.Id == loggedInUser.Id)
+                        .Where(u => u.CreatedBy == loggedInUser.Id)
                         .Select(s => new TicketIndexViewModel
                         {
                             Id = s.Id,
@@ -94,9 +94,9 @@ namespace TicketManagementSystem.Controllers
         }
 
         //Filter by Title, Status and Priority
-        public async Task<IActionResult> Filter(string title, int? StatusSearch, int? customerPriority, int? adminPriority)
+        public async Task<IActionResult> Filter(string title, int? StatusSearch, int? customerPriority, int? adminPriority, List<TicketIndexViewModel> model)
         {
-            List<TicketIndexViewModel> model;
+            var loggedInUser = await userManager.GetUserAsync(User);
 
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
@@ -120,7 +120,7 @@ namespace TicketManagementSystem.Controllers
             else
             {
                 model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                        .Where(u => u.CreatedUser.Id == loggedInUser.Id)
+                        .Where(u => u.CreatedBy == loggedInUser.Id)
                         .Select(s => new TicketIndexViewModel
                         {
                             Id = s.Id,

@@ -173,6 +173,7 @@
                     @Html.DisplayFor(modelItem => item.UserEmail)
                 </td>
             }
+
             @if (User.IsInRole("Customer"))
             {
                 @if (item.Status == Status.Draft)
@@ -190,7 +191,8 @@
                     </td>
                 }
             }
-                </tr>
+
+        </tr>
         }
     </tbody>
 </table>
