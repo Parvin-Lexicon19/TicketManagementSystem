@@ -618,6 +618,76 @@ namespace TicketManagementSystem.Controllers
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", model.Ticket.ProjectId);
             return View(model);
         }
+        [HttpPost]
+        public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority)
+        {
+            var newticket = _context.Tickets.Find(id);
+
+            if (newticket == null)
+            {
+                return "The ticket not found";
+            }
+
+            // Update only the changed value to database.
+
+            //Status
+            if (newticket.Status != (Status)(Status))
+            {
+                newticket.Status = (Status)(Status);
+            }
+
+            //Response Type
+            if (newticket.ResponseType != (ResponseType)(RespType))
+            {
+                newticket.ResponseType = (ResponseType)(RespType);
+            }
+            //Response Description
+            if (newticket.ResponseDesc != RespDesc)
+            {
+                newticket.ResponseDesc = RespDesc;
+            }
+            //Hours Spent
+            if (newticket.HoursSpent != HoursSpent)
+            {
+                newticket.HoursSpent = HoursSpent;
+            }
+            // Real Priority.
+            if (newticket.RealPriority != (Priority)(RelPriority))
+            {
+                newticket.RealPriority = (Priority)(RelPriority);
+
+                // Change the due date upon changing the real priority
+
+                switch (newticket.RealPriority)
+                {
+                    case Priority.A_2days:
+                        newticket.DueDate = newticket.CreatedDate.AddDays(2);
+                        break;
+                    case Priority.B_5days:
+                        newticket.DueDate = newticket.CreatedDate.AddDays(5);
+                        break;
+                    case Priority.C_9days:
+                        newticket.DueDate = newticket.CreatedDate.AddDays(9);
+                        break;
+
+                    default:
+                        throw new Exception();
+                }
+            }
+
+            // Update the dataase.
+            try
+            {
+                _context.Update(newticket);
+                _context.SaveChanges();
+                return "The Ticket status successfully Upadated !!";
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return "Ticket Not found";
+
+            }
+        }
 
         // GET: Tickets/Delete/5
         public async Task<IActionResult> Delete(long? id)
