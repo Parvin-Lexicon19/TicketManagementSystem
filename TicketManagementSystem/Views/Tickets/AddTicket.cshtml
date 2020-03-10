@@ -5,7 +5,7 @@
 
 <h1>Add Ticket</h1>
 
-<h4>Ticket</h4>
+@*<h4>Ticket</h4>*@
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -37,12 +37,15 @@
                 <span asp-validation-for="Ticket.CustomerPriority" class="text-danger"></span>
             </div>
 
-
+            <hr />
             @for (int i = 0; i < 3; i++)
-            {               
+            {
                 <div class="form-group row">
-                    <label asp-for="File" class="col-md-2 col-form-label"></label>
-                    <div class="col-md-10">
+                    <div class="col-md-3 col-form-label">
+                        @Html.Label("Attachment" + (i + 1).ToString())
+                    </div>
+                    @*<label asp-for="File" class="col-md-2 col-form-label"></label>*@
+                    <div class="col-md-9">
                         <div class="custom-file">
                             <input asp-for="File" class="form-control custom-file-input">
                             <label class="custom-file-label">Choose File...</label>
@@ -50,9 +53,9 @@
                     </div>
                 </div>
             }
+            <hr />
 
-
-            <div class="form-group" align="center">
+            <div class="form-group" align="center" style="padding-top: 50px">
                 <input name="submit" type="submit" id="submit" value="Save as Draft" class="btn btn-primary" />
                 <input name="submit" type="submit" id="submit" value="Submit" class="btn btn-primary" />
             </div>
