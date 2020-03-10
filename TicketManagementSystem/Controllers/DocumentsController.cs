@@ -47,6 +47,7 @@ namespace TicketManagementSystem.Controllers
             }
 
             var document = _context.Documents.Where(d => d.Id == id).FirstOrDefault();
+            var ticketid = document.TicketId;
             if (!System.IO.File.Exists(document.Path))
             {
                 return NotFound();
@@ -81,8 +82,8 @@ namespace TicketManagementSystem.Controllers
                 }
             }
 
-           
-            return View();
+
+            return RedirectToAction("edit", "Ticket", new { id = ticketid, });
         }
 
         
