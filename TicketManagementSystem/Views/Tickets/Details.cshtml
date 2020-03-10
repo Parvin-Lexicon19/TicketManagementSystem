@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    int i = 0;
 }
 
 <h1>Details</h1>
@@ -177,21 +178,34 @@
     </dl>
 
 </div>
+
 @if (Model.Documents != null)
 {
 
     @foreach (var item in Model.Documents)
-    { 
-        <dl class="row">
+    {
+<dl class="row">
+    @if (i == 0)
+    {
         <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Documents)
         </dt>
-        <dd class="col-sm-3">
-            <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-        </dd>
-  
-     </dl>
     }
+    else
+    {
+        <dt class="col-sm-3">       
+        </dt>
+    }
+
+    <dd class="col-sm-3">
+        <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+    </dd>
+
+</dl>
+        i++;
+    }
+
+
 }
 
 <br />

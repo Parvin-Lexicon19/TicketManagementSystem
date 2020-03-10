@@ -467,13 +467,8 @@ namespace TicketManagementSystem.Controllers
 
                 if (model.File!=null)
                 {
-
-                    foreach (var item in model.File)
-                    {
-
-                        Fileupload(item, model.Ticket.Id, model.Ticket.CreatedBy);
-                    }
-
+                   Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
+                    
                 }
                 
                 
@@ -514,10 +509,19 @@ namespace TicketManagementSystem.Controllers
             {
                 return NotFound();
             }
+            
+            ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
+
+            var model = new TicketDetailsViewModel
+            {
+                Ticket = ticket,
+                Documents = ticket.Documents,
+            };
+
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
-            return View(ticket);
+            return View(model);
         }
 
         // POST: Tickets/Edit/5
@@ -525,18 +529,18 @@ namespace TicketManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,RefNo,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket, string submit)
+        public async Task<IActionResult> Edit(long id, TicketDetailsViewModel model, string submit)
         {
-            switch (ticket.CustomerPriority)
+            switch (model.Ticket.CustomerPriority)
             {
                 case Priority.A_2days:
-                    ticket.DueDate = DateTime.Now.AddDays(2);
+                    model.Ticket.DueDate = DateTime.Now.AddDays(2);
                     break;
                 case Priority.B_5days:
-                    ticket.DueDate = DateTime.Now.AddDays(5);
+                    model.Ticket.DueDate = DateTime.Now.AddDays(5);
                     break;
                 case Priority.C_9days:
-                    ticket.DueDate = DateTime.Now.AddDays(9);
+                    model.Ticket.DueDate = DateTime.Now.AddDays(9);
                     break;
 
                 default:
@@ -546,18 +550,18 @@ namespace TicketManagementSystem.Controllers
             switch (submit)
             {
                 case "Submit":
-                    ticket.Status = Status.Submitted;
+                    model.Ticket.Status = Status.Submitted;
                     break;
 
                 case "Save as Draft":
-                    ticket.Status = Status.Draft;
+                    model.Ticket.Status = Status.Draft;
                     break;
 
                 default:
                     throw new Exception();
             }
 
-            if (id != ticket.Id)
+            if (id != model.Ticket.Id)
             {
                 return NotFound();
             }
@@ -566,19 +570,19 @@ namespace TicketManagementSystem.Controllers
             {
                 try
                 {
-                    _context.Update(ticket);
+                    _context.Update(model.Ticket);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TicketExists(ticket.Id))
+                    if (!TicketExists(model.Ticket.Id))
                     {
                         return NotFound();
                     }
 
-                    if (ticket.Status.Equals(Status.Submitted))
+                    if (model.Ticket.Status.Equals(Status.Submitted))
                     {
-                        var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
+                        var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
 
                         await _emailSender.SendEmailAsync(
                         "admin@bitoreq.se",
@@ -596,10 +600,10 @@ namespace TicketManagementSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
-            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
-            return View(ticket);
+            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.AssignedTo);
+            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.CreatedBy);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", model.Ticket.ProjectId);
+            return View(model);
         }
 
         // GET: Tickets/Delete/5
@@ -657,61 +661,55 @@ namespace TicketManagementSystem.Controllers
             return RedirectToAction("Details", new { id = comment.TicketId });
         }
 
-        private void Fileupload(IFormFile inputFile, long ticketid,string userid)
+        private void Fileupload(List<IFormFile> inputFiles, long ticketid,string userid,string ticketRfno)
         {
             string FileName = null;
             string filePath = null;
-
-            if (inputFile != null)
+            foreach (var inputFile in inputFiles)
             {
-
-                string projectDir = System.IO.Directory.GetCurrentDirectory();
-                var uploadsFolder = Path.Combine(projectDir, "wwwroot/Docs");
-                FileName = Path.GetFileName(inputFile.FileName);
-                filePath = Path.Combine(uploadsFolder, FileName);
-
-                if (!Directory.Exists(uploadsFolder))
-                    Directory.CreateDirectory(uploadsFolder);
-
-                using (FileStream f = new FileStream(filePath, FileMode.Create))
+                if (inputFile != null)
                 {
-                    inputFile.CopyTo(f);
-                    f.Close();
+
+                    string projectDir = System.IO.Directory.GetCurrentDirectory();
+                    var uploadsFolder = Path.Combine(projectDir, "wwwroot/Docs");
+                    FileName = Path.GetFileName(inputFile.FileName);
+                    filePath = Path.Combine(uploadsFolder, ticketRfno + "_" + FileName);
+
+                    if (!Directory.Exists(uploadsFolder))
+                        Directory.CreateDirectory(uploadsFolder);
+
+                    using (FileStream f = new FileStream(filePath, FileMode.Create))
+                    {
+                        inputFile.CopyTo(f);
+                        f.Close();
+                    }
+
+
+                }
+
+                var filename = ticketRfno + "_" + FileName;
+                var document = new Document
+                {
+
+                    Name = filename,
+                    UploadTime = DateTime.Now,
+                    Path = filePath,
+                    ApplicationUserId = userid,
+                    TicketId = ticketid
+
+                };
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(document);
+                    _context.SaveChanges();
                 }
 
 
             }
 
-            
-            var document = new Document
-            {
 
-                Name = FileName,
-                UploadTime = DateTime.Now,
-                Path = filePath,
-                ApplicationUserId = userid,
-                TicketId=ticketid
 
-            };
-
-            if (ModelState.IsValid)
-            {
-                _context.Add(document);
-                try
-                {
-                    
-                    _context.SaveChangesAsync();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    throw;
-                }
-               
-                
-            }
-
-            
         }
 
     }
