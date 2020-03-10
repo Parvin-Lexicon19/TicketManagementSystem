@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TicketManagementSystem.Core.Models;
+using TicketManagementSystem.Core.ViewModels;
 using TicketManagementSystem.Data;
 
 namespace TicketManagementSystem.Controllers
@@ -28,16 +29,26 @@ namespace TicketManagementSystem.Controllers
         [Route("ApplicationUsers/Index/{name}")]
         public async Task<IActionResult> Index(string name)
         {
-            var users=userManager.Users;
+            
+            var users = from u in userManager.Users.Include(c=>c.Company)
+                        join ur in _context.UserRoles on u.Id equals ur.UserId
+                        join r in _context.Roles on ur.RoleId equals r.Id
+                        select new ApplicationUserwithRole
+                        {
+                            ApplicationUser = u,
+                            Role = r.Name
+                        };
+
+
             string indexname="";
             if(name=="Developer")
             {
-                 users = GetUsersBasedonRoles("Developer");
+                users = users.Where(u => u.Role.Equals("Admin")|| u.Role.Equals("Developer"));
                  indexname = "Admin/Developers";
             }
             else if(name=="Customer")
             {
-                 users = GetUsersBasedonRoles("Customer");
+                users = users.Where(u => u.Role.Equals("Customer"));
                 indexname = "Customer";
             }
 
@@ -95,7 +106,7 @@ namespace TicketManagementSystem.Controllers
 
 
 
-            
+            ViewData["PageName"] = name;
             return View(user);
         }
 
@@ -156,7 +167,7 @@ namespace TicketManagementSystem.Controllers
                 
             }
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "CompanyAbbr", applicationuser.CompanyId);
-
+            ViewData["PageName"] = name;
             return View(applicationuser);
         }
 
@@ -240,24 +251,26 @@ namespace TicketManagementSystem.Controllers
 
 
 
-        private IQueryable<ApplicationUser> GetUsersBasedonRoles(string rolename)
-        { 
+        //private IQueryable<ApplicationUserwithRole> GetUsersBasedonRoles(string rolename)
+        //{ 
 
-            var roleId = _context.Roles.Select(r => r.Id).ToList();
-            if (rolename == "Developer")
-            {
-                 roleId = _context.Roles.Where(r => r.Name == "Developer" || r.Name == "Admin").Select(r => r.Id).ToList();
-            }
-            else if (rolename=="Customer")
-            {
-                roleId = _context.Roles.Where(r => r.Name == rolename).Select(r => r.Id).ToList();
-            }
+        //    var roleId = _context.Roles.Select(r => r.Id).ToList();
+        //    if (rolename == "Developer")
+        //    {
+        //         roleId = _context.Roles.Where(r => r.Name == "Developer" || r.Name == "Admin").Select(r => r.Id).ToList();
 
-           
-            var useridList = _context.UserRoles.Where(x => roleId.Contains(x.RoleId)).Select(c => c.UserId).ToList();
-            var users = userManager.Users.Include(c=>c.Company).Where(t => useridList.Contains(t.Id));
-            return users;
-        }
+        //    }
+        //    else if (rolename=="Customer")
+        //    {
+        //        roleId = _context.Roles.Where(r => r.Name == rolename).Select(r => r.Id).ToList();
+        //    }
+
+        //    var useridList = _context.UserRoles.Where(x => roleId.Contains(x.RoleId)).Select(c => c.UserId).ToList();
+        //    var userslist = userManager.Users.Include(c=>c.Company).Where(t => useridList.Contains(t.Id));
+          
+
+        //    return users;
+        //}
 
         private bool ApplicationUserExists(string id)
         {
