@@ -436,7 +436,13 @@ namespace TicketManagementSystem.Controllers
 
                 if (model.File!=null)
                 {
-                            Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy);
+
+                    foreach (var item in model.File)
+                    {
+
+                        Fileupload(item, model.Ticket.Id, model.Ticket.CreatedBy);
+                    }
+
                 }
                 
                 
