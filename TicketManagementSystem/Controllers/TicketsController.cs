@@ -426,6 +426,7 @@ namespace TicketManagementSystem.Controllers
 
             model.Ticket.CreatedBy = loggedInUser.Id;
             model.Ticket.CreatedDate = DateTime.Now;
+            model.Ticket.RealPriority = model.Ticket.CustomerPriority;
 
             switch (model.Ticket.CustomerPriority)
             {
@@ -482,12 +483,24 @@ namespace TicketManagementSystem.Controllers
                 if (model.Ticket.Status.Equals(Status.Submitted))
                 {
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(
-                    "admin@bitoreq.se",
-                    "A New Ticket Submitted",
-                    $"A new ticket submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. "  +
-                    $"<br/>See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details.");
+                    var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
+                    List<ApplicationUser> ticketProjectDevelopers = new List<ApplicationUser>();
+                    if (ticketProject.Developer1 != null)
+                        ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer1));
+                    if (ticketProject.Developer2 != null)
+                        ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer2));
+                   
+                    foreach (var developer in ticketProjectDevelopers)
+                    {
+                        await _emailSender.SendEmailAsync(
+                          developer.Email,
+                          "A New Ticket Submitted",
+                          $"Hello dear {developer.FirstName}," +
+                          $"<br/><br/>A new ticket submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. " +
+                          $"<br/>Please see the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details</a>." +
+                          $"<br/><br/>Thank you,<br/>Bitoreq Admin"); 
+                    }
+                    
                     return RedirectToAction(nameof(EmailSent));
                 }
 
