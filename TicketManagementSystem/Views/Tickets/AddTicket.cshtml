@@ -3,8 +3,9 @@
 @{
     //var userId = userManager.GetUserId(User);
     //var loggedInUser = await userManager.GetUserAsync(User);
-    @*@Model.File= new List<IFormFile>(3);*@
+    //var = new List<IFormFile>(3);
     ViewData["Title"] = "Add Ticket";
+  
 }
 
 <h1>Add Ticket</h1>
@@ -41,17 +42,22 @@
                 <span asp-validation-for="Ticket.CustomerPriority" class="text-danger"></span>
             </div>
 
-
-            <div class="form-group row">
-                <label asp-for="File" class="col-md-2 col-form-label"></label>
-                <div class="col-md-10">
-                    <div class="custom-file">
-                        <input asp-for="File" class="form-control custom-file-input">
-                        <label class="custom-file-label">Choose File...</label>
+            @for (int i = 0; i < 3; i++)
+            {
+                <div class="form-group row">
+                    <label asp-for="File[i]" class="col-md-2 col-form-label"></label>
+                    <div class="col-md-10">
+                        <div class="custom-file">
+                            <input asp-for="File[i]" class="form-control custom-file-input">
+                            <label class="custom-file-label">Choose File...</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-                            
+
+            }
+
+
+
 
 
 
