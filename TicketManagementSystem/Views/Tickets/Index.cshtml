@@ -59,8 +59,10 @@
                         <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
                             <option selected="selected" value="">RealPriority</option>
                         </select>
-                        <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
+                        <select name="priorities" @*asp-items="@Html.GetEnumSelectList<Priorities>()"*@ class="form-control">
                             <option selected="selected" value="">Priorities</option>
+                            <option  value="1">Match</option>
+                            <option  value="2">Not Match</option>
                         </select>
                     }
                     else
