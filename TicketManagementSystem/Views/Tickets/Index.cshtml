@@ -191,9 +191,18 @@
                     @Html.DisplayFor(modelItem => item.RealPriority)
                 </td>
             }
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Submitted || item.Status == Status.Started) && (item.DueDate < DateTime.Now))
+            {
+                <td class="crossedduedate rounded-pill">
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+            }
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 <td>
