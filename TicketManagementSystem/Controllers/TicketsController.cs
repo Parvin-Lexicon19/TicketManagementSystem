@@ -50,6 +50,7 @@ namespace TicketManagementSystem.Controllers
 
             List<TicketIndexViewModel> model;
 
+            // List all the result 
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
@@ -88,7 +89,9 @@ namespace TicketManagementSystem.Controllers
                         .ToListAsync();
             }
 
+            // Sort by attributes in the list
             model = SortList(sortOrder, model);
+
             return View(model);
         }
 
@@ -98,11 +101,10 @@ namespace TicketManagementSystem.Controllers
             // return View(await applicationdbcontext.ToListAsync());
 
             var loggedInUser = await userManager.GetUserAsync(User);
-            //var UserRole = await userManager.GetRolesAsync(loggedInUser);
-
             List<TicketIndexViewModel> model;
 
-                model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+            // List all the result 
+            model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
                         .Where(u => u.CreatedUser.CompanyId == loggedInUser.CompanyId)
                         .Select(s => new TicketIndexViewModel
                         {
@@ -117,17 +119,19 @@ namespace TicketManagementSystem.Controllers
                             UserEmail = s.AssignedUser.Email
                         })
                         .ToListAsync();
-       
 
+            // Sort by attributes in the list
             model = SortList(sortOrder, model);
+
             return View(nameof(Index), model);
         }
 
         //Filter by Title, Status and Priority
-        public async Task<IActionResult> Filter(string title, int? statusSearch, int? customerPriority, int? adminPriority, List<TicketIndexViewModel> model)
+        public async Task<IActionResult> Filter(string title, int? statusSearch, int? customerPriority, int? adminPriority, int? priorities, List<TicketIndexViewModel> model)
         {
             var loggedInUser = await userManager.GetUserAsync(User);
 
+           // List all the result 
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
@@ -166,26 +170,40 @@ namespace TicketManagementSystem.Controllers
                         .ToListAsync();
             }
 
+            // Search by Title
             model = string.IsNullOrWhiteSpace(title) ?
                 model :
                 model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
+            // Search by Status Drowpdown
             model = statusSearch == null ?
               model :
               model.Where(m => m.Status == (Status)statusSearch).ToList();
 
+            // Search by Customer Priority Drowpdown
             model = customerPriority == null ?
                 model :
                 model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
 
+            // Search by Real Priority Drowpdown
             model = adminPriority == null ?
                 model :
                 model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
 
+            // Search by Match or Not-Match Priority Drowpdown
+            if (priorities.GetValueOrDefault() == 1)
+            {
+                model = model.Where(m => m.RealPriority == m.CustomerPriority).ToList();
+            }
+            if (priorities.GetValueOrDefault() == 2)
+            {
+                model = model.Where(m => m.RealPriority != m.CustomerPriority).ToList();
+            }
+                
             return View(nameof(Index), model);
         }
 
-        //Sort by Attributes
+        // Sort by attributes in the list
         private List<TicketIndexViewModel> SortList(string sortOrder, List<TicketIndexViewModel> ticket)
         {
             ViewBag.RefNoSortParm = String.IsNullOrEmpty(sortOrder) ? "RefNo_desc" : "";
