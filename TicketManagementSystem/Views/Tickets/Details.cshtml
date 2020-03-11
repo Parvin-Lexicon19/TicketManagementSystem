@@ -176,6 +176,10 @@
                 <select asp-for="@Model.Ticket.Status" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Draft" ))" class="form-control  status">
                 </select>
             </div>
+            <p class="text-danger">
+                @ViewBag.Statuscheck
+            </p>
+            
         </dd>
 
     </dl>
@@ -246,6 +250,10 @@
         }
     }
     <a asp-action="Index">Back to List</a>
+    <br />
+    <br />
+    <span id="msg" class="text-danger"></span>
+
 </div>
 
 <br />
@@ -309,10 +317,61 @@ var resDesc = $('.RespDesc').val();
 var status = $('.status').val();
 var relPriority = $('.RealPriority').val();
 var idOfTicket = @Model.Ticket.Id;
-$.post(url, { id: idOfTicket,HoursSpent: hours,Status: status,RespDesc: resDesc,RespType: resType,RelPriority: relPriority}, function(data) {
-// $("#msg").html(data);
-alert("Ticket updated successfully !!.");
-window.location = "/Tickets/Index";
-});
-})
+var isValid = true;
+
+    // Check for changing the Ticket status to 'Closed'.
+    if (status == "3") {
+        
+        if (hours == "0" || hours== "") {
+            alert("If you are the closing ticket,Please fill the hours spent");
+            isValid = false;
+        }
+        else if (resType == "") {
+            alert("If you are the closing ticket,Choose Response Type");
+            isValid = false;
+        }
+        else if (resDesc == "") {
+            alert("If you are  closing ticket,Give Response Description");
+            isValid = false;
+        }
+        
+    }
+    // Response Type should be filled only when the status is closed.
+    if (resType != "" && status != 3)
+    {
+        alert("Response Type should be filled only when the Ticket status is closed!");
+        isValid = false;
+    }
+    // Response Description should be filled only when the status is closed.
+    else if (resDesc != "" && status != 3)
+    {
+        alert("Response Description should be filled only when the Ticket status is closed!");
+        isValid = false;
+    }
+    // Hours should be 0.
+    else if ((hours == "") && status != 3)
+    {
+        alert("Hours should not be space.Should be Integer.");
+        isValid = false;
+    }
+        // Hours should be filled only when the status is changed to closed.
+    else if ((hours != "0") && status != 3)
+    {
+        alert("Hours should be filled only when the Ticket status is closed!");
+        isValid = false;
+    }
+     
+
+    // If validation is passed update the Ticket.
+    if (isValid == true) {
+         $.post(url, { id: idOfTicket, HoursSpent: hours, Status: status, RespDesc: resDesc, RespType: resType, RelPriority: relPriority }, function (data) {
+   
+            alert("Ticket updated successfully !!.");
+            window.location = "/Tickets/Index"
+
+        });
+     }
+    })
+    
+
 </script>
