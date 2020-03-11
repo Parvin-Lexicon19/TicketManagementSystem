@@ -48,16 +48,19 @@
             <div class="input-group mb-3">
                 <input type="text" name="title" class="form-control" placeholder="Search on Title" />
                 <div class="input-group-append">
-                    @if (User.IsInRole("Admin")  || User.IsInRole("Developer"))
-                    {          
+                    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+                    {
                         <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Draft" ))" class="form-control">
                             <option selected="selected" value="">Status</option>
                         </select>
                         <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
-                            <option selected="selected" value="">Priority</option>
+                            <option selected="selected" value="">CustomerPriority</option>
                         </select>
                         <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
                             <option selected="selected" value="">RealPriority</option>
+                        </select>
+                        <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
+                            <option selected="selected" value="">Priorities</option>
                         </select>
                     }
                     else
@@ -152,43 +155,50 @@
 
                 }
             }
+            else
+            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+
                 </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
+            </td>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.ProjectName)
+                    @Html.DisplayFor(modelItem => item.Status)
                 </td>
-                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                }
-                else
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                }
+            }
+            else
+            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.CustomerPriority)
+                    @Html.DisplayFor(modelItem => item.Status)
                 </td>
-                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RealPriority)
-                    </td>
-                }
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPriority)
+            </td>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.DueDate)
+                    @Html.DisplayFor(modelItem => item.RealPriority)
                 </td>
-                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserEmail)
-                    </td>
-                }
-            </tr>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.DueDate)
+            </td>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserEmail)
+                </td>
+            }
+        </tr>
         }
     </tbody>
 </table>

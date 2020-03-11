@@ -26,6 +26,7 @@ namespace TicketManagementSystem.Core.ViewModels
         public Priority? CustomerPriority { get; set; }
         [DisplayName("Real Priority")]
         public Priority? RealPriority { get; set; }
+       // public Priorities? Priorities { get; set; }
         public string AssignedTo { get; set; }
 
         [DisplayName("Assigned To")]

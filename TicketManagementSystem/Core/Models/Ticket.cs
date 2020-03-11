@@ -36,6 +36,7 @@ namespace TicketManagementSystem.Core.Models
         public Priority CustomerPriority { get; set; }
         [DisplayName("Real Priority")]
         public Priority RealPriority { get; set; }
+        //public Priorities Priorities { get; set; }
         [Required]
         [DisplayName("Due Date")]
         public DateTime DueDate { get; set; }
@@ -70,6 +71,14 @@ namespace TicketManagementSystem.Core.Models
         B_5days,
         C_9days
     }
+
+    //public enum Priorities
+    //{
+    //    Match,
+    //    Not_Match
+       
+    //}
+
     public enum ResponseType
     {
         A,
