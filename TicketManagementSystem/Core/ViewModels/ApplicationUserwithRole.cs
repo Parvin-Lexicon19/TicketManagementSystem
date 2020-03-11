@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TicketManagementSystem.Core.Models;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 
 namespace TicketManagementSystem.Core.ViewModels
 {
-    public class AddTicketViewModel
+    public class ApplicationUserwithRole
     {
 
-        public Ticket   Ticket { get; set; }
-        public List<IFormFile> File { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
+        public string  Role { get; set; }
     }
 }

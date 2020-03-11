@@ -457,6 +457,7 @@ namespace TicketManagementSystem.Controllers
 
             model.Ticket.CreatedBy = loggedInUser.Id;
             model.Ticket.CreatedDate = DateTime.Now;
+            model.Ticket.RealPriority = model.Ticket.CustomerPriority;
 
             switch (model.Ticket.CustomerPriority)
             {
@@ -498,7 +499,8 @@ namespace TicketManagementSystem.Controllers
 
                 if (model.File!=null)
                 {
-                            Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy);
+                   Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
+                    
                 }
                 
                 
@@ -507,12 +509,24 @@ namespace TicketManagementSystem.Controllers
                 if (model.Ticket.Status.Equals(Status.Submitted))
                 {
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(
-                    "admin@bitoreq.se",
-                    "A New Ticket Submitted",
-                    $"A new ticket submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. "  +
-                    $"<br/>See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details.");
+                    var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
+                    List<ApplicationUser> ticketProjectDevelopers = new List<ApplicationUser>();
+                    if (ticketProject.Developer1 != null)
+                        ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer1));
+                    if (ticketProject.Developer2 != null)
+                        ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer2));
+                   
+                    foreach (var developer in ticketProjectDevelopers)
+                    {
+                        await _emailSender.SendEmailAsync(
+                          developer.Email,
+                          "A New Ticket Submitted",
+                          $"Hello dear {developer.FirstName}," +
+                          $"<br/><br/>A new ticket submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. " +
+                          $"<br/>Please see the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details</a>." +
+                          $"<br/><br/>Thank you,<br/>Bitoreq Admin"); 
+                    }
+                    
                     return RedirectToAction(nameof(EmailSent));
                 }
 
@@ -539,10 +553,19 @@ namespace TicketManagementSystem.Controllers
             {
                 return NotFound();
             }
+            
+            ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
+
+            var model = new TicketDetailsViewModel
+            {
+                Ticket = ticket,
+                Documents = ticket.Documents,
+            };
+
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
-            return View(ticket);
+            return View(model);
         }
 
         // POST: Tickets/Edit/5
@@ -550,18 +573,18 @@ namespace TicketManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,RefNo,Title,Problem,CreatedBy,CreatedDate,AssignedTo,HoursSpent,Status,ProjectId,CustomerPriority,RealPriority,DueDate,ClosedDate,LastUpdated,ResponseType,ResponseDesc")] Ticket ticket, string submit)
+        public async Task<IActionResult> Edit(long id, TicketDetailsViewModel model, string submit)
         {
-            switch (ticket.CustomerPriority)
+            switch (model.Ticket.CustomerPriority)
             {
                 case Priority.A_2days:
-                    ticket.DueDate = DateTime.Now.AddDays(2);
+                    model.Ticket.DueDate = DateTime.Now.AddDays(2);
                     break;
                 case Priority.B_5days:
-                    ticket.DueDate = DateTime.Now.AddDays(5);
+                    model.Ticket.DueDate = DateTime.Now.AddDays(5);
                     break;
                 case Priority.C_9days:
-                    ticket.DueDate = DateTime.Now.AddDays(9);
+                    model.Ticket.DueDate = DateTime.Now.AddDays(9);
                     break;
 
                 default:
@@ -571,18 +594,18 @@ namespace TicketManagementSystem.Controllers
             switch (submit)
             {
                 case "Submit":
-                    ticket.Status = Status.Submitted;
+                    model.Ticket.Status = Status.Submitted;
                     break;
 
                 case "Save as Draft":
-                    ticket.Status = Status.Draft;
+                    model.Ticket.Status = Status.Draft;
                     break;
 
                 default:
                     throw new Exception();
             }
 
-            if (id != ticket.Id)
+            if (id != model.Ticket.Id)
             {
                 return NotFound();
             }
@@ -591,19 +614,19 @@ namespace TicketManagementSystem.Controllers
             {
                 try
                 {
-                    _context.Update(ticket);
+                    _context.Update(model.Ticket);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TicketExists(ticket.Id))
+                    if (!TicketExists(model.Ticket.Id))
                     {
                         return NotFound();
                     }
 
-                    if (ticket.Status.Equals(Status.Submitted))
+                    if (model.Ticket.Status.Equals(Status.Submitted))
                     {
-                        var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
+                        var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
 
                         await _emailSender.SendEmailAsync(
                         "admin@bitoreq.se",
@@ -621,10 +644,80 @@ namespace TicketManagementSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
-            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
-            return View(ticket);
+            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.AssignedTo);
+            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.CreatedBy);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", model.Ticket.ProjectId);
+            return View(model);
+        }
+        [HttpPost]
+        public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority)
+        {
+            var newticket = _context.Tickets.Find(id);
+
+            if (newticket == null)
+            {
+                return "The ticket not found";
+            }
+
+            // Update only the changed value to database.
+
+            //Status
+            if (newticket.Status != (Status)(Status))
+            {
+                newticket.Status = (Status)(Status);
+            }
+
+            //Response Type
+            if (newticket.ResponseType != (ResponseType)(RespType))
+            {
+                newticket.ResponseType = (ResponseType)(RespType);
+            }
+            //Response Description
+            if (newticket.ResponseDesc != RespDesc)
+            {
+                newticket.ResponseDesc = RespDesc;
+            }
+            //Hours Spent
+            if (newticket.HoursSpent != HoursSpent)
+            {
+                newticket.HoursSpent = HoursSpent;
+            }
+            // Real Priority.
+            if (newticket.RealPriority != (Priority)(RelPriority))
+            {
+                newticket.RealPriority = (Priority)(RelPriority);
+
+                // Change the due date upon changing the real priority
+
+                switch (newticket.RealPriority)
+                {
+                    case Priority.A_2days:
+                        newticket.DueDate = newticket.CreatedDate.AddDays(2);
+                        break;
+                    case Priority.B_5days:
+                        newticket.DueDate = newticket.CreatedDate.AddDays(5);
+                        break;
+                    case Priority.C_9days:
+                        newticket.DueDate = newticket.CreatedDate.AddDays(9);
+                        break;
+
+                    default:
+                        throw new Exception();
+                }
+            }
+
+            // Update the dataase.
+            try
+            {
+                _context.Update(newticket);
+                _context.SaveChanges();
+                return "The Ticket status successfully Upadated !!";
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return "Ticket Not found";
+
+            }
         }
 
         // GET: Tickets/Delete/5
@@ -682,61 +775,55 @@ namespace TicketManagementSystem.Controllers
             return RedirectToAction("Details", new { id = comment.TicketId });
         }
 
-        private void Fileupload(IFormFile inputFile, long ticketid,string userid)
+        private void Fileupload(List<IFormFile> inputFiles, long ticketid,string userid,string ticketRfno)
         {
             string FileName = null;
             string filePath = null;
-
-            if (inputFile != null)
+            foreach (var inputFile in inputFiles)
             {
-
-                string projectDir = System.IO.Directory.GetCurrentDirectory();
-                var uploadsFolder = Path.Combine(projectDir, "wwwroot/Docs");
-                FileName = Path.GetFileName(inputFile.FileName);
-                filePath = Path.Combine(uploadsFolder, FileName);
-
-                if (!Directory.Exists(uploadsFolder))
-                    Directory.CreateDirectory(uploadsFolder);
-
-                using (FileStream f = new FileStream(filePath, FileMode.Create))
+                if (inputFile != null)
                 {
-                    inputFile.CopyTo(f);
-                    f.Close();
+
+                    string projectDir = System.IO.Directory.GetCurrentDirectory();
+                    var uploadsFolder = Path.Combine(projectDir, "wwwroot/Docs");
+                    FileName = Path.GetFileName(inputFile.FileName);
+                    filePath = Path.Combine(uploadsFolder, ticketRfno + "_" + FileName);
+
+                    if (!Directory.Exists(uploadsFolder))
+                        Directory.CreateDirectory(uploadsFolder);
+
+                    using (FileStream f = new FileStream(filePath, FileMode.Create))
+                    {
+                        inputFile.CopyTo(f);
+                        f.Close();
+                    }
+
+
+                }
+
+                var filename = ticketRfno + "_" + FileName;
+                var document = new Document
+                {
+
+                    Name = filename,
+                    UploadTime = DateTime.Now,
+                    Path = filePath,
+                    ApplicationUserId = userid,
+                    TicketId = ticketid
+
+                };
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(document);
+                    _context.SaveChanges();
                 }
 
 
             }
 
-            
-            var document = new Document
-            {
 
-                Name = FileName,
-                UploadTime = DateTime.Now,
-                Path = filePath,
-                ApplicationUserId = userid,
-                TicketId=ticketid
 
-            };
-
-            if (ModelState.IsValid)
-            {
-                _context.Add(document);
-                try
-                {
-                    
-                    _context.SaveChangesAsync();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    throw;
-                }
-               
-                
-            }
-
-            
         }
 
     }

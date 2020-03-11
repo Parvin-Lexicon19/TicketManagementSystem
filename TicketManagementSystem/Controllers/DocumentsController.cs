@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TicketManagementSystem.Data;
 
 namespace TicketManagementSystem.Controllers
@@ -38,12 +39,67 @@ namespace TicketManagementSystem.Controllers
             return File(memory, GetContentType(filepath), Path.GetFileName(filepath));
         }
 
-        private string GetContentType(string path)
+        public async Task<IActionResult> RemoveFile(int? id)
         {
-            var types = GetMimeTypes();
-            var ext = Path.GetExtension(path).ToLowerInvariant();
-            return types[ext];
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var document = _context.Documents.Where(d => d.Id == id).FirstOrDefault();
+            var ticketid = document.TicketId;
+            if (!System.IO.File.Exists(document.Path))
+            {
+                return NotFound();
+            }
+            else
+            {
+                try
+                {
+                    System.IO.File.Delete(document.Path);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Remove(document);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!DocumentExists(document.Id))
+                    {
+                        return NotFound();
+                    }
+
+                }
+            }
+
+
+            return RedirectToAction("edit", "Ticket", new { id = ticketid, });
         }
+
+        
+
+                private bool DocumentExists(long id)
+                {
+                    return _context.Documents.Any(e => e.Id == id);
+                }
+
+
+                private string GetContentType(string path)
+                {
+                    var types = GetMimeTypes();
+                    var ext = Path.GetExtension(path).ToLowerInvariant();
+                    return types[ext];
+            }
 
         private Dictionary<string, string> GetMimeTypes()
         {

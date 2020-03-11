@@ -1,7 +1,8 @@
-﻿@model TicketManagementSystem.Core.Models.Ticket
+﻿@model TicketManagementSystem.Core.ViewModels.TicketDetailsViewModel
 
 @{
     ViewData["Title"] = "Edit";
+    int i = 0;
 }
 
 <h1>Edit</h1>
@@ -12,35 +13,35 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Ticket.Id" />
             <div class="form-group">
                 @*<label asp-for="RefNo" class="control-label"></label>*@
-                <input type="hidden" asp-for="RefNo" class="form-control" />
-                <span asp-validation-for="RefNo" class="text-danger"></span>
+                <input type="hidden" asp-for="Ticket.RefNo" class="form-control" />
+                <span asp-validation-for="Ticket.RefNo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="Ticket.Title" class="control-label"></label>
+                <input asp-for="Ticket.Title" class="form-control" />
+                <span asp-validation-for="Ticket.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Project" class="control-label"></label>
-                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
+                <label asp-for="Ticket.Project" class="control-label"></label>
+                <select asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
                     @*(IEnumerable<SelectListItem>)loggedInUserProjects*@
                     <option value="">Select Project</option>
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="CustomerPriority" class="control-label">Priority</label>
-                <select asp-for="CustomerPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control">
+                <label asp-for="Ticket.CustomerPriority" class="control-label">Priority</label>
+                <select asp-for="Ticket.CustomerPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control">
                     <option value="">Select Priority</option>
                 </select>
-                <span asp-validation-for="CustomerPriority" class="text-danger"></span>
+                <span asp-validation-for="Ticket.CustomerPriority" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Problem" class="control-label"></label>
-                <textarea asp-for="Problem" rows="8" class="form-control"></textarea>
-                <span asp-validation-for="Problem" class="text-danger"></span>
+                <label asp-for="Ticket.Problem" class="control-label"></label>
+                <textarea asp-for="Ticket.Problem" rows="8" class="form-control"></textarea>
+                <span asp-validation-for="Ticket.Problem" class="text-danger"></span>
             </div>
             @*<div class="form-group">
             <label asp-for="CreatedBy" class="control-label"></label>
@@ -110,6 +111,34 @@
             @*<div class="form-group">
             <input type="submit" value="Save" class="btn btn-primary" />
         </div>*@
+            @if (Model.Documents != null)
+            {
+
+                @foreach (var item in Model.Documents)
+                {
+                    <dl class="row">
+                        @if (i == 0)
+                        {
+                            <dt class="col-sm-3">
+                                @Html.DisplayNameFor(model => model.Documents)
+                            </dt>
+                        }
+                        else
+                        {
+                            <dt class="col-sm-3">
+                            </dt>
+                        }
+
+                    <dd class="col-sm-3">
+                        <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                    </dd>
+
+                    </dl>
+                    i++;
+                }
+
+
+            }
             <div class="form-group" align="center">
                 <input name="submit" type="submit" id="submit" value="Save as Draft" class="btn btn-primary" />
                 <input name="submit" type="submit" id="submit" value="Submit" class="btn btn-primary" />
@@ -119,7 +148,6 @@
 </div>
 
 <div>
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
     <a asp-action="Index">Back to List</a>
 </div>
 
