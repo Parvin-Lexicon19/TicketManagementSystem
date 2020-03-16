@@ -83,7 +83,7 @@ namespace TicketManagementSystem.Controllers
             }
 
 
-            return RedirectToAction("edit", "Ticket", new { id = ticketid, });
+            return RedirectToAction("edit", "Tickets", new { id = ticketid, });
         }
 
         

@@ -11,9 +11,11 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Edit" enctype="multipart/form-data" method="post">
+            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
             <input type="hidden" asp-for="Ticket.Id" />
+            <input type="hidden" asp-for="Ticket.CreatedBy" />
+            <input type="hidden" asp-for="Ticket.AssignedTo" />
             <div class="form-group">
                 @*<label asp-for="RefNo" class="control-label"></label>*@
                 <input type="hidden" asp-for="Ticket.RefNo" class="form-control" />
@@ -129,16 +131,38 @@
                             </dt>
                         }
 
-                    <dd class="col-sm-3">
-                        <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-                    </dd>
+                        <dd class="col-sm-3">
+                            <a id="file_@i" asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                            <a asp-controller="Documents" asp-action="RemoveFile" asp-route-id="@item.Id" onClick="deleteit(i);">Remove</a>
+                        </dd>
+
 
                     </dl>
+
                     i++;
                 }
 
 
             }
+
+            @for (int j = 0; j < (3 - Model.Documents.Count); j++)
+            {
+                <div class="form-group row">
+                   
+                    <div class="col-md-3 col-form-label">
+                        @Html.Label("Attachment" + (j + 1).ToString())
+                    </div>
+                    @*<label asp-for="File" class="col-md-2 col-form-label"></label>*@
+                    <div class="col-md-9">
+                        <div class="custom-file">
+                            <input asp-for="File" class="form-control custom-file-input">
+                            <label class="custom-file-label">Choose File...</label>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
             <div class="form-group" align="center">
                 <input name="submit" type="submit" id="submit" value="Save as Draft" class="btn btn-primary" />
                 <input name="submit" type="submit" id="submit" value="Submit" class="btn btn-primary" />

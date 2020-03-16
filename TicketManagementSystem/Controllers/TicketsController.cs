@@ -599,9 +599,27 @@ namespace TicketManagementSystem.Controllers
                 Documents = ticket.Documents,
             };
 
+            loggedInUser = await userManager.GetUserAsync(User);
+            var loggedInUserProjects = _context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId);
+
+            selectListProjects = new List<SelectListItem>();
+
+            foreach (var project in loggedInUserProjects)
+            {
+                var selectItem = new SelectListItem
+                {
+                    Text = project.Name,
+                    Value = project.Id.ToString()
+                };
+                selectListProjects.Add(selectItem);
+            }
+
+            
+
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
+            //ViewData["ProjectId"] = new SelectList(_context.Projects.Where(P=>P., "Id", "Name", ticket.ProjectId);
+            ViewData["ProjectId"] = selectListProjects;
             return View(model);
         }
 
@@ -612,6 +630,8 @@ namespace TicketManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, TicketDetailsViewModel model, string submit)
         {
+            model.Ticket.CreatedDate = DateTime.Now;
+
             switch (model.Ticket.CustomerPriority)
             {
                 case Priority.A_2days:
@@ -653,6 +673,11 @@ namespace TicketManagementSystem.Controllers
                 {
                     _context.Update(model.Ticket);
                     await _context.SaveChangesAsync();
+
+                    if (model.File != null)
+                        Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
+
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
