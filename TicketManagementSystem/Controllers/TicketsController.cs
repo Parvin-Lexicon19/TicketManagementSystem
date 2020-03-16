@@ -758,14 +758,16 @@ namespace TicketManagementSystem.Controllers
                 _context.SaveChanges();
 
                 // Generate Email while closing Ticket.
-                var callbackUrl = Url.Action("Details", "Tickets", new { id = newticket.Id }, protocol: Request.Scheme);
+                if ((int)newticket.Status == 3)
+                {
+                    var callbackUrl = Url.Action("Details", "Tickets", new { id = newticket.Id }, protocol: Request.Scheme);
 
-                _emailSender.SendEmailAsync(
-                           createdUser.Email,
-                           "The Ticket is closed",
-                           $"The ticket closed by { loggedInUser}. " +
-                           $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
-
+                    _emailSender.SendEmailAsync(
+                               createdUser.Email,
+                               "The Ticket is closed",
+                               $"The ticket closed by { loggedInUser}. " +
+                               $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+                }
                 return "The Ticket status successfully Upadated !!";
             }
             catch (DbUpdateConcurrencyException)
