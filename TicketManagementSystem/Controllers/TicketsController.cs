@@ -479,11 +479,9 @@ namespace TicketManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddTicket(AddTicketViewModel model, string submit)
         {
-
             if (User.IsInRole("Developer") || User.IsInRole("Admin"))
-            {
                 loggedInUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == model.Ticket.CreatedBy);
-            }
+            
             model.Ticket.CreatedBy = loggedInUser.Id;
             //Getting LoggedInUser's ComapnyId & then CompanyAbbr & Last RefNo of that company
             Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
@@ -547,7 +545,6 @@ namespace TicketManagementSystem.Controllers
                 _context.Add(model.Ticket);
                 await _context.SaveChangesAsync();
 
-
                 if (model.File != null)
                     Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
 
@@ -572,10 +569,6 @@ namespace TicketManagementSystem.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-
-            //ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.AssignedTo);
-            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.CreatedBy);
-            //ViewData["ProjectId"] = selectListProjects;
 
             return View(model);
         }
@@ -824,7 +817,6 @@ namespace TicketManagementSystem.Controllers
             {
                 if (inputFile != null)
                 {
-
                     string projectDir = System.IO.Directory.GetCurrentDirectory();
                     var uploadsFolder = Path.Combine(projectDir, "wwwroot/Docs");
                     FileName = Path.GetFileName(inputFile.FileName);
@@ -838,20 +830,16 @@ namespace TicketManagementSystem.Controllers
                         inputFile.CopyTo(f);
                         f.Close();
                     }
-
-
                 }
 
                 var filename = ticketRfno + "_" + FileName;
                 var document = new Document
                 {
-
                     Name = filename,
                     UploadTime = DateTime.Now,
                     Path = filePath,
                     ApplicationUserId = userid,
                     TicketId = ticketid
-
                 };
 
                 if (ModelState.IsValid)
@@ -861,12 +849,6 @@ namespace TicketManagementSystem.Controllers
                 }
             }
         }
-
-        //public JsonResult GetCustomers()
-        //{
-        //    var users = _context.ApplicationUsers.Select(row => row);
-        //    return Json(users);
-        //}
                
         [HttpPost]
         public JsonResult GetProjects(string customerId)
@@ -886,7 +868,6 @@ namespace TicketManagementSystem.Controllers
                 };
                 selectListProjects.Add(selectItem);
             }
-            //ViewData["ProjectId"] = selectListProjects;
             return Json(selectListProjects);
         }
     }

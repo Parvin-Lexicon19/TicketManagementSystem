@@ -35,11 +35,10 @@
 
             <div class="form-group">
                 <label asp-for="Ticket.ProjectId" class="control-label"></label>
-                @*<select id="projectDropDownList" asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">*@
-                <select id="projectDropDownList" asp-for="Ticket.ProjectId" class="form-control">
+                <select id="projectDropDownList" asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
                     <option value="">Select Project</option>
                 </select>
-                @*<span asp-validation-for="Ticket.ProjectId" class="text-danger"></span>*@
+                <span asp-validation-for="Ticket.ProjectId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Ticket.CustomerPriority" class="control-label">Priority</label>
@@ -82,74 +81,3 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
-</script>
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-
-<script type="text/javascript">
-
-    function FillProjects() {
-    var customerId = $('#customerDropDownList').val();
-    $.ajax({
-        url: 'GetProjects',
-        type: "POST",
-        dataType: "JSON",
-        data: { customerId: customerId},
-        success: function (projects) {                    
-            $("#projectDropDownList").html("");   //clear before appending new list 
-            $.each(projects, function (i, project) {
-                $("#projectDropDownList").append(
-                    $('<option value="' + project.value + '">' + project.text + '</option>'));
-            });
-        }
-    });
-  }
-
-//    $(function () {
-//        $("#ddlFruits").change(function () {
-//            var selectedText = $(this).find("option:selected").text();
-//            var selectedValue = $(this).val();
-//            alert("Selected Text: " + selectedText + " Value: " + selectedValue);
-//        });
-
-//        $('#customerDropDownList').change(function () {
-//            var customerId = $('#customerDropDownList').val();
-//            var obj = { customerId: customerId };
-//            AjaxCall('GetProjects', obj, 'POST')
-//                .done(function (response) {
-//            if (response.length > 0) {
-//                $('#projectDropDownList').html('');
-//                var options = '';
-//                options += '<option value="Select">Select</option>';
-//                for (var i = 0; i < response.length; i++) {
-//                    options += '<option value="' + response[i].val + '">' + response[i].text + '</option>';
-//                }
-//                $('#projectDropDownList').append(options);
-//            }
-//        }).fail(function (error) {
-//            alert(error.StatusText);
-//        });
-//        });
-        
-//        //selectBox.addEventListener('change', () => {
-//        //Object.keys(repos).forEach(key => {
-//        //  if (selectBox.value === repos[key].name) {
-//        //    keyIndex = key;
-//        //  }
-//        //});
-
-//    });
-
-
-//function AjaxCall(url, data, type) {
-//    return $.ajax({
-//        url: url,
-//        type: type ? type : 'GET',
-//        datatype: 'text',
-//        //data: $('#customerDropDownList').val(),
-//        data: JSON.stringify(data),
-//        contentType: 'application/json'
-//    });
-//} 
-</script>
-
