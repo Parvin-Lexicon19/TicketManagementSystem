@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -419,6 +420,9 @@ namespace TicketManagementSystem.Controllers
                         TicketId = ticket.Id,
                     }
                  };
+            // Pass the LoggedInUser when closing the Ticket.
+            loggedInUser = await userManager.GetUserAsync(User);
+            TempData["loggedInUser"] = loggedInUser.Email;
 
             return View(model);
         }
@@ -689,10 +693,17 @@ namespace TicketManagementSystem.Controllers
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", model.Ticket.ProjectId);
             return View(model);
         }
+        // Edit Ticket Through Detail Screen.
         [HttpPost]
         public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority)
         {
-            var newticket = _context.Tickets.Find(id);
+            var newticket =  _context.Tickets.Find(id);
+
+            string loggedInUser = (string)TempData["loggedInUser"];
+           var createdUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == newticket.CreatedBy);
+            
+
+            TempData.Keep();
 
             if (newticket == null)
             {
@@ -752,6 +763,16 @@ namespace TicketManagementSystem.Controllers
             {
                 _context.Update(newticket);
                 _context.SaveChanges();
+
+                // Generate Email while closing Ticket.
+                var callbackUrl = Url.Action("Details", "Tickets", new { id = newticket.Id }, protocol: Request.Scheme);
+
+                _emailSender.SendEmailAsync(
+                           createdUser.Email,
+                           "The Ticket is closed",
+                           $"The ticket closed by { loggedInUser}. " +
+                           $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+
                 return "The Ticket status successfully Upadated !!";
             }
             catch (DbUpdateConcurrencyException)
