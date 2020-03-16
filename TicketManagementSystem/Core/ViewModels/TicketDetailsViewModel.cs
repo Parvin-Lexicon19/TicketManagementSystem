@@ -9,6 +9,7 @@ namespace TicketManagementSystem.Core.ViewModels
 {
     public class TicketDetailsViewModel
     {
+       
         public Ticket Ticket { get; set; }
         public Comment Comment { get; set; }
 

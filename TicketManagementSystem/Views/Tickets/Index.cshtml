@@ -13,6 +13,7 @@
         else
         {
             <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>My Tickets</h1></a>
+            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index2"><h1> Company Tickets</h1></a>
         }
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -47,21 +48,26 @@
             <div class="input-group mb-3">
                 <input type="text" name="title" class="form-control" placeholder="Search on Title" />
                 <div class="input-group-append">
-                    @if (User.IsInRole("Admin")  || User.IsInRole("Developer"))
-                    {          
-                        <select name="StatusSearch" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Draft" ))" class="form-control">
+                    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+                    {
+                        <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Draft" ))" class="form-control">
                             <option selected="selected" value="">Status</option>
                         </select>
                         <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
-                            <option selected="selected" value="">Priority</option>
+                            <option selected="selected" value="">CustomerPriority</option>
                         </select>
                         <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
                             <option selected="selected" value="">RealPriority</option>
                         </select>
+                        <select name="priorities" class="form-control">
+                            <option selected="selected" value="">Priorities</option>
+                            <option  value="1">Match</option>
+                            <option  value="2">Not Match</option>
+                        </select>
                     }
                     else
                     {
-                        <select name="StatusSearch" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
+                        <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
                             <option selected="selected" value="">Status</option>
                         </select>
                         <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
@@ -130,13 +136,34 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.OrderByDescending(i => i.Id))
         {
         <tr>
-            <td>
-                <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+            @if (User.IsInRole("Customer"))
+            {
+                @if (item.Status == Status.Draft)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
 
-            </td>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+
+                    </td>
+
+                }
+            }
+            else
+            {
+                <td>
+                    <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+
+                </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
@@ -164,34 +191,24 @@
                     @Html.DisplayFor(modelItem => item.RealPriority)
                 </td>
             }
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Submitted || item.Status == Status.Started) && (item.DueDate < DateTime.Now))
+            {
+                <td class="crossedduedate rounded-pill">
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+            }
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 <td>
                     @Html.DisplayFor(modelItem => item.UserEmail)
                 </td>
             }
-
-            @if (User.IsInRole("Customer"))
-            {
-                @if (item.Status == Status.Draft)
-                {
-                    <td>
-                        <a asp-action="DetailsDraft" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                }
-                else
-                {
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    </td>
-                }
-            }
-
         </tr>
         }
     </tbody>

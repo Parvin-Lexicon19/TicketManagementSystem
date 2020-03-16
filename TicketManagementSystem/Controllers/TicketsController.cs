@@ -52,10 +52,11 @@ namespace TicketManagementSystem.Controllers
 
             List<TicketIndexViewModel> model;
 
+            // List all the result 
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                    .Where(s => s.Status != Status.Draft)
+                    .Where(s => s.Status != Status.Draft && s.Status != Status.Closed)
                     .Select(s => new TicketIndexViewModel
                     {
                         Id = s.Id,
@@ -90,38 +91,23 @@ namespace TicketManagementSystem.Controllers
                         .ToListAsync();
             }
 
+            // Sort by attributes in the list
             model = SortList(sortOrder, model);
+
             return View(model);
         }
 
-        //Filter by Title, Status and Priority
-        public async Task<IActionResult> Filter(string title, int? StatusSearch, int? customerPriority, int? adminPriority, List<TicketIndexViewModel> model)
+        public async Task<IActionResult> Index2(string sortOrder)
         {
+            //var applicationdbcontext = _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project);
+            // return View(await applicationdbcontext.ToListAsync());
+
             var loggedInUser = await userManager.GetUserAsync(User);
+            List<TicketIndexViewModel> model;
 
-            if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-                model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                    .Where(s => s.Status != Status.Draft)
-                    .Select(s => new TicketIndexViewModel
-                    {
-                        Id = s.Id,
-                        RefNo = s.RefNo,
-                        Title = s.Title,
-                        Status = s.Status,
-                        ProjectName = s.Project.Name,
-                        CustomerPriority = s.CustomerPriority,
-                        RealPriority = s.RealPriority,
-                        DueDate = s.DueDate,
-                        UserEmail = s.AssignedUser.Email
-                    })
-                    .ToListAsync();
-
-            }
-            else
-            {
-                model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                        .Where(u => u.CreatedBy == loggedInUser.Id)
+            // List all the result 
+            model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                        .Where(u => u.CreatedUser.CompanyId == loggedInUser.CompanyId)
                         .Select(s => new TicketIndexViewModel
                         {
                             Id = s.Id,
@@ -135,28 +121,91 @@ namespace TicketManagementSystem.Controllers
                             UserEmail = s.AssignedUser.Email
                         })
                         .ToListAsync();
-            }
 
-            model = string.IsNullOrWhiteSpace(title) ?
-                model :
-                model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
-
-            model = StatusSearch == null ?
-              model :
-              model.Where(m => m.Status == (Status)StatusSearch).ToList();
-
-            model = customerPriority == null ?
-                model :
-                model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
-
-            model = adminPriority == null ?
-                model :
-                model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
+            // Sort by attributes in the list
+            model = SortList(sortOrder, model);
 
             return View(nameof(Index), model);
         }
 
-        //Sort by Attributes
+        //Filter by Title, Status and Priority
+        public async Task<IActionResult> Filter(string title, int? statusSearch, int? customerPriority, int? adminPriority, int? priorities, List<TicketIndexViewModel> model)
+        {
+            var loggedInUser = await userManager.GetUserAsync(User);
+
+           // List all the result 
+            if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                    .Where(s => s.Status != Status.Draft && s.Status != Status.Closed)
+                    .Select(s => new TicketIndexViewModel
+                    {
+                        Id = s.Id,
+                        RefNo = s.RefNo,
+                        Title = s.Title,
+                        Status = s.Status,
+                        ProjectName = s.Project.Name,
+                        CustomerPriority = s.CustomerPriority,
+                        RealPriority = s.RealPriority,
+                        DueDate = s.DueDate,
+                        UserEmail = s.AssignedUser.Email
+                    })
+                    .ToListAsync();
+
+            }
+            else
+            {
+                model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                        .Where(u => u.CreatedBy == loggedInUser.Id)
+                        .Select(s => new TicketIndexViewModel
+                        {
+                            Id = s.Id,
+                            RefNo = s.RefNo,
+                            Title = s.Title,
+                            Status = s.Status,
+                            ProjectName = s.Project.Name,
+                            CustomerPriority = s.CustomerPriority,
+                            RealPriority = s.RealPriority,
+                            DueDate = s.DueDate,
+                            UserEmail = s.AssignedUser.Email
+                        })
+                        .ToListAsync();
+            }
+
+            // Search by Title
+            model = string.IsNullOrWhiteSpace(title) ?
+                model :
+                model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
+
+            // Search by Status Drowpdown
+            model = statusSearch == null ?
+              model :
+              model.Where(m => m.Status == (Status)statusSearch).ToList();
+
+            // Search by Customer Priority Drowpdown
+            model = customerPriority == null ?
+                model :
+                model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
+
+            // Search by Real Priority Drowpdown
+            model = adminPriority == null ?
+                model :
+                model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
+
+            // Search by Match or Not-Match Priority Drowpdown
+            if (priorities.GetValueOrDefault() == 1)
+            {
+                model = model.Where(m => m.RealPriority == m.CustomerPriority).ToList();
+            }
+            if (priorities.GetValueOrDefault() == 2)
+            {
+                model = model.Where(m => m.RealPriority != m.CustomerPriority).ToList();
+            }
+                
+            return View(nameof(Index), model);
+        }
+
+        // Sort by attributes in the list
         private List<TicketIndexViewModel> SortList(string sortOrder, List<TicketIndexViewModel> ticket)
         {
             ViewBag.RefNoSortParm = String.IsNullOrEmpty(sortOrder) ? "RefNo_desc" : "";
@@ -639,6 +688,77 @@ namespace TicketManagementSystem.Controllers
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.CreatedBy);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", model.Ticket.ProjectId);
             return View(model);
+        }
+        [HttpPost]
+        public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority)
+        {
+            var newticket = _context.Tickets.Find(id);
+
+            if (newticket == null)
+            {
+                return "The ticket not found";
+            }
+
+            // Update only the changed value to database.
+
+            //Status
+            if (newticket.Status != (Status)(Status))
+            {
+                newticket.Status = (Status)(Status);
+            }
+
+            //Response Type
+            if (newticket.ResponseType != (ResponseType)(RespType))
+            {
+                newticket.ResponseType = (ResponseType)(RespType);
+            }
+            //Response Description
+            if (newticket.ResponseDesc != RespDesc)
+            {
+                newticket.ResponseDesc = RespDesc;
+            }
+            //Hours Spent
+            if (newticket.HoursSpent != HoursSpent)
+            {
+                newticket.HoursSpent = HoursSpent;
+            }
+            // Real Priority.
+            if (newticket.RealPriority != (Priority)(RelPriority))
+            {
+                newticket.RealPriority = (Priority)(RelPriority);
+
+                // Change the due date upon changing the real priority
+
+                switch (newticket.RealPriority)
+                {
+                    case Priority.A_2days:
+                        newticket.DueDate = newticket.CreatedDate.AddDays(2);
+                        break;
+                    case Priority.B_5days:
+                        newticket.DueDate = newticket.CreatedDate.AddDays(5);
+                        break;
+                    case Priority.C_9days:
+                        newticket.DueDate = newticket.CreatedDate.AddDays(9);
+                        break;
+
+                    default:
+                        throw new Exception();
+                }
+            }
+
+           
+            // Update the dataase.
+            try
+            {
+                _context.Update(newticket);
+                _context.SaveChanges();
+                return "The Ticket status successfully Upadated !!";
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return "Ticket Not found";
+
+            }
         }
 
         // GET: Tickets/Delete/5

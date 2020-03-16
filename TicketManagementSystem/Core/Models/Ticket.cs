@@ -70,6 +70,7 @@ namespace TicketManagementSystem.Core.Models
         B_5days,
         C_9days
     }
+
     public enum ResponseType
     {
         A,
