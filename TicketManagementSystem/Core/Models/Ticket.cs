@@ -43,6 +43,7 @@ namespace TicketManagementSystem.Core.Models
         public DateTime ClosedDate { get; set; }
         [DisplayName("Last Updated")]
         public DateTime LastUpdated { get; set; }
+        [DisplayName("Response Type")]
         public ResponseType ResponseType { get; set; }
         [DisplayName("Response Desc.")]
         public string ResponseDesc { get; set; }
