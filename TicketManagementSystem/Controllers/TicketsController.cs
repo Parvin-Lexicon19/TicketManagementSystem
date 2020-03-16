@@ -27,14 +27,16 @@ namespace TicketManagementSystem.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ApplicationDbContext _context;
         private static ApplicationUser loggedInUser;
-        List<SelectListItem> selectListItems;
+        List<SelectListItem> selectListCustomers;
+        List<SelectListItem> selectListProjects;
+        List<ApplicationUser> ticketProjectDevelopers;
         private readonly IEmailSender _emailSender;
 
         public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _context = context;
             this.userManager = userManager;
-            selectListItems = new List<SelectListItem>();
+            //selectListItems = new List<SelectListItem>();
             _emailSender = emailSender;
         }
 
@@ -375,28 +377,48 @@ namespace TicketManagementSystem.Controllers
         // GET: Tickets/AddTicket
         public async Task<IActionResult> AddTicketAsync()
         {
-            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
-            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
-            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+            var model = new AddTicketViewModel();
 
-            loggedInUser = await userManager.GetUserAsync(User);
-            
-            var loggedInUserProjects = _context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId);
-            foreach (var project in loggedInUserProjects)
+            //ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
+            if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
-                var selectItem = new SelectListItem
+                //ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Email");
+
+                selectListCustomers = new List<SelectListItem>();
+
+                var customers = await userManager.GetUsersInRoleAsync("Customer");
+                foreach (var customer in customers)
                 {
-                    Text = project.Name,
-                    Value = project.Id.ToString()
-                };
-                selectListItems.Add(selectItem);
+                    var selectItem = new SelectListItem
+                    {
+                        Text = customer.Email,
+                        Value = customer.Id.ToString()
+                    };
+                    selectListCustomers.Add(selectItem);
+                }
+                ViewData["CreatedBy"] = selectListCustomers;
+                ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             }
 
-            var model = new AddTicketViewModel();
-            //model.File = new List<IFormFile>(3);
+            else if (User.IsInRole("Customer"))
+            {
+                loggedInUser = await userManager.GetUserAsync(User);
+                var loggedInUserProjects = _context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId);
 
+                selectListProjects = new List<SelectListItem>();
 
-            ViewData["ProjectId"] = selectListItems;
+                foreach (var project in loggedInUserProjects)
+                {
+                    var selectItem = new SelectListItem
+                    {
+                        Text = project.Name,
+                        Value = project.Id.ToString()
+                    };
+                    selectListProjects.Add(selectItem);
+                }
+
+                ViewData["ProjectId"] = selectListProjects;
+            }            
 
             return View(model);
         }
@@ -409,6 +431,11 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> AddTicket(AddTicketViewModel model, string submit)
         {
 
+            if (User.IsInRole("Developer") || User.IsInRole("Admin"))
+            {
+                loggedInUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == model.Ticket.CreatedBy);
+            }
+            model.Ticket.CreatedBy = loggedInUser.Id;
             //Getting LoggedInUser's ComapnyId & then CompanyAbbr & Last RefNo of that company
             Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
             var companyAbbr = loggedInUserCompany.CompanyAbbr;
@@ -423,8 +450,7 @@ namespace TicketManagementSystem.Controllers
             //Increasing that last RefNo by 1 and assigning it to the newly added ticket
             model.Ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
-
-            model.Ticket.CreatedBy = loggedInUser.Id;
+            
             model.Ticket.CreatedDate = DateTime.Now;
             model.Ticket.RealPriority = model.Ticket.CustomerPriority;
 
@@ -447,7 +473,16 @@ namespace TicketManagementSystem.Controllers
             switch (submit)
             {
                 case "Submit":
-                    model.Ticket.Status = Status.Submitted;                    
+                    model.Ticket.Status = Status.Submitted;
+                    var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
+                    ticketProjectDevelopers = new List<ApplicationUser>();
+                    if (ticketProject.Developer1 != null)
+                    {
+                        ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer1));
+                        model.Ticket.AssignedTo = ticketProject.Developer1;
+                    }
+                    if (ticketProject.Developer2 != null)
+                        ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer2));
                     break;
 
                 case "Save as Draft":
@@ -458,33 +493,20 @@ namespace TicketManagementSystem.Controllers
                     throw new Exception();
             }
 
-
             if (ModelState.IsValid)
-            {                
+            {
                 _context.Add(model.Ticket);
                 await _context.SaveChangesAsync();
 
 
+                if (model.File != null)
+                    Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
 
-                if (model.File!=null)
-                {
-                   Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
-                    
-                }
-                
-                
-
-
+                //Ticket assigns to developer1, but emails sent to both developer1 and developer2
                 if (model.Ticket.Status.Equals(Status.Submitted))
                 {
-                    var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
-                    var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
-                    List<ApplicationUser> ticketProjectDevelopers = new List<ApplicationUser>();
-                    if (ticketProject.Developer1 != null)
-                        ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer1));
-                    if (ticketProject.Developer2 != null)
-                        ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer2));
-                   
+                    var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);                   
+
                     foreach (var developer in ticketProjectDevelopers)
                     {
                         await _emailSender.SendEmailAsync(
@@ -493,18 +515,18 @@ namespace TicketManagementSystem.Controllers
                           $"Hello dear {developer.FirstName}," +
                           $"<br/><br/>A new ticket submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. " +
                           $"<br/>Please see the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details</a>." +
-                          $"<br/><br/>Thank you,<br/>Bitoreq Admin"); 
+                          $"<br/><br/>Thank you,<br/>Bitoreq Admin");
                     }
-                    
+
                     return RedirectToAction(nameof(EmailSent));
                 }
 
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.AssignedTo);
+            //ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.AssignedTo);
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.CreatedBy);
-            ViewData["ProjectId"] = selectListItems;
+            //ViewData["ProjectId"] = selectListProjects;
 
             return View(model);
         }
@@ -717,13 +739,35 @@ namespace TicketManagementSystem.Controllers
                     _context.Add(document);
                     _context.SaveChanges();
                 }
-
-
             }
-
-
-
         }
 
+        //public JsonResult GetCustomers()
+        //{
+        //    var users = _context.ApplicationUsers.Select(row => row);
+        //    return Json(users);
+        //}
+               
+        [HttpPost]
+        public JsonResult GetProjects(string customerId)
+        {
+            var selectedUserProjects = string.IsNullOrEmpty(customerId)?
+                _context.Projects.Select(row => row)
+                : _context.Projects.Where(g => g.CompanyId == _context.ApplicationUsers.FirstOrDefault(a => a.Id == customerId).CompanyId);
+
+            selectListProjects = new List<SelectListItem>();
+
+            foreach (var project in selectedUserProjects)
+            {
+                var selectItem = new SelectListItem
+                {
+                    Text = project.Name,
+                    Value = project.Id.ToString()
+                };
+                selectListProjects.Add(selectItem);
+            }
+            //ViewData["ProjectId"] = selectListProjects;
+            return Json(selectListProjects);
+        }
     }
 }

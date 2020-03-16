@@ -19,6 +19,7 @@ namespace TicketManagementSystem.Data
         public DbSet<Document> Documents { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
 
 
