@@ -66,7 +66,7 @@ namespace TicketManagementSystem.Controllers
             return View(model);
         }
 
-
+        // Index for Customer Company Tickets  
         public async Task<IActionResult> IndexCompanyTickets(string sortOrder, List<TicketIndexViewModel> model, string title, int? statusSearch, int? customerPriority, int? priorities )
         {
             var loggedInUser = await userManager.GetUserAsync(User);
@@ -94,6 +94,7 @@ namespace TicketManagementSystem.Controllers
             return View(model);
         }
 
+        // Customer tickets ViewModel and List all the result by UserId
         private async Task<List<TicketIndexViewModel>> TicketViewModelCustomer(List<TicketIndexViewModel> model, ApplicationUser loggedInUser)
         {
             model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
@@ -114,6 +115,7 @@ namespace TicketManagementSystem.Controllers
             return model;
         }
 
+        // Admin tickets ViewModel and List all the result and not show Draft status and Closed status
         private async Task<List<TicketIndexViewModel>> TicketViewModelAdmin(List<TicketIndexViewModel> model)
         {
             model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
@@ -149,6 +151,7 @@ namespace TicketManagementSystem.Controllers
                 model = await TicketViewModelCustomer(model, loggedInUser);
             }
 
+            // List all the result and not show Draft Status 
             model2 = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
                        .Where(s => s.Status != Status.Draft)
                        .Select(s => new TicketIndexViewModel
@@ -215,7 +218,7 @@ namespace TicketManagementSystem.Controllers
         {
             var loggedInUser = await userManager.GetUserAsync(User);
 
-            // List all the result by Company 
+            // List all the result by CompanyId 
             model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
                         .Where(u => u.CreatedUser.CompanyId == loggedInUser.CompanyId)
                         .Select(s => new TicketIndexViewModel
