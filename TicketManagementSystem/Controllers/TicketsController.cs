@@ -783,8 +783,14 @@ namespace TicketManagementSystem.Controllers
                         throw new Exception();
                 }
             }
+            if ((int)Status == 3)
+            {
+                newticket.ClosedDate = DateTime.Now;
+            }
 
-           
+            newticket.LastUpdated = DateTime.Now;
+
+
             // Update the dataase.
             try
             {
@@ -795,12 +801,14 @@ namespace TicketManagementSystem.Controllers
                 if ((int)newticket.Status == 3)
                 {
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = newticket.Id }, protocol: Request.Scheme);
-
-                    _emailSender.SendEmailAsync(
+                    if (createdUser != null)
+                    {
+                        _emailSender.SendEmailAsync(
                                createdUser.Email,
                                "The Ticket is closed",
                                $"The ticket closed by { loggedInUser}. " +
                                $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+                    }
                 }
                 return "The Ticket status successfully Upadated !!";
             }
