@@ -128,7 +128,7 @@
             </dt>
             <dd class="col-sm-4">
                 @Html.DisplayNameFor(model => model.Ticket.ResponseType)
-
+            </dd>
 
         </dl>
         <dl class="row">
@@ -142,7 +142,7 @@
                 @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
             </dt>
             <dd class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
+                @Html.DisplayFor(model => model.Ticket.HoursSpent)
             </dd>
         </dl>
     }
@@ -179,7 +179,7 @@
             <p class="text-danger">
                 @ViewBag.Statuscheck
             </p>
-            
+
         </dd>
 
     </dl>
@@ -242,61 +242,62 @@
 
             <input type="button" value="Save" id="Save" class="btn btn-primary hide collapse" />
         </div>
-            }
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-                @if ((int)Model.Ticket.Status != 3)
-                {
-                    <div class="text-center">
-                        <button class="btn btn-primary center-block" id="SaveEditbtn" data-toggle="collapse" data-target=".hide">Edit</button>
-                    </div>
+    }
+    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+    {
+        @if ((int)Model.Ticket.Status != 3)
+        {
+            <div class="text-center">
+                <button class="btn btn-primary center-block" id="SaveEditbtn" data-toggle="collapse" data-target=".hide">Edit</button>
+            </div>
 
-                }
-            }
-            <a asp-action="Index">Back to List</a>
-            <br />
-            <br />
-            <span id="msg" class="text-danger"></span>
+        }
+    }
+    <a asp-action="Index">Back to List</a>
+    <br />
+    <br />
+    <span id="msg" class="text-danger"></span>
 
+</div>
+
+<br />
+<br />
+    @if ((int)Model.Ticket.Status != 3)
+    {
+    <div class="form-group">
+        <!--Button trigger modal-->
+        <div>
+            <button type="button" id="commentPopUp" class="btn btn-primary" data-toggle="modal" data-target="commentModalCenter">Add Comment</button>
         </div>
-
         <br />
-        <br />
-
-        <div class="form-group">
-            <!--Button trigger modal-->
-            <div>
-                <button type="button" id="commentPopUp" class="btn btn-primary" data-toggle="modal" data-target="commentModalCenter">Add Comment</button>
-            </div>
-            <br />
-            <b><label asp-for="Ticket.Comments" class="control-label"></label></b>
-            <div style="height: 55vh; overflow:auto;">
-                @await Html.PartialAsync("_CommentsPartial", Model.Ticket.Comments)
-            </div>
+        <b><label asp-for="Ticket.Comments" class="control-label"></label></b>
+        <div style="height: 55vh; overflow:auto;">
+            @await Html.PartialAsync("_CommentsPartial", Model.Ticket.Comments)
         </div>
+    </div>
 
-        <!--Modal-->
-        <div class="modal fade" id="commentModalCenter" tabindex="-1" role="dialog" aria-labelledby="commentModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Module for @Model.Ticket.Title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        @await Html.PartialAsync("CommentModalPopUpPartial", Model.Comment)
-                    </div>
-
-                </div>
+<!--Modal-->
+<div class="modal fade" id="commentModalCenter" tabindex="-1" role="dialog" aria-labelledby="commentModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Module for @Model.Ticket.Title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("CommentModalPopUpPartial", Model.Comment)
+            </div>
+
         </div>
+    </div>
+</div>
+    }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-
-        <script type="text/javascript">
+<script type="text/javascript">
 $("#commentPopUp").click(function () {
 $("#commentModalCenter").modal('show');
 });
@@ -378,4 +379,4 @@ var isValid = true;
     })
 
 
-        </script>
+</script>
