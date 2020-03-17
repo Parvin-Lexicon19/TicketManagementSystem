@@ -27,3 +27,7 @@ function FillProjects() {
         }
     });
 }
+
+function deleteit(no) {
+    document.getElementById(this.deleteit)
+}

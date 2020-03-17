@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -447,6 +448,9 @@ namespace TicketManagementSystem.Controllers
                         TicketId = ticket.Id,
                     }
                  };
+            // Pass the LoggedInUser when closing the Ticket.
+            loggedInUser = await userManager.GetUserAsync(User);
+            TempData["loggedInUser"] = loggedInUser.Email;
 
             return View(model);
         }
@@ -623,9 +627,27 @@ namespace TicketManagementSystem.Controllers
                 Documents = ticket.Documents,
             };
 
+            loggedInUser = await userManager.GetUserAsync(User);
+            var loggedInUserProjects = _context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId);
+
+            selectListProjects = new List<SelectListItem>();
+
+            foreach (var project in loggedInUserProjects)
+            {
+                var selectItem = new SelectListItem
+                {
+                    Text = project.Name,
+                    Value = project.Id.ToString()
+                };
+                selectListProjects.Add(selectItem);
+            }
+
+            
+
             ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
             ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
+            //ViewData["ProjectId"] = new SelectList(_context.Projects.Where(P=>P., "Id", "Name", ticket.ProjectId);
+            ViewData["ProjectId"] = selectListProjects;
             return View(model);
         }
 
@@ -636,6 +658,8 @@ namespace TicketManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, TicketDetailsViewModel model, string submit)
         {
+            model.Ticket.CreatedDate = DateTime.Now;
+
             switch (model.Ticket.CustomerPriority)
             {
                 case Priority.A_2days:
@@ -677,6 +701,11 @@ namespace TicketManagementSystem.Controllers
                 {
                     _context.Update(model.Ticket);
                     await _context.SaveChangesAsync();
+
+                    if (model.File != null)
+                        Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
+
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -710,10 +739,17 @@ namespace TicketManagementSystem.Controllers
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", model.Ticket.ProjectId);
             return View(model);
         }
+        // Edit Ticket Through Detail Screen.
         [HttpPost]
         public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority)
         {
-            var newticket = _context.Tickets.Find(id);
+            var newticket =  _context.Tickets.Find(id);
+
+            string loggedInUser = (string)TempData["loggedInUser"];
+           var createdUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == newticket.CreatedBy);
+            
+
+            TempData.Keep();
 
             if (newticket == null)
             {
@@ -773,6 +809,18 @@ namespace TicketManagementSystem.Controllers
             {
                 _context.Update(newticket);
                 _context.SaveChanges();
+
+                // Generate Email while closing Ticket.
+                if ((int)newticket.Status == 3)
+                {
+                    var callbackUrl = Url.Action("Details", "Tickets", new { id = newticket.Id }, protocol: Request.Scheme);
+
+                    _emailSender.SendEmailAsync(
+                               createdUser.Email,
+                               "The Ticket is closed",
+                               $"The ticket closed by { loggedInUser}. " +
+                               $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+                }
                 return "The Ticket status successfully Upadated !!";
             }
             catch (DbUpdateConcurrencyException)

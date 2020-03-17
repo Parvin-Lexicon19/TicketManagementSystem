@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
         @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
         {
@@ -196,9 +196,13 @@
             }
             @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Submitted || item.Status == Status.Started) && (item.DueDate < DateTime.Now))
             {
-                <td class="crossedduedate rounded-pill">
-                    @Html.DisplayFor(modelItem => item.DueDate)
-                </td>
+        <td>
+
+            @Html.DisplayFor(modelItem => item.DueDate)
+            <button type="submit" class="btn btn-danger btn-sm" aria-hidden="true">
+                <i class="fa fa-exclamation-circle"data-toggle="tooltip" title="Crossed Due Date!!" ></i>
+            </button>
+        </td>
             }
             else
             {
@@ -219,6 +223,12 @@
 @if(null != TempData["alertMessage"])
    {
 <script type="text/javascript">
-       alert("User created successful");
+    alert("User created successful");
+ 
 </script>
    }
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
