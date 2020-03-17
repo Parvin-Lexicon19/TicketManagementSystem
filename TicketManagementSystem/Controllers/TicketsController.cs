@@ -124,16 +124,15 @@ namespace TicketManagementSystem.Controllers
 
             // Sort by attributes in the list
             model = SortList(sortOrder, model);
-
             return View(nameof(Index), model);
         }
 
         //Filter by Title, Status and Priority
-        public async Task<IActionResult> Filter(string title, int? statusSearch, int? customerPriority, int? adminPriority, int? priorities, List<TicketIndexViewModel> model)
+        public async Task<IActionResult> Filter(string title, int? statusSearch, int? customerPriority, int? adminPriority, int? priorities, List<TicketIndexViewModel> model, List<TicketIndexViewModel> model2)
         {
             var loggedInUser = await userManager.GetUserAsync(User);
 
-           // List all the result 
+            // List all the result 
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
@@ -152,7 +151,9 @@ namespace TicketManagementSystem.Controllers
                     })
                     .ToListAsync();
 
+                 
             }
+
             else
             {
                 model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
@@ -172,15 +173,42 @@ namespace TicketManagementSystem.Controllers
                         .ToListAsync();
             }
 
+            model2 = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
+                       .Where(s => s.Status != Status.Draft)
+                       .Select(s => new TicketIndexViewModel
+                       {
+                           Id = s.Id,
+                           RefNo = s.RefNo,
+                           Title = s.Title,
+                           Status = s.Status,
+                           ProjectName = s.Project.Name,
+                           CustomerPriority = s.CustomerPriority,
+                           RealPriority = s.RealPriority,
+                           DueDate = s.DueDate,
+                           UserEmail = s.AssignedUser.Email
+                       })
+                       .ToListAsync();
+
+
             // Search by Title
             model = string.IsNullOrWhiteSpace(title) ?
                 model :
                 model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
-            // Search by Status Drowpdown
-            model = statusSearch == null ?
+            if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+               
+              model = statusSearch == null ?
               model :
-              model.Where(m => m.Status == (Status)statusSearch).ToList();
+              model2.Where(m => m.Status == (Status)statusSearch).ToList();
+            }
+            else
+            {
+
+             model = statusSearch == null ?
+             model :
+             model.Where(m => m.Status == (Status)statusSearch).ToList();
+            }
 
             // Search by Customer Priority Drowpdown
             model = customerPriority == null ?

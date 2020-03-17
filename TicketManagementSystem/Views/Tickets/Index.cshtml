@@ -104,6 +104,7 @@
             </th>
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
+                
                 <th>
                     @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
                 </th>
@@ -172,9 +173,11 @@
             </td>
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
+               
                 <td>
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
+                
             }
             else
             {
