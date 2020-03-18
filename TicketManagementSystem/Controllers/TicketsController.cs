@@ -783,7 +783,7 @@ namespace TicketManagementSystem.Controllers
                         throw new Exception();
                 }
             }
-            if ((int)Status == 3)
+            if (Status == Status.Closed)
             {
                 newticket.ClosedDate = DateTime.Now;
             }
@@ -798,7 +798,7 @@ namespace TicketManagementSystem.Controllers
                 _context.SaveChanges();
 
                 // Generate Email while closing Ticket.
-                if ((int)newticket.Status == 3)
+                if (Status == Status.Closed)
                 {
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = newticket.Id }, protocol: Request.Scheme);
                     if (createdUser != null)
