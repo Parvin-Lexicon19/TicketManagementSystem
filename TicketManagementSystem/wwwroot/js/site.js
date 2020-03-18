@@ -31,3 +31,6 @@ function FillProjects() {
 function deleteit(no) {
     document.getElementById(this.deleteit)
 }
+
+//$(document).ready(function () {
+//    $("#removefile").on("click", function () {
