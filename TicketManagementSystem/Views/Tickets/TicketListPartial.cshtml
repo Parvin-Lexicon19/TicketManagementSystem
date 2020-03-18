@@ -1,0 +1,153 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model IEnumerable<TicketIndexViewModel>
+
+
+<p>
+    <a asp-action="AddTicket">Add Ticket</a>
+</p>
+@*}*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "index", new { sortorder = ViewBag.RefNoSortParm })
+            </th>
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.Title), "Index", new { sortOrder = ViewBag.TitleSortParm })
+            </th>
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectNameSortParm })
+            </th>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
+                </th>
+            }
+            else
+            {
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
+                </th>
+            }
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.CustomerPriority), "Index", new { sortOrder = ViewBag.CustomerPrioritySortParm })
+            </th>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.RealPriority), "Index", new { sortOrder = ViewBag.RealPrioritySortParm })
+                </th>
+            }
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.DueDateSortParm })
+            </th>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.UserEmail), "index", new { sortorder = ViewBag.AssignedToSortParm })
+                </th>
+            }
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model@*.OrderByDescending(i => i.Id)*@)
+{
+<tr>
+    @if (User.IsInRole("Customer"))
+    {
+        @if (item.Status == Status.Draft)
+        {
+            <td>
+                <a asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+
+            </td>
+        }
+        else
+        {
+            <td>
+                <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+
+            </td>
+
+        }
+    }
+    else
+    {
+        <td>
+            <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+
+        </td>
+    }
+    <td>
+        @Html.DisplayFor(modelItem => item.Title)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ProjectName)
+    </td>
+    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+    {
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+
+    }
+    else
+    {
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+    }
+    <td>
+        @Html.DisplayFor(modelItem => item.CustomerPriority)
+    </td>
+    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+    {
+        <td>
+            @Html.DisplayFor(modelItem => item.RealPriority)
+        </td>
+    }
+    @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Submitted || item.Status == Status.Started) && (item.DueDate < DateTime.Now))
+    {
+        <td>
+
+            @Html.DisplayFor(modelItem => item.DueDate)
+            <button type="submit" class="btn btn-danger btn-sm" aria-hidden="true">
+                <i class="fa fa-exclamation-circle" data-toggle="tooltip" title="Crossed Due Date!!"></i>
+            </button>
+        </td>
+    }
+    else
+    {
+        <td>
+            @Html.DisplayFor(modelItem => item.DueDate)
+        </td>
+    }
+    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+    {
+        <td>
+            @Html.DisplayFor(modelItem => item.UserEmail)
+        </td>
+    }
+</tr>
+}
+    </tbody>
+</table>
+@if (null != TempData["alertMessage"])
+{
+    <script type="text/javascript">
+        alert("User created successful");
+
+    </script>
+}
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

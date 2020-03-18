@@ -1,0 +1,46 @@
+﻿@model IEnumerable<TicketIndexViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+       <div class="container">
+         
+               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="IndexCompanyTickets"><h1>Company Tickets</h1></a>
+
+           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                   aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+           </button>
+
+               <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                   @*<partial name="_LoginPartial" />*@
+                   <ul class="navbar-nav flex-grow-1">
+                       <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index">My Tickets </a>
+                   </ul>
+               </div>
+
+       </div>
+</nav>
+        <form asp-action="FilterForCompanyTickets">
+            <div class="input-group mb-3">
+                <input type="text" name="title" class="form-control" placeholder="Search on Title" />
+                <div class="input-group-append">
+                 
+                        <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
+                            <option selected="selected" value="">Status</option>
+                        </select>
+                        <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
+                            <option selected="selected" value="">Priority</option>
+                        </select>
+
+
+                </div>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-search">&emsp;search</i></button>
+                </div>
+            </div>
+        </form>
+
+        <partial name="TicketListPartial" />
