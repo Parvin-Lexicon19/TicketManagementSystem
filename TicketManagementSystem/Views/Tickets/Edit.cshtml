@@ -136,7 +136,7 @@
                                 <span class="form-check-inline">
                                     &nbsp;
                                     <a id="file_@i" asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a> &nbsp;
-                                    <a @*asp-controller="Documents" asp-action="RemoveFile" asp-route-id="@item.Id"*@ href="#"  href="javascript:void(0);" onclick="deleteit(i);"><i class="fa fa-remove" style="font-size:24px;color:red"></i></a>
+                                    <a asp-controller="Documents" asp-action="RemoveFile" asp-route-id="@item.Id" onclick="deleteit(i);"><i class="fa fa-remove" style="font-size:24px;color:red"></i></a>
                                 </span>
 
                             </dd>
