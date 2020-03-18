@@ -5,44 +5,55 @@
 }
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container">
-        @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-        {
-            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>All Tickets</h1></a>
-        }
-        else
-        {
-            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>My Tickets</h1></a>
-            <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index2"><h1> Company Tickets</h1></a>
-        }
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+       <div class="container">
+           @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+           {
+               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>All Tickets</h1></a>
+           }
+           else
+           {
+               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>My Tickets</h1></a>
 
-        @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-        {
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                @*<partial name="_LoginPartial" />*@
-                <ul class="navbar-nav flex-grow-1">
+           }
+           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                   aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+           </button>
 
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">&nbsp;Companies</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">&nbsp;Projects</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Customer">Customers</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Developer">Admin/Developers</a>
-                    </li>
+           @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+           {
+               <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                   @*<partial name="_LoginPartial" />*@
+                   <ul class="navbar-nav flex-grow-1">
 
-                </ul>
-            </div>
-        }
-    </div>
+                       <li class="nav-item">
+                           <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">&nbsp;Companies</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">&nbsp;Projects</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Customer">Customers</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Developer">Admin/Developers</a>
+                       </li>
+
+                   </ul>
+               </div>
+           }
+           else
+           {
+
+               <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                   @*<partial name="_LoginPartial" />*@
+                   <ul class="navbar-nav flex-grow-1">
+
+                       <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="IndexCompanyTickets"> Company Tickets</a>
+
+                   </ul>
+               </div>
+           }
 </nav>
         <form asp-action="Filter">
             <div class="input-group mb-3">
@@ -84,148 +95,4 @@
             </div>
         </form>
 
-@*@if (User.IsInRole("Customer"))
-{*@
-<p>
-    <a asp-action="AddTicket">Add Ticket</a>
-</p>
-@*}*@
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "index", new { sortorder = ViewBag.RefNoSortParm })
-            </th>
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.Title), "Index", new { sortOrder = ViewBag.TitleSortParm })
-            </th>
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectNameSortParm })
-            </th>
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
-                </th>
-            }
-            else
-            {
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
-                </th>
-            }
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.CustomerPriority), "Index", new { sortOrder = ViewBag.CustomerPrioritySortParm })
-            </th>
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.RealPriority), "Index", new { sortOrder = ViewBag.RealPrioritySortParm })
-                </th>
-            }
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.DueDateSortParm })
-            </th>
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.UserEmail), "index", new { sortorder = ViewBag.AssignedToSortParm })
-                </th>
-            }
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model@*.OrderByDescending(i => i.Id)*@)
-        {
-        <tr>
-            @if (User.IsInRole("Customer"))
-            {
-                @if (item.Status == Status.Draft)
-                {
-                    <td>
-                        <a asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
-
-                    </td>
-                }
-                else
-                {
-                    <td>
-                        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
-
-                    </td>
-
-                }
-            }
-            else
-            {
-                <td>
-                    <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
-
-                </td>
-            }
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectName)
-            </td>
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-            }
-            else
-            {
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-            }
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerPriority)
-            </td>
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-                <td>
-                    @Html.DisplayFor(modelItem => item.RealPriority)
-                </td>
-            }
-            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Submitted || item.Status == Status.Started) && (item.DueDate < DateTime.Now))
-            {
-        <td>
-
-            @Html.DisplayFor(modelItem => item.DueDate)
-            <button type="submit" class="btn btn-danger btn-sm" aria-hidden="true">
-                <i class="fa fa-exclamation-circle"data-toggle="tooltip" title="Crossed Due Date!!" ></i>
-            </button>
-        </td>
-            }
-            else
-            {
-                <td>
-                    @Html.DisplayFor(modelItem => item.DueDate)
-                </td>
-            }
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserEmail)
-                </td>
-            }
-        </tr>
-        }
-    </tbody>
-</table>
-@if(null != TempData["alertMessage"])
-   {
-<script type="text/javascript">
-    alert("User created successful");
- 
-</script>
-   }
-<script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-</script>
+        <partial name="TicketListPartial" />
