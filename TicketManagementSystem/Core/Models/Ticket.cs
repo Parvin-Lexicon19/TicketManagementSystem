@@ -74,10 +74,10 @@ namespace TicketManagementSystem.Core.Models
 
     public enum ResponseType
     {
-        A,
-        B,
-        C,
-        D,
-        E
+        A = 1,
+        B = 2,
+        C = 3,
+        D = 4,
+        E = 5
     }
 }
