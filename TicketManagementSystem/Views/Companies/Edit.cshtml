@@ -13,11 +13,24 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CompanyAbbr" class="control-label"></label>
-                <input asp-for="CompanyAbbr" class="form-control" />
-                <span asp-validation-for="CompanyAbbr" class="text-danger"></span>
-            </div>
+            @if (ViewBag.companyabbr == "show")
+            {
+                <div class="form-group">
+                    <label asp-for="CompanyAbbr" class="control-label"></label>
+                    <input asp-for="CompanyAbbr" class="form-control" />
+                    <span asp-validation-for="CompanyAbbr" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label asp-for="CompanyAbbr" class="control-label"></label>
+                    <input asp-for="CompanyAbbr" class="form-control" readonly/>
+                   
+                </div>
+            }
+
+
             <div class="form-group">
                 <label asp-for="CompanyName" class="control-label"></label>
                 <input asp-for="CompanyName" class="form-control" />

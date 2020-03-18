@@ -88,7 +88,23 @@ namespace TicketManagementSystem.Controllers
             {
                 return NotFound();
             }
+
+            var projects = _context.Projects.Where(p => p.CompanyId == id).Select(p=>p.Id).ToList();
+            var tickets = _context.Tickets.Where(t => projects.Contains(t.ProjectId)).Count();
+
+            if(tickets==0)
+            {
+                ViewData["companyabbr"] = "show";
+            }
+            else
+            {
+                ViewData["companyabbr"] = "hide";
+            }
+            
+
             return View(company);
+
+            
         }
 
         // POST: Companies/Edit/5
