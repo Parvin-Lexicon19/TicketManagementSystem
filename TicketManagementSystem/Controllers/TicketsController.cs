@@ -498,7 +498,7 @@ namespace TicketManagementSystem.Controllers
                     };
                     selectListCustomers.Add(selectItem);
                 }
-                ViewData["CreatedBy"] = selectListCustomers;
+                ViewData["CreatedBy"] = selectListCustomers.OrderBy(m => m.Text);
                 ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             }
 
