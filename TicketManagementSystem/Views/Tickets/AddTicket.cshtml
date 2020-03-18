@@ -67,7 +67,10 @@
             <hr />
 
             <div class="form-group" align="center" style="padding-top: 10px">
-                <input name="submit" type="submit" id="submit" value="Save as Draft" class="btn btn-primary" />
+                @if (User.IsInRole("Customer"))
+                {
+                    <input name="submit" type="submit" id="submit" value="Save as Draft" class="btn btn-primary" />
+                }
                 <input name="submit" type="submit" id="submit" value="Submit" class="btn btn-primary" />
             </div>
         </form>
