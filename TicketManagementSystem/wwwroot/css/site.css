@@ -80,3 +80,10 @@ body {
 .hidden {
     display:none;
 }
+
+#deletemsg {
+    background-color: #f38377;
+    text-align: center;
+    font-weight: bold;
+    height: 40px
+}

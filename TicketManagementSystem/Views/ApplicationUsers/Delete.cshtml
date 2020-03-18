@@ -17,12 +17,12 @@ else if (@ViewBag.formhide == "Hide")
     @if (@ViewBag.PageName == "Developer")
     {
 
-        <p class="bg-warning"><b>Cannot delete this User.There are related Projects for this developer.</b></p>
+        <p id="deletemsg"><b>This User cannot be deleted. There are some related projects to this developer.</b></p>
     }
     else
     {
 
-        <p class="bg-warning"><b>Cannot delete this User.There are related tickets for this customer</b></p>
+        <p id="deletemsg"><b>This User cannot be deleted.There are related tickets for this customer.</b></p>
 
     }
 
@@ -31,7 +31,7 @@ else if (@ViewBag.formhide == "Hide")
 else if (@ViewBag.formhide == "Admin")
 {
 
-    <p class="bg-warning"><b>cannot delete Admin user</b></p>
+    <p id="deletemsg"><b>Admin user cannot be deleted.</b></p>
     
 }
 

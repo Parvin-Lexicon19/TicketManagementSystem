@@ -90,14 +90,14 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             [Display(Name = "Country")]
             public string Country { get; set; }
 
-            [Display(Name = "PhoneNumber")]
+            [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
 
-            [Display(Name = "JobTitle")]
+            [Display(Name = "Job Title")]
             public string JobTitle { get; set; }
 
             [Required]
-
+            [Display(Name = "Company Name")]
             public string CompanyName { get; set; }
 
       

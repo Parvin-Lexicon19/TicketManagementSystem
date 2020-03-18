@@ -128,7 +128,7 @@ namespace TicketManagementSystem.Controllers
                 var user = await userManager.FindByIdAsync(id);
                 try
                 {
-
+                    user.UserName = applicationuser.Email;
                     user.FirstName = applicationuser.FirstName;
                     user.LastName = applicationuser.LastName;
                     user.Email = applicationuser.Email;

@@ -13,7 +13,7 @@
 }
 else
 {
-    <p class=" bg-danger"><b>This project cannot be deleted. There are some connected tickets to this project.</b> </p>
+    <p id="deletemsg"><b>This project cannot be deleted. There are some connected tickets to this project.</b> </p>
    
 }
 
@@ -52,22 +52,28 @@ else
             @Html.DisplayFor(model => model.SystemsUsed)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Company)
+            @Html.DisplayNameFor(model => model.Company.CompanyAbbr)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Company.CompanyAbbr)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Developer1User)
+            @Html.DisplayNameFor(model => model.Company.CompanyName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Developer1User.Id)
+            @Html.DisplayFor(model => model.Company.CompanyName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Developer2User)
+            @Html.DisplayNameFor(model => model.Developer1)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Developer2User.Id)
+            @Html.DisplayFor(model => model.Developer1User.UserName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Developer2)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Developer2User.UserName)
         </dd>
     </dl>
 
