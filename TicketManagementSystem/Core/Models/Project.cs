@@ -19,14 +19,18 @@ namespace TicketManagementSystem.Core.Models
         public string Name { get; set; }
         public string Developer1 { get; set; }
         public string Developer2 { get; set; }
+
+        [Display(Name = "Release Date")]
         [DataType(DataType.Date)] 
         [Required]
         public DateTime ReleaseDate { get; set; }
+        [Display(Name = "Last Update")]
         [DataType(DataType.Date)]
         [Remote(action: "CheckLastUpdate", controller: "Projects", AdditionalFields = "ReleaseDate")]
         public DateTime? LastUpdate { get; set; }
         [StringLength(500)]
         public string Description { get; set; }
+        [Display(Name = "Systems Used")]
         [StringLength(100)]
         public string SystemsUsed { get; set; }
         public ICollection<Ticket> Tickets { get; set; }

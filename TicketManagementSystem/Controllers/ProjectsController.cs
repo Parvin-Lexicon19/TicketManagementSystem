@@ -96,11 +96,24 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects.Include(c => c.Company).Where(p => p.Id == id).FirstOrDefaultAsync();
+            
             if (project == null)
             {
                 return NotFound();
             }
+
+            var tickets = _context.Tickets.Where(t => t.ProjectId == id).Count();
+
+            if (tickets == 0)
+            {
+                ViewData["company"] = "show";
+            }
+            else
+            {
+                ViewData["company"] = "hide";
+            }
+
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "CompanyAbbr", project.CompanyId);
             ViewData["Developer1"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", project.Developer1);
             ViewData["Developer2"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", project.Developer2);
