@@ -11,7 +11,7 @@ namespace TicketManagementSystem.Core.Models
         public int Id { get; set; }
         [Required]
         [StringLength(5)]
-        [Display(Name = "Company Abbr")]
+        [Display(Name = "Company Abbr.")]
         public string CompanyAbbr { get; set; }
         [Required]
         [Display(Name = "Company Name")]

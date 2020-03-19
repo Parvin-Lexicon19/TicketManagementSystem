@@ -24,9 +24,9 @@
             else
             {
         <div class="form-group">
-            <label asp-for="Company.CompanyName" class="control-label"></label>
+            <label asp-for="Company.CompanyAbbr" class="control-label"></label>
             <input asp-for="Company.CompanyAbbr" class="form-control" readonly />
-            <p><small>This company has tickets, so its company name is not editable</small></p>
+            <p class="text-danger"><small>This company has tickets, so its Abbr. is not editable</small></p>
 
         </div>
             }
@@ -43,7 +43,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Developer2" class="control-label"></label>
-                <select asp-for="Developer2" class="form-control" asp-items="ViewBag.Developer2"></select>
+                <select asp-for="Developer2" class="form-control"  asp-items="ViewBag.Developer2"><option value="">Select Developer2</option></select>
                 <span asp-validation-for="Developer2" class="text-danger"></span>
             </div>
             <div class="form-group">
