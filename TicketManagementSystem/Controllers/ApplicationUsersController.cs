@@ -30,7 +30,7 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> Index(string name)
         {
             
-            var users = from u in userManager.Users.Include(c=>c.Company)
+            var users = from u in userManager.Users.Include(c=>c.Company).Where(u=>u.EmailConfirmed)
                         join ur in _context.UserRoles on u.Id equals ur.UserId
                         join r in _context.Roles on ur.RoleId equals r.Id
                         select new ApplicationUserwithRole
