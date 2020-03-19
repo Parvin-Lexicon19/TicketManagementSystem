@@ -4,16 +4,18 @@
 
 @model IEnumerable<TicketIndexViewModel>
 
-
 <p>
     <a asp-action="AddTicket">Add Ticket</a>
 </p>
-@*}*@
-<table class="table">
+
+<table id="ticketlist" class="table table-striped table-hover tablesorter">
+
     <thead>
         <tr>
             <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "index", new { sortorder = ViewBag.RefNoSortParm })
+                @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "Index", new { sortorder = ViewBag.RefNoSortParm })
+
+                @*<a asp-action="Index" asp-route-sortOrder="@ViewData["RefNoSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Ref</a>*@
             </th>
             <th>
                 @Html.ActionLink(Html.DisplayNameFor(model => model.Title), "Index", new { sortOrder = ViewBag.TitleSortParm })
@@ -151,3 +153,19 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
+
+<!-- load jQuery and tablesorter scripts -->
+<script type="text/javascript" src="/path/to/jquery-latest.js"></script>
+<script type="text/javascript" src="/path/to/jquery.tablesorter.js"></script>
+
+<!-- tablesorter widgets (optional) -->
+<script type="text/javascript" src="/path/to/jquery.tablesorter.widgets.js"></script>
+
+<script>
+
+$(function() {
+  $("#ticketlist").tablesorter({ sortList: [[0,0]] });
+});
+
+</script>
+
