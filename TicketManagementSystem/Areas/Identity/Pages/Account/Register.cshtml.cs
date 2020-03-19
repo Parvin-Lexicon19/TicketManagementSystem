@@ -82,16 +82,24 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             [Display(Name = "Role")]
             public string Role { get; set; }
             [Required]
+
             [Display(Name = "FirstName")]
-            public string FirstName { get; set; }
+            [StringLength(50)]
+            public string FirstName { get; set; }            
+
             [Required]
             [Display(Name = "LastName")]
+            [StringLength(50)]
+
             public string LastName { get; set; }
 
             [Display(Name = "Country")]
+
             public string Country { get; set; }
 
             [Display(Name = "Phone Number")]
+            [StringLength(30)]
+
             public string PhoneNumber { get; set; }
 
             [Display(Name = "Job Title")]

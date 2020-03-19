@@ -71,14 +71,13 @@
                     </span>
                 </div>
                 <br />
-                <div>
+                <div class="form-group">
                     <label asp-for="Input.CompanyName"></label>
                     <span class="text-danger">*</span>
-                    <select asp-for="Input.CompanyName" asp-items="Model.CompanyOption">
+                    <select asp-for="Input.CompanyName" class="form-control" asp-items="Model.CompanyOption">
                         <option value=""> Choose a Company</option>
 
                     </select>
-                    <br />
                     <span class="field-validation-valid text-danger"
                           data-valmsg-for="Input.CompanyName"
                           data-valmsg-replace="true">
