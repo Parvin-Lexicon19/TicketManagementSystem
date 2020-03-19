@@ -54,19 +54,26 @@ namespace TicketManagementSystem.Controllers
         // GET: Projects/Create
         public IActionResult AddProject()
         {
+            IEnumerable<SelectListItem> developers = GetDevelopersList();
+            
+            ViewData["CompanyName"] = new SelectList(_context.Companies.Where(c => c.CompanyName != BITOREQNAME), "Id", "CompanyName");
+            ViewData["Developer1"] = developers;
+            ViewData["Developer2"] = developers;
+            return View();
+        }
+
+        private IEnumerable<SelectListItem> GetDevelopersList()
+        {
             var developerRole = _context.Roles.Where(r => r.Name == "Developer").FirstOrDefault().Id;
             var developersId = _context.UserRoles.Where(ur => ur.RoleId == developerRole).Select(u => u.UserId).ToList();
 
-            var developers = _context.Users.Where(u => developersId.Contains(u.Id)).Select(i => new SelectListItem()
+            IEnumerable<SelectListItem> developers = _context.Users.Where(u => developersId.Contains(u.Id)).Select(i => new SelectListItem()
             {
                 Text = i.UserName,
                 Value = i.Id
             });
-
-            ViewData["CompanyName"] = new SelectList(_context.Companies.Where(c=>c.CompanyName!= BITOREQNAME), "Id", "CompanyName");
-            ViewData["Developer1"] = developers;
-            ViewData["Developer2"] = developers;
-            return View();
+            
+            return developers;
         }
 
         // POST: Projects/Create
@@ -82,9 +89,12 @@ namespace TicketManagementSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            IEnumerable<SelectListItem> developers = GetDevelopersList();
+
             ViewData["CompanyName"] = new SelectList(_context.Companies, "Id", "CompanyName", project.CompanyId);
-            ViewData["Developer1"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", project.Developer1);
-            ViewData["Developer2"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", project.Developer2);
+            ViewData["Developer1"] = developers;
+            ViewData["Developer2"] = developers;
             return View(project);
         }
 
@@ -114,9 +124,13 @@ namespace TicketManagementSystem.Controllers
                 ViewData["company"] = "hide";
             }
 
+
+            IEnumerable<SelectListItem> developers = GetDevelopersList();
+
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "CompanyAbbr", project.CompanyId);
-            ViewData["Developer1"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", project.Developer1);
-            ViewData["Developer2"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", project.Developer2);
+            ViewData["Developer1"] = developers;
+            ViewData["Developer2"] = developers;
+
             return View(project);
         }
 
@@ -152,9 +166,12 @@ namespace TicketManagementSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            IEnumerable<SelectListItem> developers = GetDevelopersList();
+
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "CompanyAbbr", project.CompanyId);
-            ViewData["Developer1"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", project.Developer1);
-            ViewData["Developer2"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", project.Developer2);
+            ViewData["Developer1"] = developers;
+            ViewData["Developer2"] = developers;
             return View(project);
         }
 
