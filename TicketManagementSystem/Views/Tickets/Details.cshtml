@@ -86,7 +86,7 @@
     </dl>
 
     <!--If Ticket status not closed. and want to show the Ticket status -->
-    @if ((int)Model.Ticket.Status != 3)
+    @if (Model.Ticket.Status != Status.Closed)
     {
         <dl class="row hidestatus">
             <dt class="col-sm-2">
@@ -113,7 +113,7 @@
         </dd>
     </dl>
     <!--If Ticket status is closed show every details.-->
-    @if ((int)Model.Ticket.Status == 3)
+    @if (Model.Ticket.Status == Status.Closed)
     {
         <dl class="row">
 
@@ -127,7 +127,7 @@
                 @Html.DisplayNameFor(model => model.Ticket.ResponseType)
             </dt>
             <dd class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Ticket.ResponseType)
+                @Html.DisplayFor(model => model.Ticket.ResponseType)
             </dd>
 
         </dl>
@@ -147,44 +147,9 @@
         </dl>
     }
     <!-- If Ticket status is not closed Hide the fields below and show them only when Edit button is clicked .-->
+
+
     <dl class="row hide collapse">
-
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.ResponseDesc)
-        </dt>
-        <dd class="col-sm-10">
-            <input asp-for="Ticket.ResponseDesc" class="form-control RespDesc" />
-        </dd>
-
-    </dl>
-    <dl class="row hide collapse">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.ResponseType)
-        </dt>
-        <dd class="col-sm-4">
-            <div class="row hide collapse">
-                <select name="ResType" asp-for="@Model.Ticket.ResponseType" asp-items="@(Html.GetEnumSelectList<ResponseType>())" class="form-control  ResType">
-                    <option selected="selected" value="">Response Type</option>
-                </select>
-            </div>
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.Status)
-        </dt>
-        <dd class="col-sm-3">
-            <div class="row hide collapse">
-                <select asp-for="@Model.Ticket.Status" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Draft" ))" class="form-control  status">
-                </select>
-            </div>
-            <p class="text-danger">
-                @ViewBag.Statuscheck
-            </p>
-
-        </dd>
-
-    </dl>
-    <dl class="row hide collapse">
-
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.RealPriority)
         </dt>
@@ -196,12 +161,51 @@
             </div>
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
+            @Html.DisplayNameFor(model => model.Ticket.Status)
         </dt>
         <dd class="col-sm-3">
-            <input asp-for="Ticket.HoursSpent" class="form-control hours" />
+            <div class="row hide collapse">
+                <select id='statusselect' asp-for="@Model.Ticket.Status" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Draft" ))" class="form-control  status">
+                </select>
+            </div>
+            <p class="text-danger">
+                @ViewBag.Statuscheck
+            </p>
+
         </dd>
     </dl>
+    <div class="hidden">
+        <dl class="row ">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticket.ResponseType)
+            </dt>
+            <dd class="col-sm-4">
+                <div class="row hide collapse">
+                    <select name="ResType" asp-for="@Model.Ticket.ResponseType" asp-items="@(Html.GetEnumSelectList<ResponseType>())" class="form-control  ResType">
+                        <option selected="selected" value="">Response Type</option>
+                    </select>
+                </div>
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
+            </dt>
+            <dd class="col-sm-3">
+                <input asp-for="Ticket.HoursSpent" class="form-control hours" />
+            </dd>
+        </dl>
+
+        <dl class="row">
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticket.ResponseDesc)
+            </dt>
+            <dd class="col-sm-4">
+                <textarea class="form-control RespDesc" asp-for="Ticket.ResponseDesc" rows="5" id="comment"></textarea>
+            </dd>
+
+        </dl>
+    </div>
+
 </div>
 
 @if (Model.Documents != null)
@@ -212,17 +216,17 @@
         <dl class="row">
             @if (i == 0)
             {
-                <dt class="col-sm-3">
+                <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Documents)
                 </dt>
             }
             else
             {
-                <dt class="col-sm-3">
+                <dt class="col-sm-2">
                 </dt>
             }
 
-            <dd class="col-sm-3">
+            <dd class="col-sm-4">
                 <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
             </dd>
 
@@ -245,7 +249,7 @@
     }
     @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
     {
-        @if ((int)Model.Ticket.Status != 3)
+        @if (Model.Ticket.Status != Status.Closed)
         {
             <div class="text-center">
                 <button class="btn btn-primary center-block" id="SaveEditbtn" data-toggle="collapse" data-target=".hide">Edit</button>
@@ -262,7 +266,7 @@
 
 <br />
 <br />
-    @if ((int)Model.Ticket.Status != 3)
+    @if (Model.Ticket.Status != Status.Closed)
     {
     <div class="form-group">
         <!--Button trigger modal-->
@@ -290,8 +294,8 @@
                 @await Html.PartialAsync("CommentModalPopUpPartial", Model.Comment)
             </div>
 
+            </div>
         </div>
-    </div>
 </div>
     }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -314,6 +318,15 @@ $('#SaveEditbtn').hide();
 }
 
 });
+$('#statusselect').on('change', function () {
+    var status = $('.status').val();
+
+    if(status == "3"){
+        $(".hidden").show();
+    } else {
+        $(".hidden").hide();
+    }
+});
 $('#Save').click(function () {
 var url = "/Tickets/SaveResponse";
 var hours = $('.hours').val();
@@ -325,7 +338,7 @@ var idOfTicket = @Model.Ticket.Id;
 var isValid = true;
 
     // Check for changing the Ticket status to 'Closed'.
-    if (status == "3") {
+    if (status == 3) {
 
         if (hours == "0" || hours== "") {
             alert("If you are the closing ticket,Please fill the hours spent");

@@ -25,7 +25,7 @@
             @if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
                 <div class="form-group">
-                    <label asp-for="Ticket.CreatedBy" class="control-label"></label>
+                    <label asp-for="Ticket.CreatedBy" class="control-label">Customer</label>
                     <select id="customerDropDownList" asp-for="Ticket.CreatedBy" class="form-control" asp-items="ViewBag.CreatedBy" onchange="FillProjects()" required>
                         <option value="">Select Customer</option>
                     </select>
@@ -58,7 +58,7 @@
                     @*<label asp-for="File" class="col-md-2 col-form-label"></label>*@
                     <div class="col-md-9">
                         <div class="custom-file">
-                            <input asp-for="File" class="form-control custom-file-input">
+                            <input asp-for="File" class="form-control custom-file-input" id="file">
                             <label class="custom-file-label">Choose File...</label>
                         </div>
                     </div>
@@ -67,7 +67,10 @@
             <hr />
 
             <div class="form-group" align="center" style="padding-top: 10px">
-                <input name="submit" type="submit" id="submit" value="Save as Draft" class="btn btn-primary" />
+                @if (User.IsInRole("Customer"))
+                {
+                    <input name="submit" type="submit" id="submit" value="Save as Draft" class="btn btn-primary" />
+                }
                 <input name="submit" type="submit" id="submit" value="Submit" class="btn btn-primary" />
             </div>
         </form>

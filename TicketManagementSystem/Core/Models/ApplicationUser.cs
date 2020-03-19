@@ -1,19 +1,25 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace TicketManagementSystem.Core.Models
 {
     public class ApplicationUser:IdentityUser
-    {        
+    {
+        [Display(Name = "Company Abbr")]
         public int CompanyId { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public String FullName { get => FirstName + " " + LastName; }
+
+        [Display(Name = "Job Title")]
         public String JobTitle { get; set; }
         public String Country { get; set; }
+
+       
         public ICollection<Ticket> TicketCreatedBy { get; set; }
         public ICollection<Ticket> TicketAssignedTo { get; set; }
         public ICollection<Comment> Comments { get; set; }

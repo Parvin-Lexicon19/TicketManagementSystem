@@ -496,7 +496,7 @@ namespace TicketManagementSystem.Controllers
                     };
                     selectListCustomers.Add(selectItem);
                 }
-                ViewData["CreatedBy"] = selectListCustomers;
+                ViewData["CreatedBy"] = selectListCustomers.OrderBy(m => m.Text);
                 ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             }
 
@@ -678,7 +678,7 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> Edit(long id, TicketDetailsViewModel model, string submit)
         {
             model.Ticket.CreatedDate = DateTime.Now;
-
+            model.Ticket.RealPriority = model.Ticket.CustomerPriority;
             switch (model.Ticket.CustomerPriority)
             {
                 case Priority.A_2days:
@@ -694,6 +694,8 @@ namespace TicketManagementSystem.Controllers
                 default:
                     throw new Exception();
             }
+
+
 
             switch (submit)
             {
@@ -821,7 +823,7 @@ namespace TicketManagementSystem.Controllers
                         throw new Exception();
                 }
             }
-            if ((int)Status == 3)
+            if (Status == Status.Closed)
             {
                 newticket.ClosedDate = DateTime.Now;
             }
@@ -836,7 +838,7 @@ namespace TicketManagementSystem.Controllers
                 _context.SaveChanges();
 
                 // Generate Email while closing Ticket.
-                if ((int)newticket.Status == 3)
+                if (Status == Status.Closed)
                 {
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = newticket.Id }, protocol: Request.Scheme);
                     if (createdUser != null)
@@ -875,7 +877,17 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
-            return View(ticket);
+
+            ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
+
+            var model = new TicketDetailsViewModel
+            {
+                Ticket = ticket,
+                Documents = ticket.Documents,
+            };
+
+
+            return View(model);
         }
 
         // POST: Tickets/Delete/5
@@ -883,12 +895,45 @@ namespace TicketManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
+            List<Document> ticketdocuments = _context.Documents.Where(d => d.TicketId == id).ToList();
+
             var ticket = await _context.Tickets.FindAsync(id);
             _context.Tickets.Remove(ticket);
             await _context.SaveChangesAsync();
+
+
+            
+            
+            if (ticketdocuments.Count != 0) 
+            {
+
+                foreach (var documents in ticketdocuments)
+                {
+                    if (!System.IO.File.Exists(documents.Path))
+                    {
+                        NotFound();
+                    }
+                    else
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(documents.Path);
+                        }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
+                    }
+
+                }
+                
+            }
+            
+
             return RedirectToAction(nameof(Index));
         }
 
+       
         private bool TicketExists(long id)
         {
             return _context.Tickets.Any(e => e.Id == id);
@@ -973,5 +1018,7 @@ namespace TicketManagementSystem.Controllers
             }
             return Json(selectListProjects);
         }
+
+        
     }
 }

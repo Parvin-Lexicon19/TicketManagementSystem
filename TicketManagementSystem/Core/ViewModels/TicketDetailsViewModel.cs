@@ -16,7 +16,7 @@ namespace TicketManagementSystem.Core.ViewModels
         public List<IFormFile> File { get; set; }
         public Comment Comment { get; set; }
 
-        [Display(Name = "Attached Documents")]
+        [Display(Name = "Attachments")]
         public ICollection<Document> Documents { get; set; }
     }
 }

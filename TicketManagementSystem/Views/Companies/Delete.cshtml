@@ -5,8 +5,16 @@
 }
 
 <h1>Delete</h1>
-
+@if (@ViewBag.formhide == "Show")
+{
 <h3>Are you sure you want to delete this?</h3>
+}
+else
+{
+    <div id="deletemsg"><p>This company cannot be deleted. It contains projects / projects and customers. </p></div>
+    
+}
+
 <div>
     <h4>Company</h4>
     <hr />
@@ -76,7 +84,7 @@
     }
     else
     {
-        <p class=" bg-warning"><b>cannot delete this company. Projects and customer data still exists</b> </p>
+       
         <a asp-action="Index">Back to List</a>
     }
 </div>
