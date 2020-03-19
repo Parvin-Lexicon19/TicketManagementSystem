@@ -4,6 +4,11 @@
 
 @model IEnumerable<TicketIndexViewModel>
 
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 <p>
     <a asp-action="AddTicket">Add Ticket</a>
@@ -118,8 +123,8 @@
         <td>
 
             @Html.DisplayFor(modelItem => item.DueDate)
-            <button type="submit" class="btn btn-danger btn-sm" aria-hidden="true">
-                <i class="fa fa-exclamation-circle" data-toggle="tooltip" title="Crossed Due Date!!"></i>
+            <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Crossed Due Date!">
+                <i class="fa fa-exclamation-circle text-danger"></i>
             </button>
         </td>
     }
