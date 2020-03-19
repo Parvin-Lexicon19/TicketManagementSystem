@@ -78,6 +78,7 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
+
             [Display(Name = "Role")]
             public string Role { get; set; }
             [Required]
@@ -183,8 +184,11 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
                     }
                 }
                 foreach (var error in result.Errors)
+
                 {
+
                     ModelState.AddModelError(string.Empty, error.Description);
+
                 }
             }
 
