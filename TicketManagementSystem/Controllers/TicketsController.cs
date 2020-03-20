@@ -646,24 +646,28 @@ namespace TicketManagementSystem.Controllers
                 default:
                     throw new Exception();
             }
-
-
-
             switch (submit)
             {
                 case "Submit":
                     model.Ticket.Status = Status.Submitted;
                     model.Ticket.CreatedDate = DateTime.Now;
+                    var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
+                    ticketProjectDevelopers = new List<ApplicationUser>();
+                    if (ticketProject.Developer1 != null)
+                    {
+                        ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer1));
+                        model.Ticket.AssignedTo = ticketProject.Developer1;
+                    }
+                    if (ticketProject.Developer2 != null)
+                        ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer2));
                     break;
 
                 case "Save as Draft":
-                    model.Ticket.Status = Status.Draft;
                     break;
 
                 default:
                     throw new Exception();
             }
-
             if (id != model.Ticket.Id)
             {
                 return NotFound();
@@ -678,8 +682,6 @@ namespace TicketManagementSystem.Controllers
 
                     if (model.File != null)
                         Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
-
-
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -687,30 +689,34 @@ namespace TicketManagementSystem.Controllers
                     {
                         return NotFound();
                     }
+                }
 
-                    if (model.Ticket.Status.Equals(Status.Submitted))
+                /*Ticket assigns to developer1, but emails sent to both developer1 and developer2*/
+                if (model.Ticket.Status.Equals(Status.Submitted))
+                {
+                    Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
+                    var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
+
+                    foreach (var developer in ticketProjectDevelopers)
                     {
-                        var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
-
                         await _emailSender.SendEmailAsync(
-                        "admin@bitoreq.se",
-                        "A New Ticket Submitted",
-                        $"A new ticket submitted by {loggedInUser.Email}. " +
-                        $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
-                        return RedirectToAction(nameof(EmailSent));
+                          developer.Email,
+                          "A New Ticket Submitted",
+                          $"Hello dear {developer.FirstName}," +
+                          $"<br/><br/>A new ticket submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. " +
+                          $"<br/>Please see the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details</a>." +
+                          $"<br/><br/>Thank you,<br/>Bitoreq Admin");
                     }
 
-                    //else
-                    //{
-                    //    throw;
-                    //}
+                    return RedirectToAction(nameof(EmailSent));
                 }
+
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.AssignedTo);
-            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.CreatedBy);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", model.Ticket.ProjectId);
+            //ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.AssignedTo);
+            //ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.CreatedBy);
+            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", model.Ticket.ProjectId);
             return View(model);
         }
         // Edit Ticket Through Detail Screen.
