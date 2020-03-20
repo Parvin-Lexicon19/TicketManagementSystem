@@ -343,103 +343,98 @@ namespace TicketManagementSystem.Controllers
             return ticket;
         }
 
-        // GET: Tickets/DetailsDraft
-        public async Task<IActionResult> DetailsDraft(long? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Tickets/DetailsDraft
+        //public async Task<IActionResult> DetailsDraft(long? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var ticket = await _context.Tickets
-                .Include(t => t.AssignedUser)
-                .Include(t => t.CreatedUser)
-                .Include(t => t.Project)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ticket == null)
-            {
-                return NotFound();
-            }
-            ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
-            var model = new TicketDetailsViewModel
-            {
-                Ticket = ticket,
-                Documents = ticket.Documents,
-               
-            };
+        //    var ticket = await _context.Tickets
+        //        .Include(t => t.AssignedUser)
+        //        .Include(t => t.CreatedUser)
+        //        .Include(t => t.Project)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (ticket == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
 
+        //    var model = new TicketDetailsViewModel
+        //    {
+        //        Ticket = ticket,
+        //        Documents = ticket.Documents,
+        //    };
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DetailsDraft(long? id, string submit)
-        {
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DetailsDraft(long? id, string submit)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //    var ticket = await _context.Tickets
+        //        .Include(t => t.AssignedUser)
+        //        .Include(t => t.CreatedUser)
+        //        .Include(t => t.Project)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
 
-            var ticket = await _context.Tickets
-                .Include(t => t.AssignedUser)
-                .Include(t => t.CreatedUser)
-                .Include(t => t.Project)
-                .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (ticket == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ticket == null)
-            {
-                return NotFound();
-            }
+        //    if(submit == "Submit")            
+        //        ticket.Status = Status.Submitted;  
 
-            if(submit == "Submit")
-            {
-                ticket.Status = Status.Submitted;
-              
-            }
+        //    if (id != ticket.Id)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (id != ticket.Id)
-            {
-                return NotFound();
-            }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(ticket);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!TicketExists(ticket.Id))
+        //            {
+        //                return NotFound();
+        //            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(ticket);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TicketExists(ticket.Id))
-                    {
-                        return NotFound();
-                    }
+        //            if (ticket.Status.Equals(Status.Submitted))
+        //            {
+        //                var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
 
-                    if (ticket.Status.Equals(Status.Submitted))
-                    {
-                        var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
+        //                await _emailSender.SendEmailAsync(
+        //                "admin@bitoreq.se",
+        //                "A New Ticket Submitted",
+        //                $"A new ticket submitted by {loggedInUser.Email}. " +
+        //                $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
+        //                return RedirectToAction(nameof(EmailSent));
+        //            }
 
-                        await _emailSender.SendEmailAsync(
-                        "admin@bitoreq.se",
-                        "A New Ticket Submitted",
-                        $"A new ticket submitted by {loggedInUser.Email}. " +
-                        $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
-                        return RedirectToAction(nameof(EmailSent));
-                    }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
 
-                }
-                return RedirectToAction(nameof(Index));
-            }
+        //    ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
+        //    ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
+        //    ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
 
-            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
-            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
-
-            return View(ticket);
-        }
+        //    return View(ticket);
+        //}
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(long? id)
@@ -458,20 +453,19 @@ namespace TicketManagementSystem.Controllers
             {
                 return NotFound();
             }
-
             ticket.Comments = await _context.Comments.Where(m => m.TicketId == id).Include(c => c.ApplicationUser).ToListAsync();
             ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
 
-                var model = new TicketDetailsViewModel
+            var model = new TicketDetailsViewModel
+            {
+                Ticket = ticket,
+                Documents = ticket.Documents,
+                Comment = new Comment
                 {
-                    Ticket = ticket,
-                    Documents= ticket.Documents,
-                    Comment = new Comment
-                    {
-                        TicketId = ticket.Id,
-                    }
-                 };
-            // Pass the LoggedInUser when closing the Ticket.
+                    TicketId = ticket.Id,
+                }
+            };
+            //Pass the LoggedInUser when closing the Ticket.
             loggedInUser = await userManager.GetUserAsync(User);
             TempData["loggedInUser"] = loggedInUser.Email;
 
@@ -483,46 +477,17 @@ namespace TicketManagementSystem.Controllers
         {
             var model = new AddTicketViewModel();
 
-            //ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
             if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
-                //ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Email");
-
-                selectListCustomers = new List<SelectListItem>();
-
-                var customers = await userManager.GetUsersInRoleAsync("Customer");
-                foreach (var customer in customers)
-                {
-                    var selectItem = new SelectListItem
-                    {
-                        Text = customer.Email,
-                        Value = customer.Id.ToString()
-                    };
-                    selectListCustomers.Add(selectItem);
-                }
-                ViewData["CreatedBy"] = selectListCustomers.OrderBy(m => m.Text);
+                ViewData["CreatedBy"] = new SelectList(await userManager.GetUsersInRoleAsync("Customer"), "Id", "Email").OrderBy(m => m.Text);
                 ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             }
 
             else if (User.IsInRole("Customer"))
             {
                 loggedInUser = await userManager.GetUserAsync(User);
-                var loggedInUserProjects = _context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId);
-
-                selectListProjects = new List<SelectListItem>();
-
-                foreach (var project in loggedInUserProjects)
-                {
-                    var selectItem = new SelectListItem
-                    {
-                        Text = project.Name,
-                        Value = project.Id.ToString()
-                    };
-                    selectListProjects.Add(selectItem);
-                }
-
-                ViewData["ProjectId"] = selectListProjects;
-            }            
+                ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
+            }
 
             return View(model);
         }
@@ -536,20 +501,20 @@ namespace TicketManagementSystem.Controllers
         {
             if (User.IsInRole("Developer") || User.IsInRole("Admin"))
                 loggedInUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == model.Ticket.CreatedBy);
-            
-            model.Ticket.CreatedBy = loggedInUser.Id;
-            //Getting LoggedInUser's ComapnyId & then CompanyAbbr & Last RefNo of that company
+            else if (User.IsInRole("Customer"))
+                model.Ticket.CreatedBy = loggedInUser.Id;
+
+            /*Getting LoggedInUser's ComapnyId & then CompanyAbbr & Last RefNo of that company*/
             Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
             var companyAbbr = loggedInUserCompany.CompanyAbbr;
-            //var companyLastRefNo = _context.Tickets.LastOrDefault(t => t.RefNo.Contains(companyAbbr)).RefNo;
             bool companyHasTicket = _context.Tickets.Any(t => t.RefNo.Contains(companyAbbr));
 
-            //if the company has no tickets, the last RefNo. is se to "00000", otherwise it continues from the last RefNo. for that company
+            /*if the company has no tickets, the last RefNo. is se to "00000", otherwise it continues from the last RefNo. for that company*/
             string companyLastRefNo = companyHasTicket == true? 
                 _context.Tickets.Where(t => t.RefNo.Contains(companyAbbr)).ToList().LastOrDefault().RefNo
                 : companyLastRefNo = companyAbbr + "00000";
 
-            //Increasing that last RefNo by 1 and assigning it to the newly added ticket
+            /*Increasing that last RefNo by 1 and assigning it to the newly added ticket*/
             model.Ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
             
@@ -603,10 +568,10 @@ namespace TicketManagementSystem.Controllers
                 if (model.File != null)
                     Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
 
-                //Ticket assigns to developer1, but emails sent to both developer1 and developer2
+                /*Ticket assigns to developer1, but emails sent to both developer1 and developer2*/
                 if (model.Ticket.Status.Equals(Status.Submitted))
                 {
-                    var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);                   
+                    var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
 
                     foreach (var developer in ticketProjectDevelopers)
                     {
@@ -640,8 +605,7 @@ namespace TicketManagementSystem.Controllers
             if (ticket == null)
             {
                 return NotFound();
-            }
-            
+            }            
             ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
 
             var model = new TicketDetailsViewModel
@@ -651,26 +615,11 @@ namespace TicketManagementSystem.Controllers
             };
 
             loggedInUser = await userManager.GetUserAsync(User);
-            var loggedInUserProjects = _context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
 
-            selectListProjects = new List<SelectListItem>();
+            //ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
+            //ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
 
-            foreach (var project in loggedInUserProjects)
-            {
-                var selectItem = new SelectListItem
-                {
-                    Text = project.Name,
-                    Value = project.Id.ToString()
-                };
-                selectListProjects.Add(selectItem);
-            }
-
-            
-
-            ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
-            ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-            //ViewData["ProjectId"] = new SelectList(_context.Projects.Where(P=>P., "Id", "Name", ticket.ProjectId);
-            ViewData["ProjectId"] = selectListProjects;
             return View(model);
         }
 
@@ -681,7 +630,6 @@ namespace TicketManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, TicketDetailsViewModel model, string submit)
         {
-            model.Ticket.CreatedDate = DateTime.Now;
             model.Ticket.RealPriority = model.Ticket.CustomerPriority;
             switch (model.Ticket.CustomerPriority)
             {
@@ -705,6 +653,7 @@ namespace TicketManagementSystem.Controllers
             {
                 case "Submit":
                     model.Ticket.Status = Status.Submitted;
+                    model.Ticket.CreatedDate = DateTime.Now;
                     break;
 
                 case "Save as Draft":
