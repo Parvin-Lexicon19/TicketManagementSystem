@@ -66,7 +66,7 @@ namespace TicketManagementSystem.Controllers
         }
 
         // Index for Customer Company Tickets  
-        public async Task<IActionResult> IndexCompanyTickets(string sortOrder, List<TicketIndexViewModel> model, string title, int? statusSearch, int? customerPriority, int? priorities )
+        public async Task<IActionResult> IndexCompanyTickets(string sortOrder, List<TicketIndexViewModel> model, string title, int? statusSearch, int? customerPriority, int? priorities)
         {
             var loggedInUser = await userManager.GetUserAsync(User);
 
@@ -175,16 +175,16 @@ namespace TicketManagementSystem.Controllers
 
             // Search by Status
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {              
-              model = statusSearch == null ?
-              model :
-              model2.Where(m => m.Status == (Status)statusSearch).ToList();
+            {
+                model = statusSearch == null ?
+                model :
+                model2.Where(m => m.Status == (Status)statusSearch).ToList();
             }
             else
             {
-             model = statusSearch == null ?
-             model :
-             model.Where(m => m.Status == (Status)statusSearch).ToList();
+                model = statusSearch == null ?
+                model :
+                model.Where(m => m.Status == (Status)statusSearch).ToList();
             }
 
             // Search by Customer Priority Drowpdown
@@ -215,7 +215,7 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> FilterForCompanyTickets(string title, int? statusSearch, int? customerPriority, int? priorities, List<TicketIndexViewModel> model, string sortOrder)
         {
             var loggedInUser = await userManager.GetUserAsync(User);
-           
+
             // List all the result by CompanyId 
             model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
                         .Where(u => u.CreatedUser.CompanyId == loggedInUser.CompanyId)
@@ -234,9 +234,9 @@ namespace TicketManagementSystem.Controllers
                         .ToListAsync();
 
             // Search by Title
-             model = string.IsNullOrWhiteSpace(title) ?
-             model :
-             model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
+            model = string.IsNullOrWhiteSpace(title) ?
+            model :
+            model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
             // Search by Status
             model = statusSearch == null ?
@@ -244,12 +244,12 @@ namespace TicketManagementSystem.Controllers
              model.Where(m => m.Status == (Status)statusSearch).ToList();
 
             // Search by Customer Priority Drowpdown
-             model = customerPriority == null ?
-             model :
-             model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
+            model = customerPriority == null ?
+            model :
+            model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
 
-             //model = SortList(sortOrder, model);
-             return View(nameof(IndexCompanyTickets), model);
+            //model = SortList(sortOrder, model);
+            return View(nameof(IndexCompanyTickets), model);
 
         }
 
@@ -384,8 +384,8 @@ namespace TicketManagementSystem.Controllers
             {
                 var customers = await userManager.GetUsersInRoleAsync("Customer");
                 var confirmedCustomers = customers.Where(a => a.EmailConfirmed == true);
-                ViewData["CreatedBy"] = new SelectList(confirmedCustomers, "Id", "Email").OrderBy(m => m.Text);   
-                
+                ViewData["CreatedBy"] = new SelectList(confirmedCustomers, "Id", "Email").OrderBy(m => m.Text);
+
                 ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             }
 
@@ -416,14 +416,14 @@ namespace TicketManagementSystem.Controllers
             bool companyHasTicket = _context.Tickets.Any(t => t.RefNo.Contains(companyAbbr));
 
             /*if the company has no tickets, the last RefNo. is se to "00000", otherwise it continues from the last RefNo. for that company*/
-            string companyLastRefNo = companyHasTicket == true? 
+            string companyLastRefNo = companyHasTicket == true ?
                 _context.Tickets.Where(t => t.RefNo.Contains(companyAbbr)).ToList().LastOrDefault().RefNo
                 : companyLastRefNo = companyAbbr + "00000";
 
             /*Increasing that last RefNo by 1 and assigning it to the newly added ticket*/
             model.Ticket.RefNo = Regex.Replace(companyLastRefNo, "\\d+",
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
-            
+
             model.Ticket.CreatedDate = DateTime.Now;
             model.Ticket.RealPriority = model.Ticket.CustomerPriority;
 
@@ -441,7 +441,7 @@ namespace TicketManagementSystem.Controllers
 
                 default:
                     throw new Exception();
-            }            
+            }
 
             switch (submit)
             {
@@ -459,7 +459,7 @@ namespace TicketManagementSystem.Controllers
                     break;
 
                 case "Save as Draft":
-                    model.Ticket.Status = Status.Draft;                    
+                    model.Ticket.Status = Status.Draft;
                     break;
 
                 default:
@@ -511,7 +511,7 @@ namespace TicketManagementSystem.Controllers
             if (ticket == null)
             {
                 return NotFound();
-            }            
+            }
             ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
 
             var model = new TicketDetailsViewModel
@@ -623,11 +623,11 @@ namespace TicketManagementSystem.Controllers
         [HttpPost]
         public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority)
         {
-            var newticket =  _context.Tickets.Find(id);
+            var newticket = _context.Tickets.Find(id);
 
             string loggedInUser = (string)TempData["loggedInUser"];
-           var createdUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == newticket.CreatedBy);
-            
+            var createdUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == newticket.CreatedBy);
+
 
             TempData.Keep();
 
@@ -756,9 +756,9 @@ namespace TicketManagementSystem.Controllers
 
             var ticket = await _context.Tickets.FindAsync(id);
             _context.Tickets.Remove(ticket);
-            await _context.SaveChangesAsync();            
-            
-            if (ticketdocuments.Count != 0) 
+            await _context.SaveChangesAsync();
+
+            if (ticketdocuments.Count != 0)
             {
                 foreach (var documents in ticketdocuments)
                 {
@@ -777,13 +777,13 @@ namespace TicketManagementSystem.Controllers
                             throw;
                         }
                     }
-                }                
-            }            
+                }
+            }
 
             return RedirectToAction(nameof(Index));
         }
 
-       
+
         private bool TicketExists(long id)
         {
             return _context.Tickets.Any(e => e.Id == id);
@@ -809,7 +809,7 @@ namespace TicketManagementSystem.Controllers
             return RedirectToAction("Details", new { id = comment.TicketId });
         }
 
-        private void Fileupload(List<IFormFile> inputFiles, long ticketid,string userid,string ticketRfno)
+        private void Fileupload(List<IFormFile> inputFiles, long ticketid, string userid, string ticketRfno)
         {
             string FileName = null;
             string filePath = null;
@@ -849,11 +849,11 @@ namespace TicketManagementSystem.Controllers
                 }
             }
         }
-               
+
         [HttpPost]
         public JsonResult GetProjects(string customerId)
         {
-            var selectedUserProjects = string.IsNullOrEmpty(customerId)?
+            var selectedUserProjects = string.IsNullOrEmpty(customerId) ?
                 _context.Projects.Select(row => row)
                 : _context.Projects.Where(g => g.CompanyId == _context.ApplicationUsers.FirstOrDefault(a => a.Id == customerId).CompanyId);
 
@@ -871,7 +871,7 @@ namespace TicketManagementSystem.Controllers
             }
             return Json(selectListProjects);
         }
-        
+
         public IActionResult Privacy()
         {
             return View();
