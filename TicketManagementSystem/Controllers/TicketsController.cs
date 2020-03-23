@@ -30,8 +30,6 @@ namespace TicketManagementSystem.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ApplicationDbContext _context;
         private static ApplicationUser loggedInUser;
-        List<SelectListItem> selectListCustomers;
-        List<SelectListItem> selectListProjects;
         List<ApplicationUser> ticketProjectDevelopers;
         private readonly IEmailSender _emailSender;
 
@@ -341,99 +339,6 @@ namespace TicketManagementSystem.Controllers
             return ticket;
         }
 
-        //// GET: Tickets/DetailsDraft
-        //public async Task<IActionResult> DetailsDraft(long? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var ticket = await _context.Tickets
-        //        .Include(t => t.AssignedUser)
-        //        .Include(t => t.CreatedUser)
-        //        .Include(t => t.Project)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (ticket == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
-
-        //    var model = new TicketDetailsViewModel
-        //    {
-        //        Ticket = ticket,
-        //        Documents = ticket.Documents,
-        //    };
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DetailsDraft(long? id, string submit)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var ticket = await _context.Tickets
-        //        .Include(t => t.AssignedUser)
-        //        .Include(t => t.CreatedUser)
-        //        .Include(t => t.Project)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-
-        //    if (ticket == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if(submit == "Submit")            
-        //        ticket.Status = Status.Submitted;  
-
-        //    if (id != ticket.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(ticket);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!TicketExists(ticket.Id))
-        //            {
-        //                return NotFound();
-        //            }
-
-        //            if (ticket.Status.Equals(Status.Submitted))
-        //            {
-        //                var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Scheme);
-
-        //                await _emailSender.SendEmailAsync(
-        //                "admin@bitoreq.se",
-        //                "A New Ticket Submitted",
-        //                $"A new ticket submitted by {loggedInUser.Email}. " +
-        //                $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
-        //                return RedirectToAction(nameof(EmailSent));
-        //            }
-
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-
-        //    ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
-        //    ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-        //    ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
-
-        //    return View(ticket);
-        //}
-
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(long? id)
         {
@@ -477,7 +382,10 @@ namespace TicketManagementSystem.Controllers
 
             if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
-                ViewData["CreatedBy"] = new SelectList(await userManager.GetUsersInRoleAsync("Customer"), "Id", "Email").OrderBy(m => m.Text);
+                var customers = await userManager.GetUsersInRoleAsync("Customer");
+                var confirmedCustomers = customers.Where(a => a.EmailConfirmed == true);
+                ViewData["CreatedBy"] = new SelectList(confirmedCustomers, "Id", "Email").OrderBy(m => m.Text);   
+                
                 ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             }
 
@@ -615,9 +523,6 @@ namespace TicketManagementSystem.Controllers
             loggedInUser = await userManager.GetUserAsync(User);
             ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
 
-            //ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AssignedTo);
-            //ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.CreatedBy);
-
             return View(model);
         }
 
@@ -712,9 +617,6 @@ namespace TicketManagementSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            //ViewData["AssignedTo"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.AssignedTo);
-            //ViewData["CreatedBy"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", model.Ticket.CreatedBy);
-            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", model.Ticket.ProjectId);
             return View(model);
         }
         // Edit Ticket Through Detail Screen.
@@ -834,7 +736,6 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
-
             ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
 
             var model = new TicketDetailsViewModel
@@ -842,7 +743,6 @@ namespace TicketManagementSystem.Controllers
                 Ticket = ticket,
                 Documents = ticket.Documents,
             };
-
 
             return View(model);
         }
@@ -856,14 +756,10 @@ namespace TicketManagementSystem.Controllers
 
             var ticket = await _context.Tickets.FindAsync(id);
             _context.Tickets.Remove(ticket);
-            await _context.SaveChangesAsync();
-
-
-            
+            await _context.SaveChangesAsync();            
             
             if (ticketdocuments.Count != 0) 
             {
-
                 foreach (var documents in ticketdocuments)
                 {
                     if (!System.IO.File.Exists(documents.Path))
@@ -881,11 +777,8 @@ namespace TicketManagementSystem.Controllers
                             throw;
                         }
                     }
-
-                }
-                
-            }
-            
+                }                
+            }            
 
             return RedirectToAction(nameof(Index));
         }
@@ -906,11 +799,13 @@ namespace TicketManagementSystem.Controllers
             comment.CommentTime = DateTime.Now;
             loggedInUser = await userManager.GetUserAsync(User);
             comment.CommentBy = loggedInUser.Id;
+
             if (ModelState.IsValid)
             {
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
             }
+
             return RedirectToAction("Details", new { id = comment.TicketId });
         }
 
@@ -962,7 +857,8 @@ namespace TicketManagementSystem.Controllers
                 _context.Projects.Select(row => row)
                 : _context.Projects.Where(g => g.CompanyId == _context.ApplicationUsers.FirstOrDefault(a => a.Id == customerId).CompanyId);
 
-            selectListProjects = new List<SelectListItem>();
+
+            List<SelectListItem> selectListProjects = new List<SelectListItem>();
 
             foreach (var project in selectedUserProjects)
             {
