@@ -22,7 +22,7 @@ namespace TicketManagementSystem.Core.ViewModels
         public int ProjectId { get; set; }
         [DisplayName("Project")]
         public string ProjectName { get; set; }
-        [DisplayName("Customer Priority")]
+        [DisplayName("Priority")]
         public Priority? CustomerPriority { get; set; }
         [DisplayName("Real Priority")]
         public Priority? RealPriority { get; set; }
