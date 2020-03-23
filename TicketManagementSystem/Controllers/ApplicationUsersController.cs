@@ -123,6 +123,7 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
+            applicationuser.UserName = applicationuser.Email;
             if (ModelState.IsValid)
             {
                 var user = await userManager.FindByIdAsync(id);
@@ -267,12 +268,24 @@ namespace TicketManagementSystem.Controllers
 
         //    var useridList = _context.UserRoles.Where(x => roleId.Contains(x.RoleId)).Select(c => c.UserId).ToList();
         //    var userslist = userManager.Users.Include(c=>c.Company).Where(t => useridList.Contains(t.Id));
-          
+
 
         //    return users;
         //}
+        public IActionResult EmailExist(string Email)
+        {
+            var  emailexists = userManager.Users.Where(u=>u.Email== Email).Count();
+            
+            if (emailexists !=0)
+            {
+                return Json($"Email Already Exists. Please update to another email id");
+            }
 
-        private bool ApplicationUserExists(string id)
+            return Json(true);
+        }
+
+
+            private bool ApplicationUserExists(string id)
         {
             return userManager.Users.Any(e => e.Id == id);
         }
