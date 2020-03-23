@@ -6,6 +6,10 @@
     <title>@ViewData["Title"] - TicketManagementSystem</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <!-- bootstrap css theme -->
+    <link rel="stylesheet" href="css/theme.bootstrap_4.css">
+    @*<link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet">*@
+
 </head>
 <body>
     <header>
@@ -20,11 +24,11 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>*@
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>*@
                     </ul>
                 </div>
             </div>
@@ -41,8 +45,23 @@
             &copy; 2020 - TicketManagementSystem - <a asp-area="" asp-controller="Tickets" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.9.1/jquery.tablesorter.min.js"></script>
+    <script type="/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://mottie.github.io/tablesorter/css/theme.default.css"></script>
+
+
+    <!-- pager plugin -->
+    <link rel="stylesheet" href="css/jquery.tablesorter.pager.css">
+   
+
+    @*<script src="~/js/mvc-grid/mvc-grid.js"></script>
+        <script>
+            document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+        </script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>

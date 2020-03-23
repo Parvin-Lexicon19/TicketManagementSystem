@@ -32,7 +32,7 @@ namespace TicketManagementSystem.Core.Models
         [DisplayName("Project")]
         public int ProjectId { get; set; }
         [Required]
-        [DisplayName("Customer Priority")]
+        [DisplayName("Priority")]
         public Priority CustomerPriority { get; set; }
         [DisplayName("Real Priority")]
         public Priority RealPriority { get; set; }

@@ -3,22 +3,90 @@
 *@
 
 @model IEnumerable<TicketIndexViewModel>
+@*@using NonFactors.Mvc.Grid;
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    @{
+        Layout = null;
+
+    }*@
 
 <p>
     <a asp-action="AddTicket">Add Ticket</a>
 </p>
-@*}*@
-<table class="table">
+
+@*<script src="http://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous">
+    </script>
+    <script src="/MVCGridItems/mvc-grid.js"></script>
+    <link href="~/css/mvc-grid.css" rel="stylesheet" />
+
+    <script src="~/js/mvc-grid.js"></script>*@
+
+@*<body>
+        @(Html
+                .Grid(Model)
+                .Build(columns =>
+                                {
+                                    columns.Add(model => model.RefNo).Titled("refno").Sortable(true);
+                                    columns.Add(model => model.Title).Titled("title").Sortable(true);
+                                    columns.Add(model => model.ProjectName).Titled("project name").Sortable(true); // enums are sorted by their value and not by their string representation.
+
+                                columns.Add(model => model.Status).Titled("status").Sortable(true); // sets first sort order to desc instead of asc.
+                                columns.Add(model => model.CustomerPriority).Titled("customer priority").Sortable(true);
+                                    columns.Add(model => model.RealPriority).Titled("real priority").Sortable(true);
+                                    columns.Add(model => model.DueDate).Titled("due date").Sortable(true);
+                                    columns.Add(model => model.UserEmail).Titled("user email").Sortable(true);
+                                })
+                           .Filterable()
+                           .Sortable()
+                           .Pageable()
+        )
+
+
+
+        @WebGrid.gethtml(
+            htmlattributes: new { @id = "webgrid", @class = "grid" },
+            columns: WebGrid.columns(
+                     WebGrid.column("customerid", "customer id"),
+                     WebGrid.column("contactname", "customer name"),
+                     WebGrid.column("city", "city"),
+                     WebGrid.column("country", "country")))
+
+
+        @{
+
+
+                var grid = new WebGrid();
+
+                @grid.gethtml(
+
+                headerstyle: "headerstyle",
+
+                tablestyle: "tablestyle",
+
+                alternatingrowstyle: "alternatestyle",
+
+                columns: grid.columns(
+
+                grid.column(columnname: "Id", header: "Id"),
+
+                grid.column(columnname: "Summary", header: "Summary"),
+
+                grid.column(columnname: "Status", header: "Status")))
+
+            }
+
+    </body>*@
+
+<table class="table table-striped table-hover tablesorter">
+
     <thead>
         <tr>
             <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "index", new { sortorder = ViewBag.RefNoSortParm })
+
+                @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "Index", new { sortorder = ViewBag.RefNoSortParm })
+
             </th>
             <th>
                 @Html.ActionLink(Html.DisplayNameFor(model => model.Title), "Index", new { sortOrder = ViewBag.TitleSortParm })
@@ -61,89 +129,92 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model@*.OrderByDescending(i => i.Id)*@)
-{
-<tr>
-    @if (User.IsInRole("Customer"))
-    {
-        @if (item.Status == Status.Draft)
+
+        @foreach (var item in Model.OrderByDescending(i => i.Id))
         {
-            <td>
-                <a asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+            <tr>
+                @if (User.IsInRole("Customer"))
+                {
+                    @if (item.Status == Status.Draft)
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
 
-            </td>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+
+                        </td>
+
+                    }
+                }
+                else
+                {
+                    <td>
+                        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+
+                    </td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectName)
+                </td>
+                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+                {
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerPriority)
+                </td>
+                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RealPriority)
+                    </td>
+                }
+                @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Submitted || item.Status == Status.Started) && (item.DueDate < DateTime.Now))
+                {
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.DueDate)
+                        <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Crossed Due Date!">
+                            <i class="fa fa-exclamation-circle text-danger"></i>
+                        </button>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DueDate)
+                    </td>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserEmail)
+                    </td>
+                }
+            </tr>
         }
-        else
-        {
-            <td>
-                <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
-
-            </td>
-
-        }
-    }
-    else
-    {
-        <td>
-            <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
-
-        </td>
-    }
-    <td>
-        @Html.DisplayFor(modelItem => item.Title)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.ProjectName)
-    </td>
-    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-    {
-
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-
-    }
-    else
-    {
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-    }
-    <td>
-        @Html.DisplayFor(modelItem => item.CustomerPriority)
-    </td>
-    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-    {
-        <td>
-            @Html.DisplayFor(modelItem => item.RealPriority)
-        </td>
-    }
-    @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Submitted || item.Status == Status.Started) && (item.DueDate < DateTime.Now))
-    {
-        <td>
-
-            @Html.DisplayFor(modelItem => item.DueDate)
-            <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Crossed Due Date!">
-                <i class="fa fa-exclamation-circle text-danger"></i>
-            </button>
-        </td>
-    }
-    else
-    {
-        <td>
-            @Html.DisplayFor(modelItem => item.DueDate)
-        </td>
-    }
-    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-    {
-        <td>
-            @Html.DisplayFor(modelItem => item.UserEmail)
-        </td>
-    }
-</tr>
-}
     </tbody>
 </table>
+
+
 @if (null != TempData["alertMessage"])
 {
     <script type="text/javascript">
@@ -155,4 +226,49 @@
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
+</script> 
+
+<link rel="stylesheet" href="css/theme.blue.css" />
+
+<!-- load jQuery and tablesorter scripts -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.9.1/jquery.tablesorter.min.js"></script>
+
+<script type="/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://mottie.github.io/tablesorter/css/theme.default.css"></script>
+
+<script src="path/to/jquery.js"></script>
+<script src="js/jquery.tablesorter.min.js"></script>
+
+<!-- pager plugin -->
+<link rel="stylesheet" href="css/jquery.tablesorter.pager.css">
+<script src="js/jquery.tablesorter.pager.js"></script>
+
+<!-- choose a theme file -->
+<link rel="stylesheet" href="/path/to/theme.default.css">
+
+<!-- load jQuery and tablesorter scripts -->
+<script type="text/javascript" src="/path/to/jquery-latest.js"></script>
+<script type="text/javascript" src="/path/to/jquery.tablesorter.js"></script>
+
+<!-- tablesorter widgets (optional) -->
+<script type="text/javascript" src="/path/to/jquery.tablesorter.widgets.js"></script>
+
+@*<script type="text/javascript">
+
+    $(function () {
+        $('table').tablesorter({ theme: "blue", widthfixed: true, widgets: ["filter", "columns", "zebra"], sortlist: [[0, 0]], widgets: ['zebra'] });
+    });
+
 </script>
+
+<script type="text/javascript">
+
+    $('table').addClass('tablesorter');
+
+</script>*@
+
+
+@*<script>
+        $('.mvc-grid').mvcgrid();
+    </script>*@

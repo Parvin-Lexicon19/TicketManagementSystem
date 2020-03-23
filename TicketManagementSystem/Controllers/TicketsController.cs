@@ -51,7 +51,6 @@ namespace TicketManagementSystem.Controllers
             // return View(await applicationdbcontext.ToListAsync());
 
             var loggedInUser = await userManager.GetUserAsync(User);
-            //var UserRole = await userManager.GetRolesAsync(loggedInUser);
 
             // List all the result 
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
@@ -64,7 +63,7 @@ namespace TicketManagementSystem.Controllers
             }
 
             // Sort by attributes in the list
-            model = SortList(sortOrder, model);
+            //model = SortList(sortOrder, model);
             return View(model);
         }
 
@@ -92,7 +91,7 @@ namespace TicketManagementSystem.Controllers
 
 
             // Sort by attributes in the list
-            model = SortList(sortOrder, model);
+            // model = SortList(sortOrder, model);
             return View(model);
         }
 
@@ -139,7 +138,7 @@ namespace TicketManagementSystem.Controllers
         }
 
         //Filter by Title, Status and Priority
-        public async Task<IActionResult> Filter(string title, int? statusSearch, int? customerPriority, int? adminPriority, int? priorities, List<TicketIndexViewModel> model, List<TicketIndexViewModel> model2, string sortOrder)
+        public async Task<IActionResult> Filter(string title, int? statusSearch, int? customerPriority, int? adminPriority, int? priorities, List<TicketIndexViewModel> model, List<TicketIndexViewModel> model2, string sortOrder, string currentFilter)
         {
             var loggedInUser = await userManager.GetUserAsync(User);
 
@@ -176,16 +175,15 @@ namespace TicketManagementSystem.Controllers
                 model :
                 model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
+            // Search by Status
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-               
+            {              
               model = statusSearch == null ?
               model :
               model2.Where(m => m.Status == (Status)statusSearch).ToList();
             }
             else
             {
-
              model = statusSearch == null ?
              model :
              model.Where(m => m.Status == (Status)statusSearch).ToList();
@@ -211,7 +209,7 @@ namespace TicketManagementSystem.Controllers
                 model = model.Where(m => m.RealPriority != m.CustomerPriority).ToList();
             }
 
-            model = SortList(sortOrder, model);  
+            //model = SortList(sortOrder, model);  
             return View(nameof(Index), model);
         }
 
@@ -219,7 +217,7 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> FilterForCompanyTickets(string title, int? statusSearch, int? customerPriority, int? priorities, List<TicketIndexViewModel> model, string sortOrder)
         {
             var loggedInUser = await userManager.GetUserAsync(User);
-
+           
             // List all the result by CompanyId 
             model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
                         .Where(u => u.CreatedUser.CompanyId == loggedInUser.CompanyId)
@@ -238,12 +236,12 @@ namespace TicketManagementSystem.Controllers
                         .ToListAsync();
 
             // Search by Title
-            model = string.IsNullOrWhiteSpace(title) ?
+             model = string.IsNullOrWhiteSpace(title) ?
              model :
              model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
             // Search by Status
-             model = statusSearch == null ?
+            model = statusSearch == null ?
              model :
              model.Where(m => m.Status == (Status)statusSearch).ToList();
 
@@ -252,7 +250,7 @@ namespace TicketManagementSystem.Controllers
              model :
              model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
 
-             model = SortList(sortOrder, model);
+             //model = SortList(sortOrder, model);
              return View(nameof(IndexCompanyTickets), model);
 
         }
