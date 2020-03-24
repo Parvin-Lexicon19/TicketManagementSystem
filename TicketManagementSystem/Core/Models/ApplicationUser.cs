@@ -27,6 +27,8 @@ namespace TicketManagementSystem.Core.Models
         public String JobTitle { get; set; }
         public String Country { get; set; }
 
+        [Required(ErrorMessage ="Email Required")]
+        [EmailAddress(ErrorMessage ="Enter Valid Email")]
         [Remote(action: "EmailExist", controller: "ApplicationUsers")]
         public override string Email
         {
