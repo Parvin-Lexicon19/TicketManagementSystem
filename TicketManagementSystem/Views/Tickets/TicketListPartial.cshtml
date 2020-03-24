@@ -116,9 +116,12 @@
                     @Html.ActionLink(Html.DisplayNameFor(model => model.RealPriority), "Index", new { sortOrder = ViewBag.RealPrioritySortParm })
                 </th>
             }
-            <th>
+            <th scope="col" colspan="2">
                 @Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.DueDateSortParm })
+            
+            
             </th>
+
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 <th>
@@ -132,24 +135,15 @@
 
         @foreach (var item in Model.OrderByDescending(i => i.Id))
         {
-            <tr>
-                @if (User.IsInRole("Customer"))
+        <tr>
+            @if (User.IsInRole("Customer"))
+            {
+                @if (item.Status == Status.Draft)
                 {
-                    @if (item.Status == Status.Draft)
-                    {
-                        <td>
-                            <a asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
+                    <td>
+                        <a asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
 
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
-
-                        </td>
-
-                    }
+                    </td>
                 }
                 else
                 {
@@ -157,59 +151,74 @@
                         <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
 
                     </td>
-                }
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProjectName)
-                </td>
-                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-                {
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
 
                 }
-                else
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                }
+            }
+            else
+            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.CustomerPriority)
-                </td>
-                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RealPriority)
-                    </td>
-                }
-                @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Submitted || item.Status == Status.Started) && (item.DueDate < DateTime.Now))
-                {
-                    <td>
+                    <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
 
-                        @Html.DisplayFor(modelItem => item.DueDate)
-                        <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Crossed Due Date!">
-                            <i class="fa fa-exclamation-circle text-danger"></i>
-                        </button>
-                    </td>
-                }
-                else
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DueDate)
-                    </td>
-                }
-                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserEmail)
-                    </td>
-                }
-            </tr>
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
+            </td>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+
+            }
+            else
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPriority)
+            </td>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.RealPriority)
+                </td>
+            }
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Submitted || item.Status == Status.Started) && (item.DueDate < DateTime.Now))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+
+                <td>
+                <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Due Date has expired!">
+                    <i class="fa fa-exclamation-circle text-danger"></i>
+                </button>
+
+                </td>
+
+
+
+            }
+            else
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+            }
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserEmail)
+                </td>
+            }
+        </tr>
         }
     </tbody>
 </table>
