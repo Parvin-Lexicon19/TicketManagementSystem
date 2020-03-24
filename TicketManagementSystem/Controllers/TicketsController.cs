@@ -37,7 +37,6 @@ namespace TicketManagementSystem.Controllers
         {
             _context = context;
             this.userManager = userManager;
-            //selectListItems = new List<SelectListItem>();
             _emailSender = emailSender;
         }
 
@@ -473,30 +472,36 @@ namespace TicketManagementSystem.Controllers
 
                 if (model.File != null)
                     Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
-
-                /*Ticket assigns to developer1, but emails sent to both developer1 and developer2*/
+               
                 if (model.Ticket.Status.Equals(Status.Submitted))
                 {
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
+                    var ticketRefNo = model.Ticket.RefNo;
 
-                    foreach (var developer in ticketProjectDevelopers)
-                    {
-                        await _emailSender.SendEmailAsync(
-                          developer.Email,
-                          "A New Ticket Submitted",
-                          $"Hello dear {developer.FirstName}," +
-                          $"<br/><br/>A new ticket submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. " +
-                          $"<br/>Please see the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details</a>." +
-                          $"<br/><br/>Thank you,<br/>Bitoreq Admin");
-                    }
-
-                    return RedirectToAction(nameof(EmailSent));
+                    return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo);
                 }
 
                 return RedirectToAction(nameof(Index));
             }
 
             return View(model);
+        }
+
+        /*Ticket has been assigned to developer1, but emails sent to both developer1 and developer2*/
+        private async Task<IActionResult> SubmittedTicketEmail(Company loggedInUserCompany, string callbackUrl, string ticketRefNo)
+        {
+            foreach (var developer in ticketProjectDevelopers)
+            {
+                await _emailSender.SendEmailAsync(
+                  developer.Email,
+                  $"New Ticket Submitted: {ticketRefNo}",
+                  $"Hello dear {developer.FirstName}," +
+                  $"<br/><br/>A new ticket with RefNo. <b>{ticketRefNo}</b> submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. " +
+                  $"<br/>Please see the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details</a>." +
+                  $"<br/><br/>Thank you,<br/>Bitoreq Admin");
+            }
+
+            return RedirectToAction(nameof(EmailSent));
         }
 
         // GET: Tickets/Edit/5
@@ -594,24 +599,13 @@ namespace TicketManagementSystem.Controllers
                     }
                 }
 
-                /*Ticket assigns to developer1, but emails sent to both developer1 and developer2*/
                 if (model.Ticket.Status.Equals(Status.Submitted))
                 {
                     Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
+                    var ticketRefNo = model.Ticket.RefNo;
 
-                    foreach (var developer in ticketProjectDevelopers)
-                    {
-                        await _emailSender.SendEmailAsync(
-                          developer.Email,
-                          "A New Ticket Submitted",
-                          $"Hello dear {developer.FirstName}," +
-                          $"<br/><br/>A new ticket submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. " +
-                          $"<br/>Please see the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details</a>." +
-                          $"<br/><br/>Thank you,<br/>Bitoreq Admin");
-                    }
-
-                    return RedirectToAction(nameof(EmailSent));
+                    return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo);
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -619,63 +613,60 @@ namespace TicketManagementSystem.Controllers
 
             return View(model);
         }
+
         // Edit Ticket Through Detail Screen.
         [HttpPost]
         public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority)
         {
-            var newticket = _context.Tickets.Find(id);
+            var newTicket = _context.Tickets.Find(id);
 
             string loggedInUser = (string)TempData["loggedInUser"];
-            var createdUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == newticket.CreatedBy);
+            var createdUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == newTicket.CreatedBy);
 
 
             TempData.Keep();
 
-            if (newticket == null)
+            if (newTicket == null)
             {
                 return "The ticket not found";
             }
 
-            // Update only the changed value to database.
+            /*Update only the changed value to database.*/
 
-            //Status
-            if (newticket.Status != (Status)(Status))
+            /*Status*/
+            if (newTicket.Status != (Status)(Status))
             {
-                newticket.Status = (Status)(Status);
+                newTicket.Status = (Status)(Status);
             }
 
-            //Response Type
-            if (newticket.ResponseType != (ResponseType)(RespType))
-            {
-                newticket.ResponseType = (ResponseType)(RespType);
-            }
-            //Response Description
-            if (newticket.ResponseDesc != RespDesc)
-            {
-                newticket.ResponseDesc = RespDesc;
-            }
-            //Hours Spent
-            if (newticket.HoursSpent != HoursSpent)
-            {
-                newticket.HoursSpent = HoursSpent;
-            }
-            // Real Priority.
-            if (newticket.RealPriority != (Priority)(RelPriority))
-            {
-                newticket.RealPriority = (Priority)(RelPriority);
+            /*Response Type*/
+            if (newTicket.ResponseType != (ResponseType)(RespType))
+                newTicket.ResponseType = (ResponseType)(RespType);
 
-                // Change the due date upon changing the real priority
+            /*Response Description*/
+            if (newTicket.ResponseDesc != RespDesc)
+                newTicket.ResponseDesc = RespDesc;
 
-                switch (newticket.RealPriority)
+            /*Hours Spent*/
+            if (newTicket.HoursSpent != HoursSpent)
+                newTicket.HoursSpent = HoursSpent;
+
+            /*Real Priority*/
+            if (newTicket.RealPriority != (Priority)(RelPriority))
+            {
+                newTicket.RealPriority = (Priority)(RelPriority);
+
+                /*Change the due date upon changing the real priority*/
+                switch (newTicket.RealPriority)
                 {
                     case Priority.A_2days:
-                        newticket.DueDate = newticket.CreatedDate.AddDays(2);
+                        newTicket.DueDate = newTicket.CreatedDate.AddDays(2);
                         break;
                     case Priority.B_5days:
-                        newticket.DueDate = newticket.CreatedDate.AddDays(5);
+                        newTicket.DueDate = newTicket.CreatedDate.AddDays(5);
                         break;
                     case Priority.C_9days:
-                        newticket.DueDate = newticket.CreatedDate.AddDays(9);
+                        newTicket.DueDate = newTicket.CreatedDate.AddDays(9);
                         break;
 
                     default:
@@ -684,22 +675,22 @@ namespace TicketManagementSystem.Controllers
             }
             if (Status == Status.Closed)
             {
-                newticket.ClosedDate = DateTime.Now;
+                newTicket.ClosedDate = DateTime.Now;
             }
 
-            newticket.LastUpdated = DateTime.Now;
+            newTicket.LastUpdated = DateTime.Now;
 
 
-            // Update the dataase.
+            /*Update database*/
             try
             {
-                _context.Update(newticket);
+                _context.Update(newTicket);
                 _context.SaveChanges();
 
-                // Generate Email while closing Ticket.
+                /*Generate Email while closing Ticket*/
                 if (Status == Status.Closed)
                 {
-                    var callbackUrl = Url.Action("Details", "Tickets", new { id = newticket.Id }, protocol: Request.Scheme);
+                    var callbackUrl = Url.Action("Details", "Tickets", new { id = newTicket.Id }, protocol: Request.Scheme);
                     if (createdUser != null)
                     {
                         _emailSender.SendEmailAsync(
@@ -714,7 +705,6 @@ namespace TicketManagementSystem.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 return "Ticket Not found";
-
             }
         }
 
