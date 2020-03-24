@@ -197,9 +197,9 @@
                 </td>
 
                 <td>
-                <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Due Date has expired!">
-                    <i class="fa fa-exclamation-circle text-danger"></i>
-                </button>
+                    <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Due Date has expired!">
+                        <i class="fa fa-exclamation-circle text-danger"></i>
+                    </button>
 
                 </td>
 
@@ -211,6 +211,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.DueDate)
                 </td>
+                <td>
+                </td>
+
+
             }
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
