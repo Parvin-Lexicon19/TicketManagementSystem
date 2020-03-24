@@ -65,11 +65,12 @@ namespace TicketManagementSystem.Core.Models
         Closed 
 
     }
+    /*Assigned numbers are number of work days, you may change them if you want*/
     public enum Priority
     {
-        A_2days,
-        B_5days,
-        C_9days
+        A_2days = 2,
+        B_5days = 5,
+        C_9days = 9
     }
 
     public enum ResponseType
