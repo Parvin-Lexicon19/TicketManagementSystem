@@ -4,7 +4,7 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+    <h1>Radera</h1>
 
 @if (@ViewBag.formhide == "Show")
 {
@@ -13,12 +13,12 @@
 }
 else
 {
-    <p id="deletemsg"><b>This project cannot be deleted. There are some connected tickets to this project.</b> </p>
+    <p id="deletemsg"><b>Det här projektet kan inte raderas. Det finns några anslutna biljetter till detta projekt.</b> </p>
    
 }
 
 <div>
-    <h4>Project</h4>
+    <h4>Projekt</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -83,13 +83,13 @@ else
         <form asp-action="Delete">
             <input type="hidden" asp-for="Id" />
             <input type="submit" value="Delete" class="btn btn-danger" /> |
-            <a asp-action="Index">Back to List</a>
+            <a asp-action="Index">Tillbaka till listan</a>
         </form>
 
     }
     else
     {
-        <a asp-action="Index">Back to List</a>
+<a asp-action="Index">Tillbaka till listan</a>
     }
 
 

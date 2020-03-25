@@ -8,7 +8,7 @@
 
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            <a class="navbar-brand" asp-area="" asp-controller="Projects" asp-action="Index"><h1>Projects</h1></a>
+            <a class="navbar-brand" asp-area="" asp-controller="Projects" asp-action="Index"><h1>Projekt</h1></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -20,16 +20,16 @@
                     <ul class="navbar-nav flex-grow-1">
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Biljetter</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">Companies</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">Företag</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Customer">Customers</a>
+                            <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Customer">Kunder</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Developer">Admins/Developers</a>
+                            <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Developer">Administratörer / Utvecklare</a>
                         </li>
                     </ul>
                 </div>
@@ -40,9 +40,9 @@
 
 
 <p>
-    <a asp-action="AddProject">Add Project</a>
+    <a asp-action="AddProject">Lägg till projekt</a>
 </p>
-<table class="table">
+<table class="table table-striped table-hover tablesorter">
     <thead>
         <tr>
             <th>
@@ -102,9 +102,9 @@
             </td>*@
 
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Redigera</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detaljer</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Radera</a>
             </td>
         </tr>
         }

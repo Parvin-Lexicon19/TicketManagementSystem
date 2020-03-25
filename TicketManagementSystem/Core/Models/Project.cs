@@ -11,29 +11,34 @@ namespace TicketManagementSystem.Core.Models
     public class Project
     {
         public int Id { get; set; }
-
-        [Display(Name = "Company Name")]
+        [Display(Name = "Företagsnamn")]
         public int CompanyId { get; set; }
         [Required]
         [StringLength(70)]
+        [Display(Name = "Projektnamn")]
         public string Name { get; set; }
+
+        [Display(Name = "Utvecklare1")]
         public string Developer1 { get; set; }
+        [Display(Name = "Utvecklare2")]
         public string Developer2 { get; set; }
 
-        [Display(Name = "Release Date")]
+        [Display(Name = "Utgivningsdatum")]
         [DataType(DataType.Date)] 
         [Required]
         public DateTime ReleaseDate { get; set; }
-        [Display(Name = "Last Update")]
+        [Display(Name = "Senaste uppdateringen")]
         [DataType(DataType.Date)]
         [Remote(action: "CheckLastUpdate", controller: "Projects", AdditionalFields = "ReleaseDate")]
         public DateTime? LastUpdate { get; set; }
         [StringLength(500)]
+        [Display(Name = "Beskrivning")]
         public string Description { get; set; }
-        [Display(Name = "Systems Used")]
+        [Display(Name = "System som används")]
         [StringLength(100)]
         public string SystemsUsed { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
+        [Display(Name = "Företag")]
         public Company Company { get; set; }
         public virtual ApplicationUser Developer1User { get; set; }
         public virtual ApplicationUser Developer2User { get; set; }
