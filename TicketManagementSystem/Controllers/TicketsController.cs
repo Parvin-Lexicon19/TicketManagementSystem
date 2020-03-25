@@ -425,23 +425,8 @@ namespace TicketManagementSystem.Controllers
 
             model.Ticket.CreatedDate = DateTime.Now;
             model.Ticket.RealPriority = model.Ticket.CustomerPriority;
-
-            switch (model.Ticket.CustomerPriority)
-            {
-                case Priority.A_2days:
-                    model.Ticket.DueDate = DateTime.Now.AddDays(2);
-                    break;
-                case Priority.B_5days:
-                    model.Ticket.DueDate = DateTime.Now.AddDays(5);
-                    break;
-                case Priority.C_9days:
-                    model.Ticket.DueDate = DateTime.Now.AddDays(9);
-                    break;
-
-                default:
-                    throw new Exception();
-            }
-
+            model.Ticket.DueDate = DateTimeExtensions.SetDueDate(model.Ticket.CustomerPriority);
+            
             switch (submit)
             {
                 case "Submit":
@@ -539,21 +524,8 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> Edit(long id, TicketDetailsViewModel model, string submit)
         {
             model.Ticket.RealPriority = model.Ticket.CustomerPriority;
-            switch (model.Ticket.CustomerPriority)
-            {
-                case Priority.A_2days:
-                    model.Ticket.DueDate = DateTime.Now.AddDays(2);
-                    break;
-                case Priority.B_5days:
-                    model.Ticket.DueDate = DateTime.Now.AddDays(5);
-                    break;
-                case Priority.C_9days:
-                    model.Ticket.DueDate = DateTime.Now.AddDays(9);
-                    break;
+            model.Ticket.DueDate = DateTimeExtensions.SetDueDate(model.Ticket.CustomerPriority);
 
-                default:
-                    throw new Exception();
-            }
             switch (submit)
             {
                 case "Submit":
@@ -657,21 +629,7 @@ namespace TicketManagementSystem.Controllers
                 newTicket.RealPriority = (Priority)(RelPriority);
 
                 /*Change the due date upon changing the real priority*/
-                switch (newTicket.RealPriority)
-                {
-                    case Priority.A_2days:
-                        newTicket.DueDate = newTicket.CreatedDate.AddDays(2);
-                        break;
-                    case Priority.B_5days:
-                        newTicket.DueDate = newTicket.CreatedDate.AddDays(5);
-                        break;
-                    case Priority.C_9days:
-                        newTicket.DueDate = newTicket.CreatedDate.AddDays(9);
-                        break;
-
-                    default:
-                        throw new Exception();
-                }
+                newTicket.DueDate = DateTimeExtensions.SetDueDate(newTicket.RealPriority);
             }
             if (Status == Status.Closed)
             {
