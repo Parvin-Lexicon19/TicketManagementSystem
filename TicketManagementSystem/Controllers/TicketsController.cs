@@ -117,7 +117,7 @@ namespace TicketManagementSystem.Controllers
         private async Task<List<TicketIndexViewModel>> TicketViewModelAdmin(List<TicketIndexViewModel> model)
         {
             model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                .Where(s => s.Status != Status.Draft && s.Status != Status.Closed)
+                .Where(s => s.Status != Status.Utkast && s.Status != Status.Stängd)
                 .Select(s => new TicketIndexViewModel
                 {
                     Id = s.Id,
@@ -151,7 +151,7 @@ namespace TicketManagementSystem.Controllers
 
             // List all the result and not show Draft Status 
             model2 = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                       .Where(s => s.Status != Status.Draft)
+                       .Where(s => s.Status != Status.Utkast)
                        .Select(s => new TicketIndexViewModel
                        {
                            Id = s.Id,
@@ -430,7 +430,7 @@ namespace TicketManagementSystem.Controllers
             switch (submit)
             {
                 case "Submit":
-                    model.Ticket.Status = Status.Submitted;
+                    model.Ticket.Status = Status.Lämnats;
                     var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
                     ticketProjectDevelopers = new List<ApplicationUser>();
                     if (ticketProject.Developer1 != null)
@@ -443,7 +443,7 @@ namespace TicketManagementSystem.Controllers
                     break;
 
                 case "Save as Draft":
-                    model.Ticket.Status = Status.Draft;
+                    model.Ticket.Status = Status.Utkast;
                     break;
 
                 default:
@@ -458,7 +458,7 @@ namespace TicketManagementSystem.Controllers
                 if (model.File != null)
                     Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
                
-                if (model.Ticket.Status.Equals(Status.Submitted))
+                if (model.Ticket.Status.Equals(Status.Lämnats))
                 {
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
                     var ticketRefNo = model.Ticket.RefNo;
@@ -529,7 +529,7 @@ namespace TicketManagementSystem.Controllers
             switch (submit)
             {
                 case "Submit":
-                    model.Ticket.Status = Status.Submitted;
+                    model.Ticket.Status = Status.Lämnats;
                     model.Ticket.CreatedDate = DateTime.Now;
                     var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
                     ticketProjectDevelopers = new List<ApplicationUser>();
@@ -571,7 +571,7 @@ namespace TicketManagementSystem.Controllers
                     }
                 }
 
-                if (model.Ticket.Status.Equals(Status.Submitted))
+                if (model.Ticket.Status.Equals(Status.Lämnats))
                 {
                     Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
@@ -631,7 +631,7 @@ namespace TicketManagementSystem.Controllers
                 /*Change the due date upon changing the real priority*/
                 newTicket.DueDate = DateTimeExtensions.SetDueDate(newTicket.RealPriority);
             }
-            if (Status == Status.Closed)
+            if (Status == Status.Stängd)
             {
                 newTicket.ClosedDate = DateTime.Now;
             }
@@ -646,7 +646,7 @@ namespace TicketManagementSystem.Controllers
                 _context.SaveChanges();
 
                 /*Generate Email while closing Ticket*/
-                if (Status == Status.Closed)
+                if (Status == Status.Stängd)
                 {
                     
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = newTicket.Id }, protocol: Request.Scheme);

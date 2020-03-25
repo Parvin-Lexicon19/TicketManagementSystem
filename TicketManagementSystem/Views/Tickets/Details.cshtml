@@ -86,7 +86,7 @@
     </dl>
 
     <!--If Ticket status not closed. and want to show the Ticket status -->
-    @if (Model.Ticket.Status != Status.Closed)
+    @if (Model.Ticket.Status != Status.Stängd)
     {
         <dl class="row hidestatus">
             <dt class="col-sm-2">
@@ -113,7 +113,7 @@
         </dd>
     </dl>
     <!--If Ticket status is closed show every details.-->
-    @if (Model.Ticket.Status == Status.Closed)
+    @if (Model.Ticket.Status == Status.Stängd)
     {
         <dl class="row">
 
@@ -260,7 +260,7 @@ else
     }
     @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
     {
-        @if (Model.Ticket.Status != Status.Closed)
+        @if (Model.Ticket.Status != Status.Stängd)
         {
             <div class="text-center">
                 <button class="btn btn-primary center-block" id="SaveEditbtn" data-toggle="collapse" data-target=".hide">Edit</button>
@@ -277,7 +277,7 @@ else
 
 <br />
 <br />
-@if (Model.Ticket.Status != Status.Closed)
+@if (Model.Ticket.Status != Status.Stängd)
 {
     <div class="form-group">
         <!--Button trigger modal-->

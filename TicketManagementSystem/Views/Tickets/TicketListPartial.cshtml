@@ -67,7 +67,7 @@
         <tr>
             @if (User.IsInRole("Customer"))
             {
-                @if (item.Status == Status.Draft)
+                @if (item.Status == Status.Utkast)
                 {
                     <td>
                         <a asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNo)</a>
@@ -119,7 +119,7 @@
                     @Html.DisplayFor(modelItem => item.RealPriority)
                 </td>
             }
-            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Submitted || item.Status == Status.Started) && (item.DueDate < DateTime.Now))
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Lämnats || item.Status == Status.Satteigång) && (item.DueDate < DateTime.Now))
             {
                 <td>
                     @Html.DisplayFor(modelItem => item.DueDate)

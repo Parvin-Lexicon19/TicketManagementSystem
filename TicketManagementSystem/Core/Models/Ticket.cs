@@ -61,11 +61,11 @@ namespace TicketManagementSystem.Core.Models
     {
         Utkast,
         Lämnats,
-        //Received,
         Satteigång,
         Stängd
 
     }
+
     /*Assigned numbers are number of work days, you may change them if you want*/
     public enum Priority
     {
