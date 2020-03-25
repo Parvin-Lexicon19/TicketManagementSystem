@@ -22,6 +22,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="NonFactors.Grid.Mvc6" Version="6.0.1" />
+    <PackageReference Include="RazorGenerator.Templating" Version="2.4.7" />
     <PackageReference Include="SendGrid" Version="9.12.7" />
   </ItemGroup>
 
