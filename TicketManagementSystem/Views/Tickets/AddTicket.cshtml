@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label asp-for="Ticket.ProjectId" class="control-label"></label>
                 <select id="projectDropDownList" asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
-                    <option value="">Select Project</option>
+                    <option value="">Välj Projekt</option>
                 </select>
                 <span asp-validation-for="Ticket.ProjectId" class="text-danger"></span>
             </div>
@@ -78,7 +78,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Tillbaka till Listan</a>
+    <a asp-action="Index">Tillbaka till listan</a>
 </div>
 
 @section Scripts {
