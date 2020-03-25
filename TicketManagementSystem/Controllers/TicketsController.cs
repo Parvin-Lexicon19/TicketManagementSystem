@@ -429,7 +429,7 @@ namespace TicketManagementSystem.Controllers
             
             switch (submit)
             {
-                case "Submit":
+                case "Skicka in":
                     model.Ticket.Status = Status.Lämnats;
                     var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
                     ticketProjectDevelopers = new List<ApplicationUser>();
@@ -442,7 +442,7 @@ namespace TicketManagementSystem.Controllers
                         ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer2));
                     break;
 
-                case "Save as Draft":
+                case "Spara som Utkast":
                     model.Ticket.Status = Status.Utkast;
                     break;
 
@@ -528,7 +528,7 @@ namespace TicketManagementSystem.Controllers
 
             switch (submit)
             {
-                case "Submit":
+                case "Skicka in":
                     model.Ticket.Status = Status.Lämnats;
                     model.Ticket.CreatedDate = DateTime.Now;
                     var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
@@ -542,7 +542,7 @@ namespace TicketManagementSystem.Controllers
                         ticketProjectDevelopers.Add(await userManager.FindByIdAsync(ticketProject.Developer2));
                     break;
 
-                case "Save as Draft":
+                case "Spara som Utkast":
                     break;
 
                 default:

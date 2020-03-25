@@ -61,7 +61,7 @@
                 <div class="input-group-append">
                     @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
                     {
-                        <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Draft" ))" class="form-control">
+                        <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Utkast" ))" class="form-control">
                             <option selected="selected" value="">Status</option>
                         </select>
                         <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">

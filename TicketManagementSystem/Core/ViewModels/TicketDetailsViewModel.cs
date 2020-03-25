@@ -12,11 +12,10 @@ namespace TicketManagementSystem.Core.ViewModels
     {
        
         public Ticket Ticket { get; set; }
-
         public List<IFormFile> File { get; set; }
         public Comment Comment { get; set; }
 
-        [Display(Name = "Attachments")]
+        [Display(Name = "Bifoga Filer")]
         public ICollection<Document> Documents { get; set; }
     }
 }

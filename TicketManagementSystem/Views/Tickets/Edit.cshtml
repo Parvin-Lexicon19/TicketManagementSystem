@@ -6,7 +6,7 @@
     int i = 0;
 }
 
-<h3>Edit Ticket</h3>
+<h3>Redigera biljett</h3>
 <hr />
 <div>
     <div class="row">
@@ -30,13 +30,13 @@
                     <label asp-for="Ticket.Project" class="control-label"></label>
                     <select asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
                         @*(IEnumerable<SelectListItem>)loggedInUserProjects*@
-                        <option value="">Select Project</option>
+                        <option value="">Välj projekt</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Ticket.CustomerPriority" class="control-label">Priority</label>
+                    <label asp-for="Ticket.CustomerPriority" class="control-label">Prioritet</label>
                     <select asp-for="Ticket.CustomerPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control">
-                        <option value="">Select Priority</option>
+                        <option value="">Välj prioritet</option>
                     </select>
                     <span asp-validation-for="Ticket.CustomerPriority" class="text-danger"></span>
                 </div>
@@ -155,13 +155,13 @@
                     <div class="form-group row">
 
                         <div class="col-md-3 col-form-label">
-                            @Html.Label("Attachment" + (j + 1).ToString())
+                            @Html.Label("Bifoga Fil" + (j + 1).ToString())
                         </div>
                         @*<label asp-for="File" class="col-md-2 col-form-label"></label>*@
                         <div class="col-md-9">
                             <div class="custom-file">
                                 <input asp-for="File" class="form-control custom-file-input">
-                                <label class="custom-file-label">Choose File...</label>
+                                <label class="custom-file-label">Välj FIL...</label>
                             </div>
                         </div>
                     </div>
@@ -169,16 +169,16 @@
                 }
 
                 <div class="form-group" align="center">
-                    <input name="submit" type="submit" id="submit" value="Save as Draft" class="btn btn-primary" />
-                    <input name="submit" type="submit" id="submit" value="Submit" class="btn btn-primary" />
+                    <input name="submit" type="submit" id="submit" value="Spara som Utkast" class="btn btn-primary" />
+                    <input name="submit" type="submit" id="submit" value="Skicka in" class="btn btn-primary" />
                 </div>
             </form>
         </div>
     </div>
 
     <div>
-        <a asp-action="Delete" asp-route-id="@Model.Ticket.Id">Delete</a> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Delete" asp-route-id="@Model.Ticket.Id">Radera</a> |
+        <a asp-action="Index">Tillbaka till listan</a>
     </div>
 </div>
 

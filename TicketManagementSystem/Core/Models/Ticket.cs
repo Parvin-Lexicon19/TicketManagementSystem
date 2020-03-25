@@ -48,6 +48,7 @@ namespace TicketManagementSystem.Core.Models
         [DisplayName("Svarbeskrivning")]
         public string ResponseDesc { get; set; }
         public ICollection<Document> Documents { get; set; }
+        [DisplayName("kommentarer")]
         public ICollection<Comment> Comments { get; set; }
         [DisplayName("Projekt")]
         public Project Project { get; set; }
