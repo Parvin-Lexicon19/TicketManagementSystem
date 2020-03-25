@@ -13,25 +13,25 @@ namespace TicketManagementSystem.Core.ViewModels
 
         public Int64 Id { get; set; }
         [Required]
-        [DisplayName("Ticket No.")]
+        [DisplayName("Biljettnummer")]
         public string RefNo { get; set; }
         [Required]
         public string Title { get; set; }
         [DisplayName("Status")]
         public Status? Status { get; set; }
         public int ProjectId { get; set; }
-        [DisplayName("Project")]
+        [DisplayName("Projekt")]
         public string ProjectName { get; set; }
-        [DisplayName("Priority")]
+        [DisplayName("Prioritet")]
         public Priority? CustomerPriority { get; set; }
-        [DisplayName("Real Priority")]
+        [DisplayName("Verklig Prioritering")]
         public Priority? RealPriority { get; set; }
         public string AssignedTo { get; set; }
         [Required]
-        [DisplayName("Assigned To")]
+        [DisplayName("Tilldelats")]
         public string UserEmail { get; set; }
 
-        [DisplayName("Due Date")]
+        [DisplayName("Förfallodatum")]
         [DataType(DataType.Date), DisplayFormat(DataFormatString = @"{0:dd\/MM\/yyyy HH:mm}",
             ApplyFormatInEditMode = true)]
         public DateTime DueDate { get; set; }

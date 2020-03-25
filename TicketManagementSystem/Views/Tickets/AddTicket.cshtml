@@ -3,7 +3,7 @@
     ViewData["Title"] = "Add Ticket";
 }
 
-<h1>Add Ticket</h1>
+    <h1>Lägg till biljett</h1>
 
 @*<h4>Ticket</h4>*@
 <hr />
@@ -41,9 +41,9 @@
                 <span asp-validation-for="Ticket.ProjectId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Ticket.CustomerPriority" class="control-label">Priority</label>
+                <label asp-for="Ticket.CustomerPriority" class="control-label">Prioritet</label>
                 <select asp-for="Ticket.CustomerPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control">
-                    <option value="">Select Priority</option>
+                    <option value="">Välj prioritet</option>
                 </select>
                 <span asp-validation-for="Ticket.CustomerPriority" class="text-danger"></span>
             </div>
@@ -53,13 +53,13 @@
             {
                 <div class="form-group row">
                     <div class="col-md-3 col-form-label">
-                        @Html.Label("Attachment" + (i + 1).ToString())
+                        @Html.Label("FIL" + (i + 1).ToString())
                     </div>
                     @*<label asp-for="File" class="col-md-2 col-form-label"></label>*@
                     <div class="col-md-9">
                         <div class="custom-file">
                             <input asp-for="File" class="form-control custom-file-input" id="file">
-                            <label class="custom-file-label">Choose File...</label>
+                            <label class="custom-file-label">Välj FIL...</label>
                         </div>
                     </div>
                 </div>
@@ -69,16 +69,16 @@
             <div class="form-group" align="center" style="padding-top: 10px">
                 @if (User.IsInRole("Customer"))
                 {
-                    <input name="submit" type="submit" id="submit" value="Save as Draft" class="btn btn-primary" />
+                    <input name="submit" type="submit" id="submit" value="Spara som Utkast" class="btn btn-primary" />
                 }
-                <input name="submit" type="submit" id="submit" value="Submit" class="btn btn-primary" />
+                <input name="submit" type="submit" id="submit" value="Skicka in" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Tillbaka till Listan</a>
 </div>
 
 @section Scripts {

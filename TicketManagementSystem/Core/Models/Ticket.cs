@@ -11,58 +11,59 @@ namespace TicketManagementSystem.Core.Models
     public class Ticket
     {
         public Int64 Id { get; set; }
-        [DisplayName("Ticket No.")]
+        [DisplayName("Biljettnummer")]
         public string RefNo { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
         [StringLength(500)]
-        [DisplayName("Description")]
+        [DisplayName("Beskrivning")]
         public string Problem { get; set; }
-        [DisplayName("Created By")]
+        [DisplayName("Skapad av")]
         public string CreatedBy { get; set; }
-        [DisplayName("Created Date")]
+        [DisplayName("Skapat Datum")]
         public DateTime CreatedDate { get; set; }
-        [DisplayName("Assigned To")]
+        [DisplayName("Tilldelats")]
         public string AssignedTo { get; set; }
-        [DisplayName("Hours Spent")]
+        [DisplayName("Tillbringade Timmar")]
         public double HoursSpent { get; set; }
         [Required]
         public Status Status { get; set; }
-        [DisplayName("Project")]
+        [DisplayName("Projekt")]
         public int ProjectId { get; set; }
         [Required]
-        [DisplayName("Priority")]
+        [DisplayName("Prioritet")]
         public Priority CustomerPriority { get; set; }
-        [DisplayName("Real Priority")]
+        [DisplayName("Verklig Prioritering")]
         public Priority RealPriority { get; set; }
         [Required]
-        [DisplayName("Due Date")]
+        [DisplayName("Förfallodatum")]
         public DateTime DueDate { get; set; }
-        [DisplayName("Closed Date")]
+        [DisplayName("Stängt Datum")]
         public DateTime ClosedDate { get; set; }
-        [DisplayName("Last Updated")]
+        [DisplayName("Senast Uppdaterad")]
         public DateTime LastUpdated { get; set; }
-        [DisplayName("Response Type")]
+        [DisplayName("Svarstyp")]
         public ResponseType ResponseType { get; set; }
-        [DisplayName("Response Desc.")]
+        [DisplayName("Svarbeskrivning")]
         public string ResponseDesc { get; set; }
         public ICollection<Document> Documents { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        [DisplayName("Projekt")]
         public Project Project { get; set; }
-        [DisplayName("Created User")]
+        [DisplayName("Skapad Användare")]
         public virtual ApplicationUser CreatedUser { get; set; }
-        [DisplayName("Assigned User")]
+        [DisplayName("Tilldelad Användare")]
         public virtual ApplicationUser AssignedUser { get; set; }
     }
 
     public enum Status
     {
-        Draft,
-        Submitted,
+        Utkast,
+        Lämnats,
         //Received,
-        Started,
-        Closed 
+        Satteigång,
+        Stängd
 
     }
     public enum Priority

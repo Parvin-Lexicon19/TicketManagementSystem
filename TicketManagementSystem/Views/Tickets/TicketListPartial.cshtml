@@ -3,81 +3,10 @@
 *@
 
 @model IEnumerable<TicketIndexViewModel>
-@*@using NonFactors.Mvc.Grid;
-
-    @{
-        Layout = null;
-
-    }*@
 
 <p>
-    <a asp-action="AddTicket">Add Ticket</a>
+    <a asp-action="AddTicket">Lägg till biljett</a>
 </p>
-
-@*<script src="http://code.jquery.com/jquery-3.3.1.js"
-            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-            crossorigin="anonymous">
-    </script>
-    <script src="/MVCGridItems/mvc-grid.js"></script>
-    <link href="~/css/mvc-grid.css" rel="stylesheet" />
-
-    <script src="~/js/mvc-grid.js"></script>*@
-
-@*<body>
-        @(Html
-                .Grid(Model)
-                .Build(columns =>
-                                {
-                                    columns.Add(model => model.RefNo).Titled("refno").Sortable(true);
-                                    columns.Add(model => model.Title).Titled("title").Sortable(true);
-                                    columns.Add(model => model.ProjectName).Titled("project name").Sortable(true); // enums are sorted by their value and not by their string representation.
-
-                                columns.Add(model => model.Status).Titled("status").Sortable(true); // sets first sort order to desc instead of asc.
-                                columns.Add(model => model.CustomerPriority).Titled("customer priority").Sortable(true);
-                                    columns.Add(model => model.RealPriority).Titled("real priority").Sortable(true);
-                                    columns.Add(model => model.DueDate).Titled("due date").Sortable(true);
-                                    columns.Add(model => model.UserEmail).Titled("user email").Sortable(true);
-                                })
-                           .Filterable()
-                           .Sortable()
-                           .Pageable()
-        )
-
-
-
-        @WebGrid.gethtml(
-            htmlattributes: new { @id = "webgrid", @class = "grid" },
-            columns: WebGrid.columns(
-                     WebGrid.column("customerid", "customer id"),
-                     WebGrid.column("contactname", "customer name"),
-                     WebGrid.column("city", "city"),
-                     WebGrid.column("country", "country")))
-
-
-        @{
-
-
-                var grid = new WebGrid();
-
-                @grid.gethtml(
-
-                headerstyle: "headerstyle",
-
-                tablestyle: "tablestyle",
-
-                alternatingrowstyle: "alternatestyle",
-
-                columns: grid.columns(
-
-                grid.column(columnname: "Id", header: "Id"),
-
-                grid.column(columnname: "Summary", header: "Summary"),
-
-                grid.column(columnname: "Status", header: "Status")))
-
-            }
-
-    </body>*@
 
 <table class="table table-striped table-hover tablesorter">
 
@@ -228,31 +157,31 @@
     });
 </script> 
 
-<link rel="stylesheet" href="css/theme.blue.css" />
+@*<link rel="stylesheet" href="css/theme.blue.css" />*@
 
 <!-- load jQuery and tablesorter scripts -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+@*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.9.1/jquery.tablesorter.min.js"></script>
 
 <script type="/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="http://mottie.github.io/tablesorter/css/theme.default.css"></script>
 
 <script src="path/to/jquery.js"></script>
-<script src="js/jquery.tablesorter.min.js"></script>
+<script src="js/jquery.tablesorter.min.js"></script>*@
 
 <!-- pager plugin -->
-<link rel="stylesheet" href="css/jquery.tablesorter.pager.css">
-<script src="js/jquery.tablesorter.pager.js"></script>
+@*<link rel="stylesheet" href="css/jquery.tablesorter.pager.css">
+<script src="js/jquery.tablesorter.pager.js"></script>*@
 
 <!-- choose a theme file -->
-<link rel="stylesheet" href="/path/to/theme.default.css">
+@*<link rel="stylesheet" href="/path/to/theme.default.css">*@
 
 <!-- load jQuery and tablesorter scripts -->
-<script type="text/javascript" src="/path/to/jquery-latest.js"></script>
-<script type="text/javascript" src="/path/to/jquery.tablesorter.js"></script>
+@*<script type="text/javascript" src="/path/to/jquery-latest.js"></script>
+<script type="text/javascript" src="/path/to/jquery.tablesorter.js"></script>*@
 
 <!-- tablesorter widgets (optional) -->
-<script type="text/javascript" src="/path/to/jquery.tablesorter.widgets.js"></script>
+@*<script type="text/javascript" src="/path/to/jquery.tablesorter.widgets.js"></script>*@
 
 @*<script type="text/javascript">
 
