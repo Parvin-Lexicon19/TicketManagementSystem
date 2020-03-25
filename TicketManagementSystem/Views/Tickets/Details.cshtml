@@ -165,7 +165,7 @@
         </dt>
         <dd class="col-sm-3">
             <div class="row hide collapse">
-                <select id='statusselect' asp-for="@Model.Ticket.Status" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Draft" ))" class="form-control  status">
+                <select id='statusselect' asp-for="@Model.Ticket.Status" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Utkast" ))" class="form-control  status">
                 </select>
             </div>
             <p class="text-danger">
