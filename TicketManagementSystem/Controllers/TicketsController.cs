@@ -690,15 +690,20 @@ namespace TicketManagementSystem.Controllers
                 /*Generate Email while closing Ticket*/
                 if (Status == Status.Closed)
                 {
+                    
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = newTicket.Id }, protocol: Request.Scheme);
+                    var ticketRefNo = newTicket.RefNo;
+
                     if (createdUser != null)
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               "The Ticket is closed",
-                               $"The ticket closed by { loggedInUser}. " +
-                               $"See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details.");
-                    }
+                               $"The Ticket {ticketRefNo} is closed",
+                               $"Hello dear {createdUser.FirstName}," +
+                               $"<br/><br/>The Ticket {ticketRefNo} is closed by { loggedInUser}. " +
+                               $"<br/><br/>See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details." +
+                               $"<br/><br/>Thank you,<br/>Bitoreq Admin");
+                    }   
                 }
                 return "The Ticket status successfully Upadated !!";
             }
