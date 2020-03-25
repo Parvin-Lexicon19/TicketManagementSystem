@@ -25,9 +25,9 @@
             @if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
                 <div class="form-group">
-                    <label asp-for="Ticket.CreatedBy" class="control-label">Customer</label>
+                    <label asp-for="Ticket.CreatedBy" class="control-label">Kund</label>
                     <select id="customerDropDownList" asp-for="Ticket.CreatedBy" class="form-control" asp-items="ViewBag.CreatedBy" onchange="FillProjects()" required>
-                        <option value="">Select Customer</option>
+                        <option value="">Välj kundr</option>
                     </select>
                     <span asp-validation-for="Ticket.CreatedBy" class="text-danger"></span>
                 </div>

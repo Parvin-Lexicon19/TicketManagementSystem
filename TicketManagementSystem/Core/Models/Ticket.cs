@@ -63,9 +63,16 @@ namespace TicketManagementSystem.Core.Models
         Lämnats,
         Satteigång,
         Stängd
-
     }
 
+    //public enum Status
+    //{
+    //    Draft,
+    //    Submitted,
+    //    Started,
+    //    Closed
+
+    //}
     /*Assigned numbers are number of work days, you may change them if you want*/
     public enum Priority
     {
