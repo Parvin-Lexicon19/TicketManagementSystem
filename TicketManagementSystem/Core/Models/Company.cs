@@ -11,19 +11,22 @@ namespace TicketManagementSystem.Core.Models
         public int Id { get; set; }
         [Required]
         [StringLength(5)]
-        [Display(Name = "Company Abbr.")]
+        [Display(Name = "Företagets Förkortning")]
         public string CompanyAbbr { get; set; }
         [Required]
-        [Display(Name = "Company Name")]
+        [Display(Name = "Företagsnamn")]
         public string CompanyName { get; set; }
-        [Display(Name = "Contact Person")]
+        [Display(Name = "Kontaktperson")]
         public string ContactPerson { get; set; }
+        [Display(Name = "E-post")]
         public string Email { get; set; }
         public string Address { get; set; }
+        [Display(Name = "Stad")]
         public string City { get; set; }
         [Range(10000, 99999)]
-        [Display(Name = "Postal Code")]
+        [Display(Name = "Postnummer")]
         public int? PostalCode { get; set; }
+        [Display(Name = "Land")]
         public string Country { get; set; }
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
