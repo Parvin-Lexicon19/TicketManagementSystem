@@ -16,23 +16,16 @@ else if (@ViewBag.formhide == "Hide")
 
     @if (@ViewBag.PageName == "Developer")
     {
-
         <p id="deletemsg"><b>This User cannot be deleted. There are some related projects to this developer.</b></p>
     }
     else
     {
-
         <p id="deletemsg"><b>This User cannot be deleted.There are related tickets for this customer.</b></p>
-
-    }
-
-   
+    }   
 }
 else if (@ViewBag.formhide == "Admin")
 {
-
-    <p id="deletemsg"><b>Admin user cannot be deleted.</b></p>
-    
+    <p id="deletemsg"><b>Admin user cannot be deleted.</b></p>    
 }
 
 

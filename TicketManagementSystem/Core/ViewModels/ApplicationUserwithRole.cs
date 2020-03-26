@@ -8,9 +8,7 @@ namespace TicketManagementSystem.Core.ViewModels
 {
     public class ApplicationUserwithRole
     {
-
         public ApplicationUser ApplicationUser { get; set; }
-
         public string  Role { get; set; }
     }
 }

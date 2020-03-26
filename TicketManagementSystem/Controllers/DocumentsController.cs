@@ -11,15 +11,12 @@ namespace TicketManagementSystem.Controllers
 {
     public class DocumentsController : Controller
     {
-
         private readonly ApplicationDbContext _context;
-
 
         public DocumentsController(ApplicationDbContext context)
         {
             _context = context;
         }
-   
 
         public async Task<IActionResult> Download(int? id)
         {
@@ -82,24 +79,20 @@ namespace TicketManagementSystem.Controllers
                 }
             }
 
-
             return RedirectToAction("edit", "Tickets", new { id = ticketid, });
         }
 
-        
+        private bool DocumentExists(long id)
+        {
+            return _context.Documents.Any(e => e.Id == id);
+        }
 
-                private bool DocumentExists(long id)
-                {
-                    return _context.Documents.Any(e => e.Id == id);
-                }
-
-
-                private string GetContentType(string path)
-                {
-                    var types = GetMimeTypes();
-                    var ext = Path.GetExtension(path).ToLowerInvariant();
-                    return types[ext];
-            }
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
 
         private Dictionary<string, string> GetMimeTypes()
         {

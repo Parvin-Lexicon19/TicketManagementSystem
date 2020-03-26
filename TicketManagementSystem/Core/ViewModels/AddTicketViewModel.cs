@@ -10,9 +10,7 @@ namespace TicketManagementSystem.Core.ViewModels
 {
     public class AddTicketViewModel
     {
-
         public Ticket   Ticket { get; set; }
         public List<IFormFile> File { get; set; }
-
     }
 }

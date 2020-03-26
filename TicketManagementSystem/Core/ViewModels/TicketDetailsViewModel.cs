@@ -9,8 +9,7 @@ using TicketManagementSystem.Core.Models;
 namespace TicketManagementSystem.Core.ViewModels
 {
     public class TicketDetailsViewModel
-    {
-       
+    {       
         public Ticket Ticket { get; set; }
 
         public List<IFormFile> File { get; set; }

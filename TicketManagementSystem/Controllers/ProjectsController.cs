@@ -193,8 +193,7 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
-            var anytickets= _context.Tickets.Where(t=>t.ProjectId==id).Count();
-            
+            var anytickets= _context.Tickets.Where(t=>t.ProjectId==id).Count();            
 
             if (anytickets == 0)
             {
@@ -204,9 +203,6 @@ namespace TicketManagementSystem.Controllers
             {
                 ViewData["formhide"] = "Hide";
             }
-
-
-
 
             return View(project);
         }

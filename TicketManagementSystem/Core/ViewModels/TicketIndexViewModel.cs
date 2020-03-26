@@ -10,7 +10,6 @@ namespace TicketManagementSystem.Core.ViewModels
 {
     public class TicketIndexViewModel
     {
-
         public Int64 Id { get; set; }
         [Required]
         [DisplayName("Ticket No.")]

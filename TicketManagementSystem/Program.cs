@@ -16,7 +16,7 @@ namespace TicketManagementSystem
     {
         public static void Main(string[] args)
         {
-            var host =CreateHostBuilder(args).Build();
+            var host = CreateHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())
             {
@@ -32,8 +32,8 @@ namespace TicketManagementSystem
                 var adminPW = config["KEY"];
 
                 try
-                { 
-                   SeedData.InitializeAsync(services, adminPW).Wait();
+                {
+                    SeedData.InitializeAsync(services, adminPW).Wait();
                 }
                 catch (Exception ex)
                 {
@@ -42,7 +42,7 @@ namespace TicketManagementSystem
                 }
             }
 
-              host.Run();
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

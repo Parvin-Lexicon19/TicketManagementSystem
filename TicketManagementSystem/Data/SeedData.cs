@@ -22,7 +22,6 @@ namespace TicketManagementSystem.Data
             var options = services.GetRequiredService<DbContextOptions<ApplicationDbContext>>();
             using (var context = new ApplicationDbContext(options))
             {
-
                 //seed BITOREQ company data to database
                 var foundcompany = await context.Companies.CountAsync(c => c.CompanyName == BITOREQNAME);
                 if (foundcompany == 0)
@@ -52,22 +51,19 @@ namespace TicketManagementSystem.Data
                         var companyabbr = rgx.Replace(companyname, "");
                         var company = new Company
                         {
-                            
                             CompanyName = companyname,
-                            CompanyAbbr = companyabbr.Substring(0,5).ToUpper(),
+                            CompanyAbbr = companyabbr.Substring(0, 5).ToUpper(),
                             Email = fake.Internet.Email(companyname),
                             Address = fake.Address.StreetAddress(),
                             City = fake.Address.City(),
                             Country = "Sweden"
-
                         };
                         newcompanies.Add(company);
                     }
 
-                        context.AddRange(newcompanies);
-                        context.SaveChanges();
+                    context.AddRange(newcompanies);
+                    context.SaveChanges();
                 }
-
 
                 var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
@@ -99,14 +95,14 @@ namespace TicketManagementSystem.Data
                 {
                     var foundUser = await userManager.FindByEmailAsync(email);
                     var companyid = await context.Companies.FirstOrDefaultAsync(c => c.CompanyName == BITOREQNAME);
-                    
+
                     if (foundUser != null) continue;
                     else
                     {
                         await NewUser(adminPW, userManager, email, companyid.Id);
                     }
                 }
-                
+
                 // Assigning roles for the admin users
                 foreach (var email in adminEmails)
                 {
@@ -115,16 +111,13 @@ namespace TicketManagementSystem.Data
                     if (adminUserRole.Count > 0) continue;
                     else
                     {
-
                         var addToRoleResult = await userManager.AddToRoleAsync(adminUser, "Admin");
 
                         if (!addToRoleResult.Succeeded)
                         {
                             throw new Exception(string.Join("\n", addToRoleResult.Errors));
                         }
-
                     }
-
                 }
 
                 //creating Developers
@@ -149,16 +142,13 @@ namespace TicketManagementSystem.Data
                     if (developerUserRole.Count > 0) continue;
                     else
                     {
-
                         var addToRoleResult = await userManager.AddToRoleAsync(developerUser, "Developer");
 
                         if (!addToRoleResult.Succeeded)
                         {
                             throw new Exception(string.Join("\n", addToRoleResult.Errors));
                         }
-
                     }
-
                 }
 
 
@@ -166,19 +156,15 @@ namespace TicketManagementSystem.Data
                 var CustomersEmails = new[] { "Customer1@bitoreq.se", "Customer2@bitoreq.se", "Customer3@bitoreq.se", "Customer4@bitoreq.se" };
                 var getCompanyIds = context.Companies.Where(c => c.CompanyName != BITOREQNAME).Select(v => v.Id).ToList();
 
-                
+
                 foreach (var email in CustomersEmails)
                 {
                     var foundUser = await userManager.FindByEmailAsync(email);
 
-
-                    
                     if (foundUser != null) continue;
                     else
                     {
-                        
                         var randomCompanyId = getCompanyIds.OrderBy(x => random.Next()).Take(1).FirstOrDefault();
-
                         await NewUser(adminPW, userManager, email, randomCompanyId);
                     }
                 }
@@ -192,7 +178,6 @@ namespace TicketManagementSystem.Data
                     if (CustomerUserRole.Count > 0) continue;
                     else
                     {
-
                         var addToRoleResult = await userManager.AddToRoleAsync(CustomerUser, "Customer");
 
                         if (!addToRoleResult.Succeeded)
@@ -200,7 +185,6 @@ namespace TicketManagementSystem.Data
                             throw new Exception(string.Join("\n", addToRoleResult.Errors));
                         }
                     }
-
                 }
 
                 //Seed 4 Projects
@@ -216,7 +200,7 @@ namespace TicketManagementSystem.Data
                         for (int j = 1; j < 3; j++)
                         {
                             var getcopantabbr = context.Companies.Where(c => c.Id == company).Select(c => c.CompanyAbbr).FirstOrDefault();
-                            List<string> deverlopers =await context.UserRoles.Where(r => r.RoleId == roleid).Select(r => r.UserId).ToListAsync();
+                            List<string> deverlopers = await context.UserRoles.Where(r => r.RoleId == roleid).Select(r => r.UserId).ToListAsync();
 
                             int index = random.Next(deverlopers.Count);
                             string developeerid = deverlopers[index];

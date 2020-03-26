@@ -63,8 +63,8 @@ namespace TicketManagementSystem.Core.Models
         //Received,
         Started,
         Closed 
-
     }
+
     /*Assigned numbers are number of work days, you may change them if you want*/
     public enum Priority
     {

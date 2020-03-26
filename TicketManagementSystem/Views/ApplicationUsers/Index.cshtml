@@ -22,7 +22,6 @@
                     <p>Customers</p>
                 </h1>
             </a>
-
         }
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -55,9 +54,6 @@
                             <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Developer">Admins/Developers</a>
                         </li>
                     }
-
-
-
                 </ul>
             </div>
         }
@@ -91,7 +87,7 @@
             </th>
             <th></th>
         </tr>
-        </thead>
+     </thead>
     <tbody>
         @foreach (var item in Model)
         {

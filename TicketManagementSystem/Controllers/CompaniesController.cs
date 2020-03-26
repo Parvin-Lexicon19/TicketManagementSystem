@@ -102,9 +102,7 @@ namespace TicketManagementSystem.Controllers
             }
             
 
-            return View(company);
-
-            
+            return View(company);            
         }
 
         // POST: Companies/Edit/5

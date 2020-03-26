@@ -112,6 +112,7 @@
             @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
         </dd>
     </dl>
+
     <!--If Ticket status is closed show every details.-->
     @if (Model.Ticket.Status == Status.Closed)
     {
@@ -146,9 +147,8 @@
             </dd>
         </dl>
     }
+
     <!-- If Ticket status is not closed Hide the fields below and show them only when Edit button is clicked .-->
-
-
     <dl class="row hide collapse">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.RealPriority)
@@ -195,14 +195,12 @@
         </dl>
 
         <dl class="row">
-
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Ticket.ResponseDesc)
             </dt>
             <dd class="col-sm-4">
                 <textarea class="form-control RespDesc" asp-for="Ticket.ResponseDesc" rows="5" id="comment"></textarea>
             </dd>
-
         </dl>
     </div>
 
@@ -210,7 +208,6 @@
 
 @if (Model.Documents.Count != 0)
 {
-
     @foreach (var item in Model.Documents)
     {
         <dl class="row">
@@ -233,18 +230,15 @@
         </dl>
         i++;
     }
-
-
 }
+
 else
 {
     <dl class="row">
 
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Documents)
-        </dt>
-      
-
+        </dt>   
     </dl>
 }
 
@@ -321,7 +315,7 @@ $("#commentModalCenter").modal('show');
 $("#btnHideModal").click(function () {
 $("#commentModalCenter").modal('hide');
 });
-            @* Toggle between Edit and Save button *@
+ @* Toggle between Edit and Save button *@
 $("#SaveEditbtn").click(function () {
 
 if ($(this).text() == "Edit") {
@@ -349,7 +343,7 @@ var relPriority = $('.RealPriority').val();
 var idOfTicket = @Model.Ticket.Id;
 var isValid = true;
 
-    // Check for changing the Ticket status to 'Closed'.
+    //Check for changing the Ticket status to 'Closed'.
     if (status == 3) {
 
         if (hours == "0" || hours== "") {
@@ -364,27 +358,26 @@ var isValid = true;
             alert("If you are  closing ticket,Give Response Description");
             isValid = false;
         }
-
     }
-    // Response Type should be filled only when the status is closed.
+    //Response Type should be filled only when the status is closed.
     if (resType != "" && status != 3)
     {
         alert("Response Type should be filled only when the Ticket status is closed!");
         isValid = false;
     }
-    // Response Description should be filled only when the status is closed.
+    //Response Description should be filled only when the status is closed.
     else if (resDesc != "" && status != 3)
     {
         alert("Response Description should be filled only when the Ticket status is closed!");
         isValid = false;
     }
-    // Hours should be 0.
+    //Hours should be 0.
     else if ((hours == "") && status != 3)
     {
         alert("Hours should not be space.Should be Integer.");
         isValid = false;
     }
-        // Hours should be filled only when the status is changed to closed.
+    //Hours should be filled only when the status is changed to closed.
     else if ((hours != "0") && status != 3)
     {
         alert("Hours should be filled only when the Ticket status is closed!");
@@ -402,6 +395,5 @@ var isValid = true;
         });
      }
     })
-
 
 </script>
