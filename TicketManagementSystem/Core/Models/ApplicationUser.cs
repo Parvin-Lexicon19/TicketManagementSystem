@@ -10,26 +10,30 @@ namespace TicketManagementSystem.Core.Models
 {
     public class ApplicationUser:IdentityUser
     {
-        [Display(Name = "User Name")]
+        [Display(Name = "Användarnamn")]
         public override string UserName
         {
             get { return base.UserName; }
             set { base.UserName = value; }
         }
 
-        [Display(Name = "Company Abbr")]
+        [Display(Name = "Företagets Förkortning")]
         public int CompanyId { get; set; }
+        [Display(Name = "Förnamn")]
         public String FirstName { get; set; }
+        [Display(Name = "Efternamn")]
         public String LastName { get; set; }
         public String FullName { get => FirstName + " " + LastName; }
 
-        [Display(Name = "Job Title")]
+        [Display(Name = "Jobbtitel")]
         public String JobTitle { get; set; }
+        [Display(Name = "Land")]
         public String Country { get; set; }
 
         [Required(ErrorMessage ="Email Required")]
         [EmailAddress(ErrorMessage ="Enter Valid Email")]
         [Remote(action: "EmailExist", controller: "ApplicationUsers")]
+        [Display(Name = "E-post")]
         public override string Email
         {
             get { return base.Email; }
@@ -37,7 +41,7 @@ namespace TicketManagementSystem.Core.Models
         }
 
 
-        [Display(Name = "Phone Number")]
+        [Display(Name = "Telefonnummer")]
         public override string PhoneNumber
         {
             get { return base.PhoneNumber; }
@@ -50,6 +54,7 @@ namespace TicketManagementSystem.Core.Models
         public ICollection<Document> Documents { get; set; }
         public ICollection<Project> ProjectDeveloper1 { get; set; }
         public ICollection<Project> ProjectDeveloper2 { get; set; }
+        [Display(Name = "Företag")]
         public Company Company { get; set; }
     }
 }

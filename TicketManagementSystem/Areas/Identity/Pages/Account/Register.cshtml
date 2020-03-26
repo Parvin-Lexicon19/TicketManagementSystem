@@ -1,7 +1,7 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register - A New User";
+    ViewData["Title"] = "Registrera - en ny användare";
     var roles = (List<IdentityRole>)ViewData["roles"];
 
 }
@@ -62,7 +62,7 @@
                     <label asp-for="Input.Role"></label>
                     <span class="text-danger field-validation-error">*</span>
                     <select asp-for="Input.Role" class="form-control" asp-items='new SelectList(roles,"Id","Name")'>
-                        <option value=""> Choose a Role</option>
+                        <option value=""> Välj en roll </option>
                     </select>
     
                     <span class="field-validation-valid text-danger"
@@ -75,7 +75,7 @@
                     <label asp-for="Input.CompanyName"></label>
                     <span class="text-danger">*</span>
                     <select asp-for="Input.CompanyName" class="form-control" asp-items="Model.CompanyOption">
-                        <option value=""> Choose a Company</option>
+                        <option value=""> Välj ett företag </option>
 
                     </select>
                     <span class="field-validation-valid text-danger"
@@ -85,7 +85,7 @@
                 </div>
                 <br />
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Register</button>
+                    <button type="submit" class="btn btn-primary">Registrera</button>
                 </div>
                 <br />
             </form>

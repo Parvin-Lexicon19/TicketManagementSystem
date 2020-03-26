@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+    <h1>Redigera</h1>
 
 <hr />
 <div class="row">
@@ -59,14 +59,14 @@
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Spara" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index" asp-route-name=@ViewData["PageName"]>Back to List</a>
+    <a asp-action="Index" asp-route-name=@ViewData["PageName"]>Tillbaka till listan</a>
 </div>
 
 @section Scripts {

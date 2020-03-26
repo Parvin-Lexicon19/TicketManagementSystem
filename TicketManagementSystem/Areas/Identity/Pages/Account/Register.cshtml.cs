@@ -63,50 +63,50 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "E-post")]
             public string Email { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Lösenord")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "Bekräfta lösenord")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
             [Required]
 
-            [Display(Name = "Role")]
+            [Display(Name = "Roll")]
             public string Role { get; set; }
             [Required]
 
-            [Display(Name = "FirstName")]
+            [Display(Name = "Förnamn")]
             [StringLength(50)]
             public string FirstName { get; set; }            
 
             [Required]
-            [Display(Name = "LastName")]
+            [Display(Name = "Efternamn")]
             [StringLength(50)]
 
             public string LastName { get; set; }
 
-            [Display(Name = "Country")]
+            [Display(Name = "Land")]
 
             public string Country { get; set; }
 
-            [Display(Name = "Phone Number")]
+            [Display(Name = "Telefonnummer")]
             [StringLength(30)]
 
             public string PhoneNumber { get; set; }
 
-            [Display(Name = "Job Title")]
+            [Display(Name = "Jobbtitel")]
             public string JobTitle { get; set; }
 
             [Required]
-            [Display(Name = "Company Name")]
+            [Display(Name = "Företagsnamn")]
             public string CompanyName { get; set; }
 
       

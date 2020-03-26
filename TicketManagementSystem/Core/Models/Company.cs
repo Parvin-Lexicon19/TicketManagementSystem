@@ -28,7 +28,7 @@ namespace TicketManagementSystem.Core.Models
         public int? PostalCode { get; set; }
         [Display(Name = "Land")]
         public string Country { get; set; }
-        [Display(Name = "Phone Number")]
+        [Display(Name = "Telefonnummer")]
         public string PhoneNumber { get; set; }
         public ICollection<ApplicationUser> ApplicationUser { get; set; }        
         public ICollection<Project> Projects { get; set; }

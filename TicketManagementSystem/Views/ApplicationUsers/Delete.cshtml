@@ -4,12 +4,12 @@
     ViewData["Title"] = "Delete";
 }
 
-@*<h1>Delete</h1>*@
+    <h1>Radera</h1>
 
 
 @if (@ViewBag.formhide == "Show")
 {
-   <h3>Are you sure you want to delete this user?</h3>
+<h3>Är du säker på att du vill ta bort den här användaren?</h3>
 }
 else if (@ViewBag.formhide == "Hide")
 {
@@ -17,12 +17,12 @@ else if (@ViewBag.formhide == "Hide")
     @if (@ViewBag.PageName == "Developer")
     {
 
-        <p id="deletemsg"><b>This User cannot be deleted. There are some related projects to this developer.</b></p>
+        <p id="deletemsg"><b>Den här användaren kan inte raderas. Det finns några relaterade projekt till denna utvecklare.</b></p>
     }
     else
     {
 
-        <p id="deletemsg"><b>This User cannot be deleted.There are related tickets for this customer.</b></p>
+        <p id="deletemsg"><b>Den här användaren kan inte raderas. Det finns relaterade biljetter för den här kunden.</b></p>
 
     }
 
@@ -31,13 +31,13 @@ else if (@ViewBag.formhide == "Hide")
 else if (@ViewBag.formhide == "Admin")
 {
 
-    <p id="deletemsg"><b>Admin user cannot be deleted.</b></p>
+    <p id="deletemsg"><b>Administratörsanvändaren kan inte raderas.</b></p>
     
 }
 
 
 <div>
-    <h4>Company</h4>
+    <h4>Företag</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -94,12 +94,12 @@ else if (@ViewBag.formhide == "Admin")
         <form asp-action="Delete">
             <input type="hidden" asp-for="Id" asp-route-name=@ViewData["PageName"] />
             <input type="submit" value="Delete" class="btn btn-danger" /> |
-            <a asp-action="Index" asp-route-name=@ViewData["PageName"]>Back to List</a>
+            <a asp-action="Index" asp-route-name=@ViewData["PageName"]>Tillbaka till listan</a>
         </form>
     }
     else
     {
-        <a asp-action="Index" asp-route-name=@ViewData["PageName"]>Back to List</a>
+<a asp-action="Index" asp-route-name=@ViewData["PageName"]>Tillbaka till listan</a>
     }
 
 </div>
