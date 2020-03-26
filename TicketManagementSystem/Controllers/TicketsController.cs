@@ -655,10 +655,10 @@ namespace TicketManagementSystem.Controllers
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               $"The Ticket {ticketRefNo} is closed",
+                               $"Ticket {ticketRefNo} closed",
                                $"Hello dear {createdUser.FirstName}," +
-                               $"<br/><br/>The Ticket {ticketRefNo} is closed by { loggedInUser}. " +
-                               $"<br/><br/>See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details." +
+                               $"<br/><br/>The Ticket <b>{ticketRefNo}</b> closed by { loggedInUser}." +
+                               $"<br/>Please see the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details</a>." +
                                $"<br/><br/>Thank you,<br/>Bitoreq Admin");
                     }
                 }
