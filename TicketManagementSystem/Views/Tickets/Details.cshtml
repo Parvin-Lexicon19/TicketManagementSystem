@@ -354,15 +354,15 @@ var isValid = true;
     if (status == 3) {
 
         if (hours == "0" || hours== "") {
-            alert("If you are the closing ticket,Please fill the hours spent");
+            alert("Om du är den slutliga biljetten, fyll i timmarna");
             isValid = false;
         }
         else if (resType == "") {
-            alert("If you are the closing ticket,Choose Response Type");
+            alert("Om du är den slutande biljetten, välj svarstyp");
             isValid = false;
         }
         else if (resDesc == "") {
-            alert("If you are  closing ticket,Give Response Description");
+            alert("Om du stänger biljetten, ge svarbeskrivning");
             isValid = false;
         }
 
@@ -370,25 +370,25 @@ var isValid = true;
     // Response Type should be filled only when the status is closed.
     if (resType != "" && status != 3)
     {
-        alert("Response Type should be filled only when the Ticket status is closed!");
+        alert("Svarstyp bör endast fyllas när biljettstatusen är stängd!");
         isValid = false;
     }
     // Response Description should be filled only when the status is closed.
     else if (resDesc != "" && status != 3)
     {
-        alert("Response Description should be filled only when the Ticket status is closed!");
+        alert("Svarbeskrivning bör endast fyllas när biljettstatusen är stängd!");
         isValid = false;
     }
     // Hours should be 0.
     else if ((hours == "") && status != 3)
     {
-        alert("Hours should not be space.Should be Integer.");
+        alert("Öppettiderna bör inte vara tomma.");
         isValid = false;
     }
         // Hours should be filled only when the status is changed to closed.
     else if ((hours != "0") && status != 3)
     {
-        alert("Hours should be filled only when the Ticket status is closed!");
+        alert("Öppettider bör endast fyllas när biljettstatusen är stängd!");
         isValid = false;
     }
 
@@ -397,7 +397,7 @@ var isValid = true;
     if (isValid == true) {
          $.post(url, { id: idOfTicket, HoursSpent: hours, Status: status, RespDesc: resDesc, RespType: resType, RelPriority: relPriority }, function (data) {
 
-            alert("Ticket updated successfully !!.");
+            alert("Biljetten uppdaterades framgångsrikt !!.");
             window.location = "/Tickets/Index"
 
         });
