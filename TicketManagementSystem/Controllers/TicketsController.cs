@@ -663,7 +663,7 @@ namespace TicketManagementSystem.Controllers
                     }
                 }
 
-                return "The Ticket status successfully Upadated !!";
+                return "The ticket status upadated successfully!";
             }
             catch (DbUpdateConcurrencyException)
             {
