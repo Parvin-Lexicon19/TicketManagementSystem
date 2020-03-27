@@ -225,12 +225,15 @@ namespace TicketManagementSystem.Data
 
         private static async Task NewUser(string adminPW, UserManager<ApplicationUser> userManager, string email, int companyid)
         {
+            var fake = new Faker();
             var user = new ApplicationUser
             {
                 UserName = email,
                 Email = email,
                 CompanyId = companyid,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FirstName = fake.Person.FirstName,
+                LastName = fake.Person.LastName
             };
 
             var result = await userManager.CreateAsync(user, adminPW);
