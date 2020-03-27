@@ -479,11 +479,11 @@ namespace TicketManagementSystem.Controllers
             {
                 await _emailSender.SendEmailAsync(
                   developer.Email,
-                  $"New Ticket Submitted: {ticketRefNo}",
-                  $"Hello dear {developer.FirstName}," +
-                  $"<br/><br/>A new ticket with RefNo. <b>{ticketRefNo}</b> submitted by {loggedInUser.Email} from <b>{loggedInUserCompany.CompanyName}</b> Company. " +
-                  $"<br/>Please see the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details</a>." +
-                  $"<br/><br/>Thank you,<br/>Bitoreq Admin");
+                  $"Ny biljett skickad: {ticketRefNo}",
+                  $"Hej {developer.FirstName}," +
+                  $"<br/><br/>En ny biljett med biljettnummer. <b>{ticketRefNo}</b> insänd av {loggedInUser.Email} från <b>{loggedInUserCompany.CompanyName}</b> Företag. " +
+                  $"<br/>Se biljetten här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Biljettinformation </a>." +
+                  $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
             }
 
             return RedirectToAction(nameof(EmailSent));
@@ -602,7 +602,7 @@ namespace TicketManagementSystem.Controllers
 
             if (newTicket == null)
             {
-                return "The ticket not found";
+                return "Biljetten hittades inte";
             }
 
             /*Update only the changed value to database.*/
@@ -660,10 +660,10 @@ namespace TicketManagementSystem.Controllers
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               $"The Ticket - {ticketRefNo} Priority Change Notification !!!",
-                               $"Hello dear {createdUser.FirstName}," +
-                               $"<br/><br/>The Ticket's {ticketRefNo} priority has been changed from{previousPriority}  to {RelPriority} and is changed by { loggedInUser}. " +
-                               $"<br/><br/>Thank you,<br/>Bitoreq Admin");
+                               $"Biljetten - {ticketRefNo} Meddelande om prioritetsändring !!!",
+                               $"Hej {createdUser.FirstName}," +
+                               $"<br/><br/>Biljetterna {ticketRefNo} prioritet har ändrats från {previousPriority}  till {RelPriority} och ändras av { loggedInUser}. " +
+                               $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
                     }
                 }
 
@@ -679,18 +679,18 @@ namespace TicketManagementSystem.Controllers
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               $"The Ticket {ticketRefNo} is closed",
-                               $"Hello dear {createdUser.FirstName}," +
-                               $"<br/><br/>The Ticket {ticketRefNo} is closed by { loggedInUser}. " +
-                               $"<br/><br/>See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Details." +
-                               $"<br/><br/>Thank you,<br/>Bitoreq Admin");
+                               $"Biljetten {ticketRefNo} Stängt",
+                               $"Hej {createdUser.FirstName}," +
+                               $"<br/><br/>Biljetten {ticketRefNo} är stängd av { loggedInUser}. " +
+                               $"<br/><br/>Se biljetten här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Detaljer </a>" +
+                               $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
                     }   
                 }
-                return "The Ticket status successfully Upadated !!";
+                return "Biljettstatusen har uppdaterats !!";
             }
             catch (DbUpdateConcurrencyException)
             {
-                return "Ticket Not found";
+                return "Biljett Inte hittat";
             }
         }
 

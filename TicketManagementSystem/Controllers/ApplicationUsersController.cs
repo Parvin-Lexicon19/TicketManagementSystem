@@ -278,7 +278,7 @@ namespace TicketManagementSystem.Controllers
             
             if (emailexists !=0)
             {
-                return Json($"Email Already Exists. Please update to another email id");
+                return Json($"E-post finns redan. Uppdatera till ett annat e-post-id");
             }
 
             return Json(true);
