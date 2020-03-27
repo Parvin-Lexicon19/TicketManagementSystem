@@ -13,49 +13,61 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.RefNo)
 
-                @Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "Index", new { sortorder = ViewBag.RefNoSortParm })
+                @*@Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "Index", new { sortorder = ViewBag.RefNoSortParm })*@
 
             </th>
             <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.Title), "Index", new { sortOrder = ViewBag.TitleSortParm })
+                @Html.DisplayNameFor(model => model.Title)
+
+                @*@Html.ActionLink(Html.DisplayNameFor(model => model.Title), "Index", new { sortOrder = ViewBag.TitleSortParm })*@
             </th>
             <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectNameSortParm })
+                @Html.DisplayNameFor(model => model.ProjectName)
+                @*@Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectNameSortParm })*@
             </th>
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
+            @*@if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {*@
 
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
-                </th>
-            }
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+
+            @*@Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })*@
+        </th>
+            @*}
             else
             {
                 <th>
                     @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
                 </th>
-            }
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.CustomerPriority), "Index", new { sortOrder = ViewBag.CustomerPrioritySortParm })
-            </th>
+            }*@
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerPriority)
+
+            @*@Html.ActionLink(Html.DisplayNameFor(model => model.CustomerPriority), "Index", new { sortOrder = ViewBag.CustomerPrioritySortParm })*@
+        </th>
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.RealPriority), "Index", new { sortOrder = ViewBag.RealPrioritySortParm })
-                </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RealPriority)
+            @*@Html.ActionLink(Html.DisplayNameFor(model => model.RealPriority), "Index", new { sortOrder = ViewBag.RealPrioritySortParm })*@
+        </th>
             }
-            <th scope="col" colspan="2">
-                @Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.DueDateSortParm })
-            
-            
-            </th>
+        <th scope="col" colspan="2">
+            @Html.DisplayNameFor(model => model.DueDate)
+
+            @*@Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.DueDateSortParm })*@
+
+        </th>
 
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.UserEmail), "index", new { sortorder = ViewBag.AssignedToSortParm })
-                </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserEmail)
+
+            @*@Html.ActionLink(Html.DisplayNameFor(model => model.UserEmail), "index", new { sortorder = ViewBag.AssignedToSortParm })*@
+        </th>
             }
             <th></th>
         </tr>
