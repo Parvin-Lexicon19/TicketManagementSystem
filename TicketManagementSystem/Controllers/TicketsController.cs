@@ -590,6 +590,8 @@ namespace TicketManagementSystem.Controllers
         [HttpPost]
         public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority)
         {
+            var priorityChange = false;
+            Priority previousPriority = RelPriority;
             var newTicket = _context.Tickets.Find(id);
 
             string loggedInUser = (string)TempData["loggedInUser"];
@@ -626,7 +628,9 @@ namespace TicketManagementSystem.Controllers
             /*Real Priority*/
             if (newTicket.RealPriority != (Priority)(RelPriority))
             {
+                previousPriority = (Priority)newTicket.RealPriority;
                 newTicket.RealPriority = (Priority)(RelPriority);
+                priorityChange = true;
 
                 /*Change the due date upon changing the real priority*/
                 newTicket.DueDate = DateTimeExtensions.SetDueDate(newTicket.RealPriority);
@@ -644,6 +648,22 @@ namespace TicketManagementSystem.Controllers
             {
                 _context.Update(newTicket);
                 _context.SaveChanges();
+
+                /*Generate Email when priority is changed.*/
+                if (priorityChange == true)
+                {
+                    var ticketRefNo = newTicket.RefNo;
+
+                    if (createdUser != null)
+                    {
+                        _emailSender.SendEmailAsync(
+                               createdUser.Email,
+                               $"The Ticket - {ticketRefNo} Priority Change Notification!",
+                               $"Hello dear {createdUser.FirstName}," +
+                               $"<br/><br/>The Ticket's {ticketRefNo} priority has been changed from{previousPriority}  to {RelPriority} and is changed by { loggedInUser}. " +
+                               $"<br/><br/>Thank you,<br/>Bitoreq Admin");
+                    }
+                }
 
                 /*Generate Email while closing Ticket*/
                 if (Status == Status.Closed)
