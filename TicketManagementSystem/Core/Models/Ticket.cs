@@ -32,6 +32,7 @@ namespace TicketManagementSystem.Core.Models
         [DisplayName("Projekt")]
         public int ProjectId { get; set; }
         [Required]
+
         [DisplayName("Prioritet")]
         public Priority CustomerPriority { get; set; }
         [DisplayName("Verklig Prioritering")]
@@ -84,10 +85,12 @@ namespace TicketManagementSystem.Core.Models
 
     public enum ResponseType
     {
-        A = 1,
-        B = 2,
-        C = 3,
-        D = 4,
-        E = 5
+        Nyttkrav = 1,
+        Felrättning = 2,
+        Handhavandefel = 3,
+        Otillräckliginformation = 4,
+        Feliomgivandesystem = 5,
+        Ändringiomgivandesystem =6,
+        Annat
     }
 }
