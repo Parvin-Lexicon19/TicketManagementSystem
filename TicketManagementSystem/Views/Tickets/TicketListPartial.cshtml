@@ -108,25 +108,43 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ProjectName)
             </td>
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
+            @*@if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {*@
 
                 <td>
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
 
-            }
+            @*}
             else
             {
                 <td>
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
+            }*@
+
+            @if (User.IsInRole("Customer"))
+            {
+                @if (item.Status == Status.Utkast)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerPriority)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RealPriority)
+                    </td>
+
+                }
             }
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerPriority)
-            </td>
+
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerPriority)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.RealPriority)
                 </td>

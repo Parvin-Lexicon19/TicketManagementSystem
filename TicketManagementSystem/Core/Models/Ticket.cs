@@ -35,7 +35,7 @@ namespace TicketManagementSystem.Core.Models
 
         [DisplayName("Prioritet")]
         public Priority CustomerPriority { get; set; }
-        [DisplayName("Verklig Prioritering")]
+        [DisplayName("Bitoreq Prioritet")]
         public Priority RealPriority { get; set; }
         [Required]
         [DisplayName("Förfallodatum")]
@@ -85,12 +85,17 @@ namespace TicketManagementSystem.Core.Models
 
     public enum ResponseType
     {
+        [Display(Name = "Nytt krav")]
         Nyttkrav = 1,
         Felrättning = 2,
+        [Display(Name = "Handhavande fel")]
         Handhavandefel = 3,
+        [Display(Name = "Otillräcklig information")]
         Otillräckliginformation = 4,
+        [Display(Name = "Fel i omgivande system")]
         Feliomgivandesystem = 5,
+        [Display(Name = "Ändring i omgivande system")]
         Ändringiomgivandesystem =6,
-        Annat
+        Annat = 7
     }
 }

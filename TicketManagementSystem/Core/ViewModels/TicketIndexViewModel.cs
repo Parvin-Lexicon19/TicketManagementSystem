@@ -24,7 +24,7 @@ namespace TicketManagementSystem.Core.ViewModels
         public string ProjectName { get; set; }
         [DisplayName("Prioritet")]
         public Priority? CustomerPriority { get; set; }
-        [DisplayName("Verklig Prioritering")]
+        [DisplayName("Bitoreq Prioritet")]
         public Priority? RealPriority { get; set; }
         public string AssignedTo { get; set; }
         [Required]
