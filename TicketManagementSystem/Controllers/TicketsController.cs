@@ -477,6 +477,14 @@ namespace TicketManagementSystem.Controllers
         /*Ticket has been assigned to developer1, but emails sent to both developer1 and developer2*/
         private async Task<IActionResult> SubmittedTicketEmail(Company loggedInUserCompany, string callbackUrl, string ticketRefNo)
         {
+            await _emailSender.SendEmailAsync(
+                  loggedInUser.Email,
+                  $"Your Ticket Submitted: {ticketRefNo}",
+                  $"Hello {loggedInUser.FirstName}," +
+                  $"<br/><br/>Your new ticket with RefNo. <b>{ticketRefNo}</b> submitted. " +
+                  $"<br/>See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details </a>." +
+                  $"<br/><br/>Thank you,<br/>Bitoreq Admin");
+
             foreach (var developer in ticketProjectDevelopers)
             {
                 await _emailSender.SendEmailAsync(
