@@ -19,12 +19,27 @@
             @Html.DisplayFor(model => model.Ticket.RefNo)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
+        </dd>        
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.Title)
         </dt>
         <dd class="col-sm-4">
             @Html.DisplayFor(model => model.Ticket.Title)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Ticket.CreatedDate)
+        </dd>        
     </dl>
+
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.Problem)
@@ -33,13 +48,12 @@
             @Html.DisplayFor(model => model.Ticket.Problem)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.CreatedUser)
+            @Html.DisplayNameFor(model => model.Ticket.LastUpdated)
         </dt>
         <dd class="col-sm-4">
-            @Html.DisplayFor(model => model.Ticket.CreatedUser.Email)
-        </dd>        
+            @Html.DisplayFor(model => model.Ticket.LastUpdated)
+        </dd>
     </dl>
-
     <dl class="row">
         @if (User.IsInRole("Customer"))
         {
@@ -60,26 +74,11 @@
             </dd>
         }
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
-        </dt>
-        <dd class="col-sm-4">
-            @Html.DisplayFor(model => model.Ticket.CreatedDate)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.ClosedDate)
         </dt>
         <dd class="col-sm-4">
             @Html.DisplayFor(model => model.Ticket.ClosedDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.LastUpdated)
-        </dt>
-        <dd class="col-sm-4">
-            @Html.DisplayFor(model => model.Ticket.LastUpdated)
-
-        </dd>
+        </dd>        
     </dl>
     <dl class="row">
         <dt class="col-sm-2">
@@ -122,13 +121,13 @@
     }
 <dl class="row">
 
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
-    </dt>
-    <dd class="col-sm-4">
-        @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
-    </dd>
-    @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (Model.Ticket.Status == Status.Stängd)) 
+     <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.CreatedUser)
+     </dt>
+     <dd class="col-sm-4">
+         @Html.DisplayFor(model => model.Ticket.CreatedUser.Email)
+     </dd>
+    @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (Model.Ticket.Status == Status.Stängd))
     {
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.RealPriority)
