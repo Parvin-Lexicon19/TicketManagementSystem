@@ -11,7 +11,7 @@ namespace TicketManagementSystem.Core.Models
     public class Project
     {
         public int Id { get; set; }
-        [Display(Name = "Kundersnamn")]
+        [Display(Name = "Kunder")]
         public int CompanyId { get; set; }
         [Required]
         [StringLength(70)]
@@ -27,7 +27,7 @@ namespace TicketManagementSystem.Core.Models
         [DataType(DataType.Date)] 
         [Required]
         public DateTime ReleaseDate { get; set; }
-        [Display(Name = "Senaste Uppdateringen")]
+        [Display(Name = "Release Datum")]
         [DataType(DataType.Date)]
         [Remote(action: "CheckLastUpdate", controller: "Projects", AdditionalFields = "ReleaseDate")]
         public DateTime? LastUpdate { get; set; }

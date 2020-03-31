@@ -6,7 +6,7 @@
 
     <h1>Redigera</h1>
 
-    <h4>Projekt</h4>
+    <h4>Lösning</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,7 +17,9 @@
             {
                 <div class="form-group">
                     <label asp-for="CompanyId" class="control-label"></label>
-                    <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
+                    <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId">
+
+                    </select>
                     <span asp-validation-for="CompanyId" class="text-danger"></span>
                 </div>
             }
@@ -38,12 +40,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="Developer1" class="control-label"></label>
-                <select asp-for="Developer1" class="form-control" asp-items="ViewBag.Developer1"></select>
+                <select asp-for="Developer1" class="form-control" asp-items="ViewBag.Developer1">
+                    <option value="">Välj Utvecklare 1</option>
+                </select>
                 <span asp-validation-for="Developer1" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Developer2" class="control-label"></label>
-                <select asp-for="Developer2" class="form-control"  asp-items="ViewBag.Developer2"><option value="">Select Developer2</option></select>
+                <select asp-for="Developer2" class="form-control"  asp-items="ViewBag.Developer2">
+                    <option value="">Välj Utvecklare 2</option>
+                </select>
                 <span asp-validation-for="Developer2" class="text-danger"></span>
             </div>
             <div class="form-group">

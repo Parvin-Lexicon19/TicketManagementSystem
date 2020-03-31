@@ -3,7 +3,7 @@
     ViewData["Title"] = "Add Ticket";
 }
 
-    <h1>Lägg till biljett</h1>
+    <h1>Lägg Till Ärende</h1>
 
 @*<h4>Ticket</h4>*@
 <hr />
@@ -36,14 +36,14 @@
             <div class="form-group">
                 <label asp-for="Ticket.ProjectId" class="control-label"></label>
                 <select id="projectDropDownList" asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
-                    <option value="">Välj Projekt</option>
+                    <option value="">Välj Lösning</option>
                 </select>
                 <span asp-validation-for="Ticket.ProjectId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Ticket.CustomerPriority" class="control-label">Prioritet</label>
                 <select asp-for="Ticket.CustomerPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control">
-                    <option value="">Välj prioritet</option>
+                    <option value="">Välj Prioritet</option>
                 </select>
                 <span asp-validation-for="Ticket.CustomerPriority" class="text-danger"></span>
             </div>

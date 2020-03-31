@@ -14,7 +14,7 @@ namespace TicketManagementSystem.Core.Models
         [Display(Name = "Kunder Förkortning")]
         public string CompanyAbbr { get; set; }
         [Required]
-        [Display(Name = "kundersnamn")]
+        [Display(Name = "Kundersnamn")]
         public string CompanyName { get; set; }
         [Display(Name = "Kontaktperson")]
         public string ContactPerson { get; set; }
