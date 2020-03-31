@@ -30,18 +30,12 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Ticket.Problem)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.CreatedDate)
-        </dd>
-        <dt class="col-sm-2">
+        @*<dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Ticket.HoursSpent)
-        </dd>
+        </dd>*@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.Status)
         </dt>
@@ -54,7 +48,7 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Ticket.CustomerPriority)
         </dd>
-        <dt class="col-sm-2">
+        @*<dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.RealPriority)
         </dt>
         <dd class="col-sm-10">
@@ -71,6 +65,12 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Ticket.ClosedDate)
+        </dd>*@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.CreatedDate)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.LastUpdated)
@@ -78,7 +78,7 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Ticket.LastUpdated)
         </dd>
-        <dt class="col-sm-2">
+        @*<dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.ResponseType)
         </dt>
         <dd class="col-sm-10">
@@ -89,7 +89,7 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Ticket.ResponseDesc)
-        </dd>
+        </dd>*@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.Project)
         </dt>
@@ -113,23 +113,23 @@
 
             @foreach (var item in Model.Documents)
             {
-                
-                    @if (i == 0)
-                    {
-                        <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.Documents)
-                        </dt>
-                    }
-                    else
-                    {
-                        <dt class="col-sm-2">
-                        </dt>
-                    }
-                    <dd class="col-sm-10">
-                        <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-                    </dd>
 
-              
+                @if (i == 0)
+                {
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Documents)
+                    </dt>
+                }
+                else
+                {
+                    <dt class="col-sm-2">
+                    </dt>
+                }
+                <dd class="col-sm-10">
+                    <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                </dd>
+
+
                 i++;
             }
         }

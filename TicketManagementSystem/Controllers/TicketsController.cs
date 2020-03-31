@@ -426,13 +426,13 @@ namespace TicketManagementSystem.Controllers
             model.Ticket.CreatedDate = DateTime.Now;
             model.Ticket.LastUpdated = DateTime.Now;
 
-            model.Ticket.RealPriority = model.Ticket.CustomerPriority;
-            model.Ticket.DueDate = DateTimeExtensions.SetDueDate(model.Ticket.CustomerPriority);
+            model.Ticket.RealPriority = model.Ticket.CustomerPriority;            
             
             switch (submit)
             {
                 case "Skicka in":
                     model.Ticket.Status = Status.Inkommen;
+                    model.Ticket.DueDate = DateTimeExtensions.SetDueDate(model.Ticket.CustomerPriority);
                     var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
                     ticketProjectDevelopers = new List<ApplicationUser>();
                     if (ticketProject.Developer1 != null)
@@ -526,13 +526,14 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> Edit(long id, TicketDetailsViewModel model, string submit)
         {
             model.Ticket.RealPriority = model.Ticket.CustomerPriority;
-            model.Ticket.DueDate = DateTimeExtensions.SetDueDate(model.Ticket.CustomerPriority);
+            model.Ticket.LastUpdated = DateTime.Now;            
 
             switch (submit)
             {
                 case "Skicka in":
                     model.Ticket.Status = Status.Inkommen;
                     model.Ticket.CreatedDate = DateTime.Now;
+                    model.Ticket.DueDate = DateTimeExtensions.SetDueDate(model.Ticket.CustomerPriority);
                     var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
                     ticketProjectDevelopers = new List<ApplicationUser>();
                     if (ticketProject.Developer1 != null)
