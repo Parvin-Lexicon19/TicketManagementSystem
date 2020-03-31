@@ -125,7 +125,7 @@
     <dd class="col-sm-4">
         @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
     </dd>
-    @if (User.IsInRole("Admin") || User.IsInRole("Developer") && (Model.Ticket.Status == Status.Stängd)) 
+    @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (Model.Ticket.Status == Status.Stängd)) 
     {
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.RealPriority)
