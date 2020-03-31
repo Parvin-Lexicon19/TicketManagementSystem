@@ -424,6 +424,8 @@ namespace TicketManagementSystem.Controllers
                 m => (int.Parse(m.Value) + 1).ToString(new string('0', m.Value.Length)));
 
             model.Ticket.CreatedDate = DateTime.Now;
+            model.Ticket.LastUpdated = DateTime.Now;
+
             model.Ticket.RealPriority = model.Ticket.CustomerPriority;
             model.Ticket.DueDate = DateTimeExtensions.SetDueDate(model.Ticket.CustomerPriority);
             
