@@ -639,6 +639,7 @@ namespace TicketManagementSystem.Controllers
             if (Status == Status.Stängd)
             {
                 newTicket.ClosedDate = DateTime.Now;
+
             }
 
             newTicket.LastUpdated = DateTime.Now;

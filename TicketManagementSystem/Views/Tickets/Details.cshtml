@@ -41,13 +41,24 @@
     </dl>
 
     <dl class="row">
-
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.CustomerPriority)
-        </dt>
-        <dd class="col-sm-4">
-            @Html.DisplayFor(model => model.Ticket.CustomerPriority)
-        </dd>
+        @if (User.IsInRole("Customer"))
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticket.CustomerPriority)
+            </dt>
+            <dd class="col-sm-4">
+                @Html.DisplayFor(model => model.Ticket.RealPriority)
+            </dd>
+        }
+        else
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticket.CustomerPriority)
+            </dt>
+            <dd class="col-sm-4">
+                @Html.DisplayFor(model => model.Ticket.CustomerPriority)
+            </dd>
+        }
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.DueDate)
         </dt>
@@ -88,30 +99,42 @@
     <!--If Ticket status not closed. and want to show the Ticket status -->
     @if (Model.Ticket.Status != Status.Stängd)
     {
-        <dl class="row hidestatus">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.Status)
-            </dt>
-            <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.Status)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.RealPriority)
-            </dt>
-            <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.RealPriority)
-            </dd>
-        </dl>
-    }
-    <dl class="row">
-
+<dl class="row hidestatus">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Ticket.Status)
+    </dt>
+    <dd class="col-sm-4">
+        @Html.DisplayFor(model => model.Ticket.Status)
+    </dd>
+    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+    {
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
+            @Html.DisplayNameFor(model => model.Ticket.RealPriority)
+        </dt>
+    <dd class="col-sm-4">
+        @Html.DisplayFor(model => model.Ticket.RealPriority)
+    </dd>
+    }
+</dl>
+    }
+<dl class="row">
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
+    </dt>
+    <dd class="col-sm-4">
+        @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
+    </dd>
+    @if (User.IsInRole("Admin") || User.IsInRole("Developer") && (Model.Ticket.Status == Status.Stängd)) 
+    {
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.RealPriority)
         </dt>
         <dd class="col-sm-4">
-            @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
+            @Html.DisplayFor(model => model.Ticket.RealPriority)
         </dd>
-    </dl>
+    }
+</dl>
     <!--If Ticket status is closed show every details.-->
     @if (Model.Ticket.Status == Status.Stängd)
     {
