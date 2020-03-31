@@ -54,7 +54,7 @@ namespace TicketManagementSystem.Core.Models
         public ICollection<Document> Documents { get; set; }
         public ICollection<Project> ProjectDeveloper1 { get; set; }
         public ICollection<Project> ProjectDeveloper2 { get; set; }
-        [Display(Name = "Företag")]
+        [Display(Name = "Kunder")]
         public Company Company { get; set; }
     }
 }

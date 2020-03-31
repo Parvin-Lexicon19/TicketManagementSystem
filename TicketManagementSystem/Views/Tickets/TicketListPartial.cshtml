@@ -149,7 +149,7 @@
                     @Html.DisplayFor(modelItem => item.RealPriority)
                 </td>
             }
-            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Lämnats || item.Status == Status.Satteigång) && (item.DueDate < DateTime.Now))
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Inkommen || item.Status == Status.Påbörjade) && (item.DueDate < DateTime.Now))
             {
                 <td>
                     @Html.DisplayFor(modelItem => item.DueDate)

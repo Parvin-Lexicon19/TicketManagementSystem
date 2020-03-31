@@ -7,7 +7,7 @@
    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
        <div class="container">
          
-               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="IndexCompanyTickets"><h1>Företagets biljetter</h1></a>
+               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="IndexCompanyTickets"><h1>Kunder Ärende</h1></a>
 
            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                    aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,7 @@
                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                    @*<partial name="_LoginPartial" />*@
                    <ul class="navbar-nav flex-grow-1">
-                       <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index">Mina biljetter </a>
+                       <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index">Mina Ärende</a>
                    </ul>
                </div>
 
@@ -31,9 +31,9 @@
                         <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
                             <option selected="selected" value="">Status</option>
                         </select>
-                        <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
+                        @*<select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
                             <option selected="selected" value="">Prioritet</option>
-                        </select>
+                        </select>*@
 
 
                 </div>

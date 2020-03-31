@@ -11,7 +11,7 @@ namespace TicketManagementSystem.Core.Models
     public class Ticket
     {
         public Int64 Id { get; set; }
-        [DisplayName("Biljettnummer")]
+        [DisplayName("Ärendenummer")]
         public string RefNo { get; set; }
         [Required]
         public string Title { get; set; }
@@ -19,17 +19,17 @@ namespace TicketManagementSystem.Core.Models
         [StringLength(500)]
         [DisplayName("Beskrivning")]
         public string Problem { get; set; }
-        [DisplayName("Skapad av")]
+        [DisplayName("Skapad Av")]
         public string CreatedBy { get; set; }
         [DisplayName("Skapat Datum")]
         public DateTime CreatedDate { get; set; }
         [DisplayName("Tilldelats")]
         public string AssignedTo { get; set; }
-        [DisplayName("Tillbringade Timmar")]
+        [DisplayName("Arbetstimmar")]
         public double HoursSpent { get; set; }
         [Required]
         public Status Status { get; set; }
-        [DisplayName("Projekt")]
+        [DisplayName("Lösning")]
         public int ProjectId { get; set; }
         [Required]
 
@@ -51,7 +51,7 @@ namespace TicketManagementSystem.Core.Models
         public ICollection<Document> Documents { get; set; }
         [DisplayName("kommentarer")]
         public ICollection<Comment> Comments { get; set; }
-        [DisplayName("Projekt")]
+        [DisplayName("Lösning")]
         public Project Project { get; set; }
         [DisplayName("Skapad Användare")]
         public virtual ApplicationUser CreatedUser { get; set; }
@@ -62,8 +62,9 @@ namespace TicketManagementSystem.Core.Models
     public enum Status
     {
         Utkast,
-        Lämnats,
-        Satteigång,
+        Inkommen,
+        [Display(Name = "På började")]
+        Påbörjade,
         Stängd
     }
 

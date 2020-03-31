@@ -11,10 +11,10 @@ namespace TicketManagementSystem.Core.Models
         public int Id { get; set; }
         [Required]
         [StringLength(5)]
-        [Display(Name = "Företagets Förkortning")]
+        [Display(Name = "Kunder Förkortning")]
         public string CompanyAbbr { get; set; }
         [Required]
-        [Display(Name = "Företagsnamn")]
+        [Display(Name = "kundersnamn")]
         public string CompanyName { get; set; }
         [Display(Name = "Kontaktperson")]
         public string ContactPerson { get; set; }
