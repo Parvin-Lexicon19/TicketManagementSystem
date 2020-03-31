@@ -13,14 +13,14 @@ namespace TicketManagementSystem.Core.ViewModels
 
         public Int64 Id { get; set; }
         [Required]
-        [DisplayName("Biljettnummer")]
+        [DisplayName("Ärendenummer")]
         public string RefNo { get; set; }
         [Required]
         public string Title { get; set; }
         [DisplayName("Status")]
         public Status? Status { get; set; }
         public int ProjectId { get; set; }
-        [DisplayName("Projekt")]
+        [DisplayName("Lösning")]
         public string ProjectName { get; set; }
         [DisplayName("Prioritet")]
         public Priority? CustomerPriority { get; set; }

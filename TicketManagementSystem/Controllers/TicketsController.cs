@@ -430,7 +430,7 @@ namespace TicketManagementSystem.Controllers
             switch (submit)
             {
                 case "Skicka in":
-                    model.Ticket.Status = Status.Lämnats;
+                    model.Ticket.Status = Status.Inkommen;
                     var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
                     ticketProjectDevelopers = new List<ApplicationUser>();
                     if (ticketProject.Developer1 != null)
@@ -458,7 +458,7 @@ namespace TicketManagementSystem.Controllers
                 if (model.File != null)
                     Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
                
-                if (model.Ticket.Status.Equals(Status.Lämnats))
+                if (model.Ticket.Status.Equals(Status.Inkommen))
                 {
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
                     var ticketRefNo = model.Ticket.RefNo;
@@ -529,7 +529,7 @@ namespace TicketManagementSystem.Controllers
             switch (submit)
             {
                 case "Skicka in":
-                    model.Ticket.Status = Status.Lämnats;
+                    model.Ticket.Status = Status.Inkommen;
                     model.Ticket.CreatedDate = DateTime.Now;
                     var ticketProject = await _context.Projects.FirstOrDefaultAsync(g => g.Id == model.Ticket.ProjectId);
                     ticketProjectDevelopers = new List<ApplicationUser>();
@@ -571,7 +571,7 @@ namespace TicketManagementSystem.Controllers
                     }
                 }
 
-                if (model.Ticket.Status.Equals(Status.Lämnats))
+                if (model.Ticket.Status.Equals(Status.Inkommen))
                 {
                     Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);

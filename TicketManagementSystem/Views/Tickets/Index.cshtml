@@ -8,11 +8,11 @@
        <div class="container">
            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
            {
-               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Alla biljetter</h1></a>
+               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Alla Ärende</h1></a>
            }
            else
            {
-               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Mina biljetter</h1></a>
+               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Mina Ärende</h1></a>
 
            }
            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -27,13 +27,13 @@
                    <ul class="navbar-nav flex-grow-1">
 
                        <li class="nav-item">
-                           <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">&nbsp;Företag</a>
+                           <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">&nbsp;Kunder</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">&nbsp;Projekt</a>
+                           <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">&nbsp;Lösning</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Customer">Kunder</a>
+                           <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Customer">Användare</a>
                        </li>
                        <li class="nav-item">
                            <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Developer">Administratörer / Utvecklare</a>
@@ -49,7 +49,7 @@
                    @*<partial name="_LoginPartial" />*@
                    <ul class="navbar-nav flex-grow-1">
 
-                       <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="IndexCompanyTickets">Företagets biljetter</a>
+                       <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="IndexCompanyTickets">Kunder Ärende</a>
 
                    </ul>
                </div>
@@ -61,19 +61,19 @@
                 <div class="input-group-append">
                     @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
                     {
-                        <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Utkast" ))" class="form-control">
+                        <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text != "Utkast"))" class="form-control">
                             <option selected="selected" value="">Status</option>
                         </select>
                         <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
                             <option selected="selected" value="">Prioritet</option>
                         </select>
                         <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
-                            <option selected="selected" value="">Verkligprioritering</option>
+                            <option selected="selected" value="">BitoreqPrioritet</option>
                         </select>
                         <select name="priorities" class="form-control">
-                            <option selected="selected" value="">Priorities</option>
-                            <option  value="1">Match</option>
-                            <option  value="2">Ingen Match</option>
+                            <option selected="selected" value="">PrioMatch</option>
+                            <option value="1">Match</option>
+                            <option value="2">Ingen Match</option>
                         </select>
                     }
                     else
@@ -81,14 +81,15 @@
                         <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
                             <option selected="selected" value="">Status</option>
                         </select>
-                        <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
+                            
+                      @*<select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
                             <option selected="selected" value="">Prioritet</option>
-                        </select>
+                        </select>*@
 
+                          
                     }
 
-
-                </div>
+                        </div>
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary"><i class="fa fa-search">&emsp;Sök</i></button>   
                 </div>
