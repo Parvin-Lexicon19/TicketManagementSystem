@@ -33,11 +33,11 @@
             @Html.DisplayFor(model => model.Ticket.Problem)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
+            @Html.DisplayNameFor(model => model.Ticket.CreatedUser)
         </dt>
         <dd class="col-sm-4">
-            @Html.DisplayFor(model => model.Ticket.CreatedDate)
-        </dd>
+            @Html.DisplayFor(model => model.Ticket.CreatedUser.Email)
+        </dd>        
     </dl>
 
     <dl class="row">
@@ -60,10 +60,10 @@
             </dd>
         }
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.DueDate)
+            @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
         </dt>
         <dd class="col-sm-4">
-            @Html.DisplayFor(model => model.Ticket.DueDate)
+            @Html.DisplayFor(model => model.Ticket.CreatedDate)
         </dd>
     </dl>
     <dl class="row">
@@ -88,12 +88,15 @@
         <dd class="col-sm-4">
             @Html.DisplayFor(model => model.Ticket.Project.Name)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.CreatedUser)
-        </dt>
-        <dd class="col-sm-4">
-            @Html.DisplayFor(model => model.Ticket.CreatedUser.Email)
-        </dd>
+        @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticket.DueDate)
+            </dt>
+            <dd class="col-sm-4">
+                @Html.DisplayFor(model => model.Ticket.DueDate)
+            </dd>
+        }
     </dl>
 
     <!--If Ticket status not closed. and want to show the Ticket status -->

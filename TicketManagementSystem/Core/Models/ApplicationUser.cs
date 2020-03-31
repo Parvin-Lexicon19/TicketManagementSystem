@@ -17,7 +17,7 @@ namespace TicketManagementSystem.Core.Models
             set { base.UserName = value; }
         }
 
-        [Display(Name = "Företagets Förkortning")]
+        [Display(Name = "Kunder Förkortning")]
         public int CompanyId { get; set; }
         [Display(Name = "Förnamn")]
         public String FirstName { get; set; }
