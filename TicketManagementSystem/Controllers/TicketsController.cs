@@ -473,7 +473,7 @@ namespace TicketManagementSystem.Controllers
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
                     var ticketRefNo = model.Ticket.RefNo;
 
-                    return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo);
+                    return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo, model.NotifyCustomer);
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -483,16 +483,18 @@ namespace TicketManagementSystem.Controllers
         }
 
         /*Ticket has been assigned to developer1, but emails sent to both developer1 and developer2*/
-        private async Task<IActionResult> SubmittedTicketEmail(Company loggedInUserCompany, string callbackUrl, string ticketRefNo)
+        private async Task<IActionResult> SubmittedTicketEmail(Company loggedInUserCompany, string callbackUrl, string ticketRefNo, bool notifyCustomer)
         {
-            await _emailSender.SendEmailAsync(
-                  loggedInUser.Email,
-                  $"Din ärende inkommen: {ticketRefNo}",
-                  $"Hej {loggedInUser.FirstName}," +
-                  $"<br/><br/>Din nya ärende med ärendenummer. <b>{ticketRefNo}</b> inkommen. " +
-                  $"<br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>." +
-                   $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
-
+            if (notifyCustomer == true)
+            {
+                await _emailSender.SendEmailAsync(
+                      loggedInUser.Email,
+                      $"Din ärende inkommen: {ticketRefNo}",
+                      $"Hej {loggedInUser.FirstName}," +
+                      $"<br/><br/>Din nya ärende med ärendenummer. <b>{ticketRefNo}</b> inkommen. " +
+                      $"<br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>." +
+                       $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
+            }
             foreach (var developer in ticketProjectDevelopers)
             {
                 await _emailSender.SendEmailAsync(
@@ -596,7 +598,7 @@ namespace TicketManagementSystem.Controllers
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
                     var ticketRefNo = model.Ticket.RefNo;
 
-                    return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo);
+                    return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo, true);
                 }
 
                 return RedirectToAction(nameof(Index));

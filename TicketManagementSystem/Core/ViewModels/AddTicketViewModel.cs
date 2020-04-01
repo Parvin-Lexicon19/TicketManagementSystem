@@ -14,6 +14,7 @@ namespace TicketManagementSystem.Core.ViewModels
 
         public Ticket   Ticket { get; set; }
         public Company CustomerCompany { get; }
+        public bool NotifyCustomer { get; set; }
         public List<IFormFile> File { get; set; }
 
     }
