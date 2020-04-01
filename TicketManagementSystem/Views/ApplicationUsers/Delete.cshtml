@@ -4,12 +4,12 @@
     ViewData["Title"] = "Delete";
 }
 
-    <h1>Radera</h1>
+<h1>Radera</h1>
 
 
 @if (@ViewBag.formhide == "Show")
 {
-<h3>Är du säker på att du vill ta bort den här användaren?</h3>
+    <h3>Är du säker på att du vill ta bort den här användaren?</h3>
 }
 else if (@ViewBag.formhide == "Hide")
 {
@@ -18,21 +18,23 @@ else if (@ViewBag.formhide == "Hide")
     {
 
         <p id="deletemsg"><b>Den här användaren kan inte raderas. Det finns några relaterade projekt till denna utvecklare.</b></p>
+        <h3>Vill du fortfarande göra användaren inaktiv??</h3>
     }
     else
     {
 
         <p id="deletemsg"><b>Den här användaren kan inte raderas. Det finns relaterade ärende för den här användare.</b></p>
+        <h3>Vill du fortfarande göra användaren inaktiv??</h3>
 
     }
 
-   
+
 }
 else if (@ViewBag.formhide == "Admin")
 {
 
     <p id="deletemsg"><b>Administratörsanvändaren kan inte raderas.</b></p>
-    
+
 }
 
 
@@ -99,9 +101,11 @@ else if (@ViewBag.formhide == "Admin")
     }
     else
     {
-<a asp-action="Index" asp-route-name=@ViewData["PageName"]>Tillbaka till listan</a>
-    }
 
-</div>
+<a asp-controller="ApplicationUsers" asp-action="InActive" asp-route-id="@Model.Id" asp-route-name=@ViewData["PageName"]> <button class="btn btn-danger">Inaktiv</button></a>  
+        <a asp-action="Index" asp-route-name=@ViewData["PageName"]>Tillbaka till listan</a>
+
+    }
+    </div>
 
 

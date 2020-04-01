@@ -203,6 +203,21 @@ namespace TicketManagementSystem.Data
 
                 }
 
+                ////updating existing users with activeuserflag
+                var userscount = userManager.Users.Count();
+
+                var users = userManager.Users.Where(u => u.ActiveUser != true).ToList();
+                if (userscount == users.Count)
+                {
+
+                    foreach (var user in users)
+                    {
+                        user.ActiveUser = true;
+                        await userManager.UpdateAsync(user);
+                        await context.SaveChangesAsync();
+                    }
+                }
+
                 //Seed 4 Projects
                 var Projects = await context.Projects.CountAsync();
                 string roleid = context.Roles.Where(r => r.Name == "Developer").FirstOrDefault().Id;
