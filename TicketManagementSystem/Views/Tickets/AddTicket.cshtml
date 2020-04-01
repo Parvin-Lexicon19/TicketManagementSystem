@@ -3,7 +3,7 @@
     ViewData["Title"] = "Add Ticket";
 }
 
-    <h1>Lägg Till Ärende</h1>
+<h1>Lägg Till Ärende</h1>
 
 @*<h4>Ticket</h4>*@
 <hr />
@@ -77,9 +77,20 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Tillbaka till listan</a>
-</div>
+@if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+{
+    <div>
+        <a asp-action="Index">Tillbaka till listan</a>
+    </div>
+}
+
+@if (User.IsInRole("Customer"))
+{
+    <form>
+        <a asp-action="Index">Tillbaka till Mina Ärende listan</a> |
+        <a asp-action="IndexCompanyTickets">Tillbaka till Kunder Ärende listan </a>
+    </form>
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

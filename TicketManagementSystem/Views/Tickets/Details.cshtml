@@ -293,12 +293,25 @@ else
 
         }
     }
-<a asp-action="Index">Tillbaka till listan</a>
-    <br />
-    <br />
-    <span id="msg" class="text-danger"></span>
 
-</div>
+    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+    {
+        <a asp-action="Index">Tillbaka till listan</a>
+    }
+
+    @if (User.IsInRole("Customer"))
+    {
+        <form >
+            <a asp-action="Index">Tillbaka till Mina Ärende listan</a> |
+            <a asp-action="IndexCompanyTickets">Tillbaka till Kunder Ärende listan </a>
+        </form>
+     }
+
+            <br />
+            <br />
+            <span id="msg" class="text-danger"></span>
+
+    </div>
 
 <br />
 <br />

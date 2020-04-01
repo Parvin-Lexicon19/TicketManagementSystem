@@ -169,8 +169,8 @@ namespace TicketManagementSystem.Controllers
 
             // Search by Title
             model = string.IsNullOrWhiteSpace(title) ?
-                model :
-                model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
+            model :
+            model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
             // Search by Status
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
@@ -188,13 +188,13 @@ namespace TicketManagementSystem.Controllers
 
             // Search by Customer Priority Drowpdown
             model = customerPriority == null ?
-                model :
-                model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
+            model :
+            model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
 
             // Search by Real Priority Drowpdown
             model = adminPriority == null ?
-                model :
-                model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
+            model :
+            model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
 
             // Search by Match or Not-Match Priority Drowpdown
             if (priorities.GetValueOrDefault() == 1)
@@ -211,7 +211,7 @@ namespace TicketManagementSystem.Controllers
         }
 
         //Filter For company Tickets by Title, Status and Priorities
-        public async Task<IActionResult> FilterForCompanyTickets(string title, int? statusSearch, int? customerPriority, int? priorities, List<TicketIndexViewModel> model, string sortOrder)
+        public async Task<IActionResult> FilterForCompanyTickets(string title, int? statusSearch, int? customerPriority, int? adminPriority, int? priorities, List<TicketIndexViewModel> model, string sortOrder)
         {
             var loggedInUser = await userManager.GetUserAsync(User);
 
@@ -239,13 +239,18 @@ namespace TicketManagementSystem.Controllers
 
             // Search by Status
             model = statusSearch == null ?
-             model :
-             model.Where(m => m.Status == (Status)statusSearch).ToList();
+            model :
+            model.Where(m => m.Status == (Status)statusSearch).ToList();
 
             // Search by Customer Priority Drowpdown
             model = customerPriority == null ?
             model :
             model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
+
+            // Search by Real Priority Drowpdown
+            model = adminPriority == null ?
+            model :
+            model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
 
             //model = SortList(sortOrder, model);
             return View(nameof(IndexCompanyTickets), model);
