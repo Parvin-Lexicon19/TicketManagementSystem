@@ -30,7 +30,8 @@ namespace TicketManagementSystem.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ApplicationDbContext _context;
         private static ApplicationUser loggedInUser;
-        List<ApplicationUser> ticketProjectDevelopers;
+        private static IEnumerable<ApplicationUser> confirmedCustomers;
+        private List<ApplicationUser> ticketProjectDevelopers;        
         private readonly IEmailSender _emailSender;
 
         public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
@@ -386,8 +387,10 @@ namespace TicketManagementSystem.Controllers
 
             if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
+                ViewData["Companies"] = new SelectList(_context.Companies, "Id", "CompanyName");
+
                 var customers = await userManager.GetUsersInRoleAsync("Customer");
-                var confirmedCustomers = customers.Where(a => a.EmailConfirmed == true);
+                confirmedCustomers = customers.Where(a => a.EmailConfirmed == true);
                 ViewData["CreatedBy"] = new SelectList(confirmedCustomers, "Id", "Email").OrderBy(m => m.Text);
 
                 ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
@@ -841,6 +844,29 @@ namespace TicketManagementSystem.Controllers
                     _context.SaveChanges();
                 }
             }
+        }
+
+        [HttpPost]
+        public JsonResult GetCustomers(string companyId)
+        {
+            var compCustomers = confirmedCustomers;
+            var selectedCompanyCustomers= string.IsNullOrEmpty(companyId) ?
+                compCustomers
+                : compCustomers.Where(g => g.CompanyId.ToString() == companyId);
+
+
+            List<SelectListItem> selectListCustomers = new List<SelectListItem>();
+
+            foreach (var customer in selectedCompanyCustomers)
+            {
+                var selectItem = new SelectListItem
+                {
+                    Text = customer.Email,
+                    Value = customer.Id
+                };
+                selectListCustomers.Add(selectItem);
+            }
+            return Json(selectListCustomers);
         }
 
         [HttpPost]
