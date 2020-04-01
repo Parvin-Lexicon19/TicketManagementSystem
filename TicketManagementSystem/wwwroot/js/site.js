@@ -12,6 +12,25 @@ $(document).ready(function () {
     });
 });
 
+function FillCustomers() {
+    var companyId = $('#companyDropDownList').val();
+    $.ajax({
+        url: 'GetCustomers',
+        type: "POST",
+        dataType: "JSON",
+        data: { companyId: companyId },
+        success: function (customers) {
+            $("#customerDropDownList").html("");   //clear before appending new list
+            $("#customerDropDownList").append(
+                $('<option value="">Select Customer</option>'));
+            $.each(customers, function (i, customer) {
+                $("#customerDropDownList").append(
+                    $('<option value="' + customer.value + '">' + customer.text + '</option>'));
+            });
+        }
+    });
+}
+
 function FillProjects() {
     var customerId = $('#customerDropDownList').val();
     $.ajax({

@@ -30,7 +30,8 @@ namespace TicketManagementSystem.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ApplicationDbContext _context;
         private static ApplicationUser loggedInUser;
-        List<ApplicationUser> ticketProjectDevelopers;
+        private static IEnumerable<ApplicationUser> confirmedCustomers;
+        private List<ApplicationUser> ticketProjectDevelopers;        
         private readonly IEmailSender _emailSender;
 
         public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
@@ -169,8 +170,8 @@ namespace TicketManagementSystem.Controllers
 
             // Search by Title
             model = string.IsNullOrWhiteSpace(title) ?
-                model :
-                model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
+            model :
+            model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
             // Search by Status
             if (User.IsInRole("Admin") || User.IsInRole("Developer"))
@@ -188,13 +189,13 @@ namespace TicketManagementSystem.Controllers
 
             // Search by Customer Priority Drowpdown
             model = customerPriority == null ?
-                model :
-                model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
+            model :
+            model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
 
             // Search by Real Priority Drowpdown
             model = adminPriority == null ?
-                model :
-                model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
+            model :
+            model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
 
             // Search by Match or Not-Match Priority Drowpdown
             if (priorities.GetValueOrDefault() == 1)
@@ -211,7 +212,7 @@ namespace TicketManagementSystem.Controllers
         }
 
         //Filter For company Tickets by Title, Status and Priorities
-        public async Task<IActionResult> FilterForCompanyTickets(string title, int? statusSearch, int? customerPriority, int? priorities, List<TicketIndexViewModel> model, string sortOrder)
+        public async Task<IActionResult> FilterForCompanyTickets(string title, int? statusSearch, int? customerPriority, int? adminPriority, int? priorities, List<TicketIndexViewModel> model, string sortOrder)
         {
             var loggedInUser = await userManager.GetUserAsync(User);
 
@@ -239,13 +240,18 @@ namespace TicketManagementSystem.Controllers
 
             // Search by Status
             model = statusSearch == null ?
-             model :
-             model.Where(m => m.Status == (Status)statusSearch).ToList();
+            model :
+            model.Where(m => m.Status == (Status)statusSearch).ToList();
 
             // Search by Customer Priority Drowpdown
             model = customerPriority == null ?
             model :
             model.Where(m => m.CustomerPriority == (Priority)customerPriority).ToList();
+
+            // Search by Real Priority Drowpdown
+            model = adminPriority == null ?
+            model :
+            model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
 
             //model = SortList(sortOrder, model);
             return View(nameof(IndexCompanyTickets), model);
@@ -381,8 +387,10 @@ namespace TicketManagementSystem.Controllers
 
             if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
+                ViewData["Companies"] = new SelectList(_context.Companies, "Id", "CompanyName");
+
                 var customers = await userManager.GetUsersInRoleAsync("Customer");
-                var confirmedCustomers = customers.Where(a => a.EmailConfirmed == true);
+                confirmedCustomers = customers.Where(a => a.EmailConfirmed == true);
                 ViewData["CreatedBy"] = new SelectList(confirmedCustomers, "Id", "Email").OrderBy(m => m.Text);
 
                 ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
@@ -479,20 +487,20 @@ namespace TicketManagementSystem.Controllers
         {
             await _emailSender.SendEmailAsync(
                   loggedInUser.Email,
-                  $"Your Ticket Submitted: {ticketRefNo}",
-                  $"Hello {loggedInUser.FirstName}," +
-                  $"<br/><br/>Your new ticket with RefNo. <b>{ticketRefNo}</b> submitted. " +
-                  $"<br/>See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details </a>." +
-                  $"<br/><br/>Thank you,<br/>Bitoreq Admin");
+                  $"Din ärende inkommen: {ticketRefNo}",
+                  $"Hej {loggedInUser.FirstName}," +
+                  $"<br/><br/>Din nya ärende med ärendenummer. <b>{ticketRefNo}</b> inkommen. " +
+                  $"<br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>." +
+                   $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
 
             foreach (var developer in ticketProjectDevelopers)
             {
                 await _emailSender.SendEmailAsync(
                   developer.Email,
-                  $"Ny biljett skickad: {ticketRefNo}",
+                  $"Ny ärende skickad: {ticketRefNo}",
                   $"Hej {developer.FirstName}," +
-                  $"<br/><br/>En ny biljett med biljettnummer. <b>{ticketRefNo}</b> insänd av {loggedInUser.Email} från <b>{loggedInUserCompany.CompanyName}</b> Företag. " +
-                  $"<br/>Se biljetten här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Biljettinformation </a>." +
+                  $"<br/><br/>En ny ärende med ärendenummer. <b>{ticketRefNo}</b> insänd av {loggedInUser.Email} från <b>{loggedInUserCompany.CompanyName}</b> Kunder. " +
+                  $"<br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>." +
                   $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
             }
 
@@ -613,7 +621,7 @@ namespace TicketManagementSystem.Controllers
 
             if (newTicket == null)
             {
-                return "Biljetten hittades inte";
+                return "Ärende hittades inte";
             }
 
             /*Update only the changed value to database.*/
@@ -672,9 +680,9 @@ namespace TicketManagementSystem.Controllers
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               $"Biljetten - {ticketRefNo} Meddelande om prioritetsändring !!!",
+                               $"Ärendenummer - {ticketRefNo} Meddelande om prioritetsändring!",
                                $"Hej {createdUser.FirstName}," +
-                               $"<br/><br/>Biljetterna {ticketRefNo} prioritet har ändrats från {previousPriority}  till {RelPriority} och ändras av { loggedInUser}. " +
+                               $"<br/><br/>Ärendenummer {ticketRefNo} prioritet har ändrats från {previousPriority}  till {RelPriority} och ändras av { loggedInUser}. " +
                                $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
                     }
                 }
@@ -691,18 +699,18 @@ namespace TicketManagementSystem.Controllers
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               $"Biljetten {ticketRefNo} Stängt",
+                               $"Ärendenummer {ticketRefNo} Stängt",
                                $"Hej {createdUser.FirstName}," +
-                               $"<br/><br/>Biljetten {ticketRefNo} är stängd av { loggedInUser}. " +
-                               $"<br/><br/>Se biljetten här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Detaljer </a>" +
+                               $"<br/><br/>Ärendenummer {ticketRefNo} är stängd av { loggedInUser}. " +
+                               $"<br/><br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>" +
                                $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
                     }   
                 }
-                return "Biljettstatusen har uppdaterats !!";
+                return "Ärendestatus har uppdaterats!";
             }
             catch (DbUpdateConcurrencyException)
             {
-                return "Biljett Inte hittat";
+                return "Ärende Inte hittat";
             }
         }
 
@@ -836,6 +844,29 @@ namespace TicketManagementSystem.Controllers
                     _context.SaveChanges();
                 }
             }
+        }
+
+        [HttpPost]
+        public JsonResult GetCustomers(string companyId)
+        {
+            var compCustomers = confirmedCustomers;
+            var selectedCompanyCustomers= string.IsNullOrEmpty(companyId) ?
+                compCustomers
+                : compCustomers.Where(g => g.CompanyId.ToString() == companyId);
+
+
+            List<SelectListItem> selectListCustomers = new List<SelectListItem>();
+
+            foreach (var customer in selectedCompanyCustomers)
+            {
+                var selectItem = new SelectListItem
+                {
+                    Text = customer.Email,
+                    Value = customer.Id
+                };
+                selectListCustomers.Add(selectItem);
+            }
+            return Json(selectListCustomers);
         }
 
         [HttpPost]

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TicketManagementSystem.Core.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace TicketManagementSystem.Core.ViewModels
 {
@@ -12,6 +13,7 @@ namespace TicketManagementSystem.Core.ViewModels
     {
 
         public Ticket   Ticket { get; set; }
+        public Company CustomerCompany { get; }
         public List<IFormFile> File { get; set; }
 
     }
