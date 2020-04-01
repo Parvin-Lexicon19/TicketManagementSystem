@@ -487,20 +487,20 @@ namespace TicketManagementSystem.Controllers
         {
             await _emailSender.SendEmailAsync(
                   loggedInUser.Email,
-                  $"Your Ticket Submitted: {ticketRefNo}",
-                  $"Hello {loggedInUser.FirstName}," +
-                  $"<br/><br/>Your new ticket with RefNo. <b>{ticketRefNo}</b> submitted. " +
-                  $"<br/>See the ticket here: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ticket Details </a>." +
-                  $"<br/><br/>Thank you,<br/>Bitoreq Admin");
+                  $"Din ärende inkommen: {ticketRefNo}",
+                  $"Hej {loggedInUser.FirstName}," +
+                  $"<br/><br/>Din nya ärende med ärendenummer. <b>{ticketRefNo}</b> inkommen. " +
+                  $"<br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>." +
+                   $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
 
             foreach (var developer in ticketProjectDevelopers)
             {
                 await _emailSender.SendEmailAsync(
                   developer.Email,
-                  $"Ny biljett skickad: {ticketRefNo}",
+                  $"Ny ärende skickad: {ticketRefNo}",
                   $"Hej {developer.FirstName}," +
-                  $"<br/><br/>En ny biljett med biljettnummer. <b>{ticketRefNo}</b> insänd av {loggedInUser.Email} från <b>{loggedInUserCompany.CompanyName}</b> Företag. " +
-                  $"<br/>Se biljetten här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Biljettinformation </a>." +
+                  $"<br/><br/>En ny ärende med ärendenummer. <b>{ticketRefNo}</b> insänd av {loggedInUser.Email} från <b>{loggedInUserCompany.CompanyName}</b> Kunder. " +
+                  $"<br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>." +
                   $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
             }
 
@@ -621,7 +621,7 @@ namespace TicketManagementSystem.Controllers
 
             if (newTicket == null)
             {
-                return "Biljetten hittades inte";
+                return "Ärende hittades inte";
             }
 
             /*Update only the changed value to database.*/
@@ -680,9 +680,9 @@ namespace TicketManagementSystem.Controllers
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               $"Biljetten - {ticketRefNo} Meddelande om prioritetsändring !!!",
+                               $"Ärendenummer - {ticketRefNo} Meddelande om prioritetsändring!",
                                $"Hej {createdUser.FirstName}," +
-                               $"<br/><br/>Biljetterna {ticketRefNo} prioritet har ändrats från {previousPriority}  till {RelPriority} och ändras av { loggedInUser}. " +
+                               $"<br/><br/>Ärendenummer {ticketRefNo} prioritet har ändrats från {previousPriority}  till {RelPriority} och ändras av { loggedInUser}. " +
                                $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
                     }
                 }
@@ -699,18 +699,18 @@ namespace TicketManagementSystem.Controllers
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               $"Biljetten {ticketRefNo} Stängt",
+                               $"Ärendenummer {ticketRefNo} Stängt",
                                $"Hej {createdUser.FirstName}," +
-                               $"<br/><br/>Biljetten {ticketRefNo} är stängd av { loggedInUser}. " +
-                               $"<br/><br/>Se biljetten här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Detaljer </a>" +
+                               $"<br/><br/>Ärendenummer {ticketRefNo} är stängd av { loggedInUser}. " +
+                               $"<br/><br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>" +
                                $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
                     }   
                 }
-                return "Biljettstatusen har uppdaterats !!";
+                return "Ärendestatus har uppdaterats!";
             }
             catch (DbUpdateConcurrencyException)
             {
-                return "Biljett Inte hittat";
+                return "Ärende Inte hittat";
             }
         }
 
