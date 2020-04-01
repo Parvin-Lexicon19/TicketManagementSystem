@@ -10,6 +10,8 @@
     <Compile Remove="Data\Migrations\20200227123927_Enums.Designer.cs" />
     <Compile Remove="Data\Migrations\20200302102833_TicketProjectIdIsRequired.cs" />
     <Compile Remove="Data\Migrations\20200302102833_TicketProjectIdIsRequired.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200401104033_addactiveusers.cs" />
+    <Compile Remove="Data\Migrations\20200401104033_addactiveusers.Designer.cs" />
   </ItemGroup>
 
 

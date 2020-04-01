@@ -30,7 +30,7 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> Index(string name)
         {
             
-            var users = from u in userManager.Users.Include(c=>c.Company).Where(u=>u.EmailConfirmed)
+            var users = from u in userManager.Users.Include(c=>c.Company).Where(u=>u.EmailConfirmed).Where(u=>u.ActiveUser)
                         join ur in _context.UserRoles on u.Id equals ur.UserId
                         join r in _context.Roles on ur.RoleId equals r.Id
                         select new ApplicationUserwithRole
@@ -105,7 +105,7 @@ namespace TicketManagementSystem.Controllers
             }
 
 
-
+            
             ViewData["PageName"] = name;
             return View(user);
         }
@@ -116,13 +116,13 @@ namespace TicketManagementSystem.Controllers
         [Route("Edit/{id}/{name}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, string name, [Bind("Id,UserName,FirstName,LastName,Email,CompanyId,JobTitle,Country,PhoneNumber")] ApplicationUser applicationuser)
+        public async Task<IActionResult> Edit(string id, string name, [Bind("Id,UserName,FirstName,LastName,Email,CompanyId,JobTitle,Country,PhoneNumber,ActiveUser")] ApplicationUser applicationuser)
         {
             if (id != applicationuser.Id)
             {
                 return NotFound();
             }
-
+            //var t = applicationuser.ActiveUser;
             applicationuser.UserName = applicationuser.Email;
             if (ModelState.IsValid)
             {
@@ -138,7 +138,7 @@ namespace TicketManagementSystem.Controllers
                     user.Country = applicationuser.Country;
                     user.PhoneNumber = applicationuser.PhoneNumber;
                     user.CompanyId = applicationuser.CompanyId;
-
+                    user.ActiveUser = applicationuser.ActiveUser;
                     
                     await _context.SaveChangesAsync();
                 }
@@ -250,6 +250,26 @@ namespace TicketManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Route("InActive/{id}/{name}")]
+        public async Task<IActionResult> InActive(string id, string name)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            user.ActiveUser = false;
+            await userManager.UpdateAsync(user);
+            await _context.SaveChangesAsync();
+
+            if (name == "Developer")
+            {
+
+                return RedirectToAction("Index", "ApplicationUsers", new { name = "Developer" });
+            }
+            else if (name == "Customer")
+            {
+                return RedirectToAction("Index", "ApplicationUsers", new { name = "Customer" });
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
 
 
         //private IQueryable<ApplicationUserwithRole> GetUsersBasedonRoles(string rolename)
@@ -272,9 +292,11 @@ namespace TicketManagementSystem.Controllers
 
         //    return users;
         //}
-        public IActionResult EmailExist(string Email)
+        public IActionResult EmailExist(string Email,string id)
         {
-            var  emailexists = userManager.Users.Where(u=>u.Email== Email).Count();
+            var existingemail = userManager.Users.Where(u => u.Id == id).FirstOrDefault().Email;
+
+            var  emailexists = userManager.Users.Where(u=>u.Email!= existingemail).Where(u => u.Email == Email).Count();
             
             if (emailexists !=0)
             {

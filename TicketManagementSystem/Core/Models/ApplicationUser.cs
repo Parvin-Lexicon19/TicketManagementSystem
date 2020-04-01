@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace TicketManagementSystem.Core.Models
 
         [Required(ErrorMessage ="Email Required")]
         [EmailAddress(ErrorMessage ="Enter Valid Email")]
-        [Remote(action: "EmailExist", controller: "ApplicationUsers")]
+        [Remote(action: "EmailExist", controller: "ApplicationUsers" , AdditionalFields = "Id")]
         [Display(Name = "E-post")]
         public override string Email
         {
@@ -47,6 +48,10 @@ namespace TicketManagementSystem.Core.Models
             get { return base.PhoneNumber; }
             set { base.PhoneNumber = value; }
         }
+
+        [Required]
+        [DefaultValue(true)]
+        public bool ActiveUser { get; set; }
 
         public ICollection<Ticket> TicketCreatedBy { get; set; }
         public ICollection<Ticket> TicketAssignedTo { get; set; }
