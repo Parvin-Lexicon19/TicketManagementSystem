@@ -4,12 +4,22 @@
 }
 
     <h1>Mail skickat</h1>
-<p>
-    <h6 style="color:forestgreen">
-        <br />Tack för att du skickade in biljetten.
-        <br />E-post skickas till projektutvecklare och de kommer tillbaka till dig efter att ha granskat biljetten.<br /><br />
-    </h6>
-</p>
+    <p>
+        @if (User.IsInRole("Customer"))
+        {
+            <h6 style="color:forestgreen">
+                <br />Tack för att du skickade in biljetten.
+                <br />E-post skickas till projektutvecklare och de kommer tillbaka till dig efter att ha granskat biljetten.<br /><br />
+            </h6>
+        }
+        else if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+        {
+            <h6 style="color:forestgreen">
+                <br />Tack för att du skickade in biljetten.
+                <br />E-post skickas till användare och projektutvecklare.<br /><br />
+            </h6>
+        }
+    </p>
 
 <div>
     <a asp-action="Index">Tillbaka till listan</a>
