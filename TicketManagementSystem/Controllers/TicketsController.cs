@@ -609,7 +609,7 @@ namespace TicketManagementSystem.Controllers
 
         // Edit Ticket Through Detail Screen.
         [HttpPost]
-        public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority)
+        public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority, DateTime DueD)
         {
             var priorityChange = false;
             Priority previousPriority = RelPriority;
@@ -647,6 +647,10 @@ namespace TicketManagementSystem.Controllers
             if (newTicket.HoursSpent != HoursSpent)
                 newTicket.HoursSpent = HoursSpent;
 
+            /*Due Date*/
+            if (newTicket.DueDate != DueD)
+                newTicket.DueDate = DueD;
+
             /*Real Priority*/
             if (newTicket.RealPriority != (Priority)(RelPriority))
             {
@@ -655,12 +659,11 @@ namespace TicketManagementSystem.Controllers
                 priorityChange = true;
 
                 /*Change the due date upon changing the real priority*/
-                newTicket.DueDate = DateTimeExtensions.SetDueDate(newTicket.RealPriority);
+                //newTicket.DueDate = DateTimeExtensions.SetDueDate(newTicket.RealPriority);
             }
             if (Status == Status.Stängd)
             {
                 newTicket.ClosedDate = DateTime.Now;
-
             }
 
             newTicket.LastUpdated = DateTime.Now;

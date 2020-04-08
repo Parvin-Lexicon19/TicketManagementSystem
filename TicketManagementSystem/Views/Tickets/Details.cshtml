@@ -87,12 +87,13 @@
             <dd class="col-sm-4">
                 @Html.DisplayFor(model => model.Ticket.Project.Name)
             </dd>
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) || 
+                (User.IsInRole("Customer") && @Model.Ticket.Status != Status.Inkommen))
             {
-                <dt class="col-sm-2">
+                <dt class="col-sm-2 hidestatus">
                     @Html.DisplayNameFor(model => model.Ticket.DueDate)
                 </dt>
-                <dd class="col-sm-4">
+                <dd class="col-sm-4 hidestatus">
                     @Html.DisplayFor(model => model.Ticket.DueDate)
                 </dd>
             }
@@ -181,7 +182,7 @@
             </dt>
             <dd class="col-sm-4">
                 <div class="row hide collapse">
-                    <select name="adminPriority" asp-for="@Model.Ticket.RealPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control RealPriority">                        
+                    <select name="adminPriority" asp-for="@Model.Ticket.RealPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control RealPriority">
                     </select>
                 </div>
             </dd>
@@ -190,7 +191,7 @@
             </dt>
             <dd class="col-sm-3">
                 <div class="row hide collapse">
-                    <select id='statusselect' asp-for="@Model.Ticket.Status" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Utkast" ))" class="form-control  status">                        
+                    <select id='statusselect' asp-for="@Model.Ticket.Status" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Utkast" ))" class="form-control  status">
                     </select>
                 </div>
                 <p class="text-danger">
@@ -199,26 +200,31 @@
 
             </dd>
         </dl>
-        <div class="hidden">
-            <dl class="row ">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Ticket.ResponseType)
-                </dt>
-                <dd class="col-sm-4">
-                    <div class="row hide collapse">
-                        <select name="ResType" asp-for="@Model.Ticket.ResponseType" asp-items="@(Html.GetEnumSelectList<ResponseType>())" class="form-control  ResType">
-                            <option selected="selected" value="">Svarstyp</option>
-                        </select>
-                    </div>
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
-                </dt>
-                <dd class="col-sm-3">
-                    <input asp-for="Ticket.HoursSpent" class="form-control hours" />
-                </dd>
-            </dl>
 
+        <dl class="row">
+            <dt class="col-sm-2 hide collapse">
+                @Html.DisplayNameFor(model => model.Ticket.DueDate)
+            </dt>
+            <dd class="col-sm-4 hide collapse">
+                <div class="row">
+                    <input asp-for="@Model.Ticket.DueDate" class="form-control dueD" required />
+                </div>
+            </dd>
+
+            <dt class="col-sm-2 hidden">
+                @Html.DisplayNameFor(model => model.Ticket.ResponseType)
+            </dt>
+            <dd class="col-sm-3 hidden">
+                <div class="row hide collapse">
+                    <select name="ResType" asp-for="@Model.Ticket.ResponseType" asp-items="@(Html.GetEnumSelectList<ResponseType>())" class="form-control  ResType">
+                        <option selected="selected" value="">Svarstyp</option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+
+
+        <div class="hidden">
             <dl class="row">
 
                 <dt class="col-sm-2">
@@ -226,6 +232,13 @@
                 </dt>
                 <dd class="col-sm-4">
                     <textarea class="form-control RespDesc" asp-for="Ticket.ResponseDesc" rows="5" id="comment"></textarea>
+                </dd>
+
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
+                </dt>
+                <dd class="col-sm-3">
+                    <input asp-for="Ticket.HoursSpent" class="form-control hours" />
                 </dd>
 
             </dl>
@@ -384,6 +397,7 @@ var resType = $('.ResType').val();
 var resDesc = $('.RespDesc').val();
 var status = $('.status').val();
 var relPriority = $('.RealPriority').val();
+    dueD = $('.dueD').val();
 var idOfTicket = @Model.Ticket.Id;
 var isValid = true;
 
@@ -400,6 +414,10 @@ var isValid = true;
         }
         else if (resDesc == "") {
             alert("Om du stänger biljetten, ge svarbeskrivning");
+            isValid = false;
+        }
+        else if (dueD == "") {
+            alert("Om du stänger biljetten, ge förfallodatum");
             isValid = false;
         }
 
@@ -432,7 +450,7 @@ var isValid = true;
 
     // If validation is passed update the Ticket.
     if (isValid == true) {
-         $.post(url, { id: idOfTicket, HoursSpent: hours, Status: status, RespDesc: resDesc, RespType: resType, RelPriority: relPriority }, function (data) {
+         $.post(url, { id: idOfTicket, HoursSpent: hours, Status: status, RespDesc: resDesc, RespType: resType, RelPriority: relPriority, DueD: dueD }, function (data) {
 
             alert("Biljetten uppdaterades framgångsrikt!!");
             window.location = "/Tickets/Index"
