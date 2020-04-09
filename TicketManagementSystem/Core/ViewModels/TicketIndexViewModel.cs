@@ -27,6 +27,13 @@ namespace TicketManagementSystem.Core.ViewModels
         [DisplayName("Bitoreq Prioritet")]
         public Priority? RealPriority { get; set; }
         public string AssignedTo { get; set; }
+
+        [DisplayName("Tim")]
+        public double HoursSpent { get; set; }
+
+        [DisplayName("Svarstyp")]
+        public ResponseType ResponseType { get; set; }
+
         [Required]
         [DisplayName("Tilldelats")]
         public string UserEmail { get; set; }

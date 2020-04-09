@@ -83,7 +83,8 @@ namespace TicketManagementSystem.Controllers
                             CustomerPriority = s.CustomerPriority,
                             RealPriority = s.RealPriority,
                             DueDate = s.DueDate,
-                            UserEmail = s.AssignedUser.Email
+                            UserEmail = s.AssignedUser.Email,
+                            HoursSpent = s.HoursSpent
                         })
                         .ToListAsync();
 
@@ -108,7 +109,8 @@ namespace TicketManagementSystem.Controllers
                         CustomerPriority = s.CustomerPriority,
                         RealPriority = s.RealPriority,
                         DueDate = s.DueDate,
-                        UserEmail = s.AssignedUser.Email
+                        UserEmail = s.AssignedUser.Email,
+                       
                     })
                     .ToListAsync();
             return model;
@@ -118,7 +120,7 @@ namespace TicketManagementSystem.Controllers
         private async Task<List<TicketIndexViewModel>> TicketViewModelAdmin(List<TicketIndexViewModel> model)
         {
             model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
-                .Where(s => s.Status != Status.Utkast && s.Status != Status.Stängd)
+                .Where(s => s.Status != Status.Utkast && s.Status != Status.Avslutad)
                 .Select(s => new TicketIndexViewModel
                 {
                     Id = s.Id,
@@ -129,7 +131,9 @@ namespace TicketManagementSystem.Controllers
                     CustomerPriority = s.CustomerPriority,
                     RealPriority = s.RealPriority,
                     DueDate = s.DueDate,
-                    UserEmail = s.AssignedUser.Email
+                    UserEmail = s.AssignedUser.Email,
+                    HoursSpent = s.HoursSpent,
+                    ResponseType = s.ResponseType
                 })
                     .ToListAsync();
             return model;
@@ -163,7 +167,9 @@ namespace TicketManagementSystem.Controllers
                            CustomerPriority = s.CustomerPriority,
                            RealPriority = s.RealPriority,
                            DueDate = s.DueDate,
-                           UserEmail = s.AssignedUser.Email
+                           UserEmail = s.AssignedUser.Email,
+                           HoursSpent = s.HoursSpent,
+                           ResponseType = s.ResponseType
                        })
                        .ToListAsync();
 
@@ -661,7 +667,7 @@ namespace TicketManagementSystem.Controllers
                 /*Change the due date upon changing the real priority*/
                 //newTicket.DueDate = DateTimeExtensions.SetDueDate(newTicket.RealPriority);
             }
-            if (Status == Status.Stängd)
+            if (Status == Status.Avslutad)
             {
                 newTicket.ClosedDate = DateTime.Now;
             }
@@ -694,7 +700,7 @@ namespace TicketManagementSystem.Controllers
 
 
                 /*Generate Email while closing Ticket*/
-                if (Status == Status.Stängd)
+                if (Status == Status.Avslutad)
                 {
                     
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = newTicket.Id }, protocol: Request.Scheme);

@@ -100,7 +100,7 @@
         </dl>
 
         <!--If Ticket status not closed. and want to show the Ticket status -->
-        @if (Model.Ticket.Status != Status.Stängd)
+        @if (Model.Ticket.Status != Status.Avslutad)
         {
             <dl class="row hidestatus">
                 <dt class="col-sm-2">
@@ -128,7 +128,7 @@
             <dd class="col-sm-4">
                 @Html.DisplayFor(model => model.Ticket.CreatedUser.Email)
             </dd>
-            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (Model.Ticket.Status == Status.Stängd))
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (Model.Ticket.Status == Status.Avslutad))
             {
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Ticket.RealPriority)
@@ -139,7 +139,7 @@
             }
         </dl>
         <!--If Ticket status is closed show every details.-->
-        @if (Model.Ticket.Status == Status.Stängd)
+        @if (Model.Ticket.Status == Status.Avslutad)
         {
             <dl class="row">
                 <dt class="col-sm-2">
@@ -298,7 +298,7 @@ else
     }
     @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
     {
-        @if (Model.Ticket.Status != Status.Stängd)
+        @if (Model.Ticket.Status != Status.Avslutad)
         {
             <div class="text-center">
                 <button class="btn btn-primary center-block" id="SaveEditbtn" data-toggle="collapse" data-target=".hide">Redigera</button>
@@ -328,7 +328,7 @@ else
 
 <br />
 <br />
-@if (Model.Ticket.Status != Status.Stängd)
+@if (Model.Ticket.Status != Status.Avslutad)
 {
     <div class="form-group">
         <!--Button trigger modal-->

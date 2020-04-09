@@ -25,7 +25,7 @@ namespace TicketManagementSystem.Core.Models
         public DateTime CreatedDate { get; set; }
         [DisplayName("Tilldelats")]
         public string AssignedTo { get; set; }
-        [DisplayName("Arbetstimmar")]
+        [DisplayName("Tim")]
         public double HoursSpent { get; set; }
         [Required]
         public Status Status { get; set; }
@@ -63,8 +63,8 @@ namespace TicketManagementSystem.Core.Models
     {
         Utkast,
         Inkommen,
-        Påbörjade,
-        Stängd
+        Påbörjad,
+        Avslutad
     }
 
     //public enum Status

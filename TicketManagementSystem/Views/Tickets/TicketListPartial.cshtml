@@ -28,47 +28,59 @@
                 @*@Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectNameSortParm })*@
             </th>
             @*@if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {*@
+        {*@
 
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
 
-            @*@Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })*@
-        </th>
+                @*@Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })*@
+            </th>
             @*}
-            else
+        else
+        {
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
+            </th>
+        }*@
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerPriority)
+
+                @*@Html.ActionLink(Html.DisplayNameFor(model => model.CustomerPriority), "Index", new { sortOrder = ViewBag.CustomerPrioritySortParm })*@
+            </th>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.Status), "Index", new { sortOrder = ViewBag.StatusSortParm })
+                    @Html.DisplayNameFor(model => model.RealPriority)
+                    @*@Html.ActionLink(Html.DisplayNameFor(model => model.RealPriority), "Index", new { sortOrder = ViewBag.RealPrioritySortParm })*@
                 </th>
-            }*@
-        <th>
-            @Html.DisplayNameFor(model => model.CustomerPriority)
+            }
+            <th scope="col" colspan="2">
 
-            @*@Html.ActionLink(Html.DisplayNameFor(model => model.CustomerPriority), "Index", new { sortOrder = ViewBag.CustomerPrioritySortParm })*@
-        </th>
+                @Html.DisplayNameFor(model => model.DueDate)
+
+                @*@Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.DueDateSortParm })*@
+
+            </th>
+
+
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
-        <th>
-            @Html.DisplayNameFor(model => model.RealPriority)
-            @*@Html.ActionLink(Html.DisplayNameFor(model => model.RealPriority), "Index", new { sortOrder = ViewBag.RealPrioritySortParm })*@
-        </th>
-           } 
-        <th scope="col" colspan="2">
+                <th>
+                    @Html.DisplayNameFor(model => model.UserEmail)
 
-            @Html.DisplayNameFor(model => model.DueDate)
+                    @*@Html.ActionLink(Html.DisplayNameFor(model => model.UserEmail), "index", new { sortorder = ViewBag.AssignedToSortParm })*@
+                </th>
+                <th >
 
-            @*@Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.DueDateSortParm })*@
+                    @Html.DisplayNameFor(model => model.HoursSpent)
 
-        </th>
-        
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-        <th>
-            @Html.DisplayNameFor(model => model.UserEmail)
+                </th>
+                <th >
 
-            @*@Html.ActionLink(Html.DisplayNameFor(model => model.UserEmail), "index", new { sortorder = ViewBag.AssignedToSortParm })*@
-        </th>
+                    @Html.DisplayNameFor(model => model.ResponseType)
+
+                </th>
+
             }
             <th></th>
         </tr>
@@ -110,19 +122,19 @@
                 @Html.DisplayFor(modelItem => item.ProjectName)
             </td>
             @*@if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {*@
+        {*@
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
 
             @*}
-            else
-            {
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-            }*@
+        else
+        {
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+        }*@
 
             @if (User.IsInRole("Customer"))
             {
@@ -150,45 +162,89 @@
                     @Html.DisplayFor(modelItem => item.RealPriority)
                 </td>
             }
-            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (item.Status == Status.Inkommen || item.Status == Status.Påbörjade) && (item.DueDate < DateTime.Now))
+
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")))
             {
+
                 <td>
                     @Html.DisplayFor(modelItem => item.DueDate)
                 </td>
 
-                <td>
-                    <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Due Date has expired!">
-                        <i class="fa fa-exclamation-circle text-danger"></i>
-                    </button>
 
-                </td>
+                @if ((item.Status == Status.Inkommen || item.Status == Status.Påbörjad) && (item.DueDate < DateTime.Now))
+                {
+                    <td>
+                        <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Due Date has expired!">
+                            <i class="fa fa-exclamation-circle text-danger"></i>
+                        </button>
 
-
-
-            }
-      
-            @if (User.IsInRole("Customer"))
-            {
-                @if (item.Status == Status.Påbörjade || item.Status == Status.Stängd)
-                { 
-                <td>
-                    @Html.DisplayFor(modelItem => item.DueDate)
-                </td>
+                    </td>
                 }
                 else
                 {
-                 <td>
-                 </td>
-                 }
+                    <td>
+                    </td>
+                }
+
+            }
+
+            @if (User.IsInRole("Customer"))
+            {
+                @if (item.Status == Status.Påbörjad || item.Status == Status.Avslutad)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DueDate)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                    </td>
+                }
 
             }
 
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
-<td>
+                <td>
+
                     @Html.DisplayFor(modelItem => item.UserEmail)
                 </td>
             }
+
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                @if (item.Status == Status.Avslutad)
+                {
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.HoursSpent)
+                    </td>                
+                }
+                else
+                {
+                    <td>
+                    </td>
+
+                }
+            }
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                @if (item.Status == Status.Avslutad)
+                {                 
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.ResponseType)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                    </td>
+
+                }
+            }
+
         </tr>
         }
     </tbody>
