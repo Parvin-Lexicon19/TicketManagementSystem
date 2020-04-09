@@ -495,21 +495,23 @@ namespace TicketManagementSystem.Controllers
             {
                 await _emailSender.SendEmailAsync(
                       loggedInUser.Email,
-                      $"Din ärende inkommen: {ticketRefNo}",
+                      $"Ärende {ticketRefNo} har mottagits.",
                       $"Hej {loggedInUser.FirstName}," +
-                      $"<br/><br/>Din nya ärende med ärendenummer. <b>{ticketRefNo}</b> inkommen. " +
-                      $"<br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>." +
-                       $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
+                      $"<br/><br/>Ditt nya ärende med ärendenummer <b>{ticketRefNo}</b> har mottagits. " +
+                      $"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>." +
+                      $"<br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet.</a>." +
+                      $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
             }
             foreach (var developer in ticketProjectDevelopers)
             {
                 await _emailSender.SendEmailAsync(
                   developer.Email,
-                  $"Ny ärende skickad: {ticketRefNo}",
+                  $"Ärende {ticketRefNo} har skickat.",
                   $"Hej {developer.FirstName}," +
-                  $"<br/><br/>En ny ärende med ärendenummer. <b>{ticketRefNo}</b> insänd av {loggedInUser.Email} från <b>{loggedInUserCompany.CompanyName}</b> Kunder. " +
-                  $"<br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>." +
-                  $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
+                  $"<br/><br/>Ett ny ärende med ärendenummer <b>{ticketRefNo}</b> insänd av {loggedInUser.Email} från <b>{loggedInUserCompany.CompanyName}</b> Kunder. " +
+                  $"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>." +
+                  $"<br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet.</a>." +
+                  $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
             }
 
             return RedirectToAction(nameof(EmailSent));
@@ -615,7 +617,7 @@ namespace TicketManagementSystem.Controllers
 
         // Edit Ticket Through Detail Screen.
         [HttpPost]
-        public string SaveResponse(long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority, DateTime DueD)
+        public string SaveResponse( long id, double HoursSpent, Status Status, string RespDesc, ResponseType RespType, Priority RelPriority, DateTime DueD)
         {
             var priorityChange = false;
             Priority previousPriority = RelPriority;
@@ -691,11 +693,14 @@ namespace TicketManagementSystem.Controllers
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               $"Ärendenummer - {ticketRefNo} Meddelande om prioritetsändring!",
+                               $" Prioritetsändring för ärende {ticketRefNo}!",
                                $"Hej {createdUser.FirstName}," +
-                               $"<br/><br/>Ärendenummer {ticketRefNo} prioritet har ändrats från {previousPriority}  till {RelPriority} och ändras av { loggedInUser}. " +
-                               $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
+                               $"<br/><br/>Prioriteten för ärendet {ticketRefNo} har ändrats från {previousPriority}  till {RelPriority} av { loggedInUser}. " +
+                               //$"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>." +
+                               $"<br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet.</a>." +
+                               $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
                     }
+
                 }
 
 
@@ -710,11 +715,12 @@ namespace TicketManagementSystem.Controllers
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               $"Ärendenummer {ticketRefNo} Stängt",
+                               $"Ärendenummer {ticketRefNo} avslutat.",
                                $"Hej {createdUser.FirstName}," +
-                               $"<br/><br/>Ärendenummer {ticketRefNo} är stängd av { loggedInUser}. " +
-                               $"<br/><br/>Se ärende här: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> Ärendeinformation </a>" +
-                               $"<br/><br/>Med vänlig hälsningar,<br/>Bitoreq Admin");
+                               $"<br/><br/>Ärendet med nummer {ticketRefNo} har avslutats av { loggedInUser}." +
+                               $"<br/><br/>Klicka här för att se ärendet:<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>" +
+                               $"<br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet.</a>." +
+                               $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
                     }   
                 }
                 return "Ärendestatus har uppdaterats!";
