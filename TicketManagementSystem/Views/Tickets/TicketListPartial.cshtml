@@ -53,14 +53,14 @@
             @Html.DisplayNameFor(model => model.RealPriority)
             @*@Html.ActionLink(Html.DisplayNameFor(model => model.RealPriority), "Index", new { sortOrder = ViewBag.RealPrioritySortParm })*@
         </th>
-            
+           } 
         <th scope="col" colspan="2">
             @Html.DisplayNameFor(model => model.DueDate)
 
             @*@Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.DueDateSortParm })*@
 
         </th>
-        }
+        
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
         <th>
@@ -165,7 +165,7 @@
 
 
             }
-            else if(!User.IsInRole("Customer"))
+            else/* if(!User.IsInRole("Customer"))*/
             {
                 <td>
                     @Html.DisplayFor(modelItem => item.DueDate)
