@@ -14,6 +14,7 @@ namespace TicketManagementSystem.Core.Models
         [DisplayName("Ärendenummer")]
         public string RefNo { get; set; }
         [Required]
+        [DisplayName("Titel")]
         public string Title { get; set; }
         [Required]
         [StringLength(500)]

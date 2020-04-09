@@ -16,6 +16,7 @@ namespace TicketManagementSystem.Core.ViewModels
         [DisplayName("Ärendenummer")]
         public string RefNo { get; set; }
         [Required]
+        [DisplayName("Titel")]
         public string Title { get; set; }
         [DisplayName("Status")]
         public Status? Status { get; set; }
