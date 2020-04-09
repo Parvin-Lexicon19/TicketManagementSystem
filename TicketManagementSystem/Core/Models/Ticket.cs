@@ -63,7 +63,6 @@ namespace TicketManagementSystem.Core.Models
     {
         Utkast,
         Inkommen,
-        [Display(Name = "På började")]
         Påbörjade,
         Stängd
     }

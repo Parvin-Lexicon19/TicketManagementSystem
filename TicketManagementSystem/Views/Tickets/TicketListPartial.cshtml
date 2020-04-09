@@ -55,6 +55,7 @@
         </th>
            } 
         <th scope="col" colspan="2">
+
             @Html.DisplayNameFor(model => model.DueDate)
 
             @*@Html.ActionLink(Html.DisplayNameFor(model => model.DueDate), "index", new { sortorder = ViewBag.DueDateSortParm })*@
@@ -165,17 +166,26 @@
 
 
             }
-            else/* if(!User.IsInRole("Customer"))*/
+      
+            @if (User.IsInRole("Customer"))
             {
+                @if (item.Status == Status.Påbörjade || item.Status == Status.Stängd)
+                { 
                 <td>
                     @Html.DisplayFor(modelItem => item.DueDate)
                 </td>
-                <td>
-                </td>
+                }
+                else
+                {
+                 <td>
+                 </td>
+                 }
+
             }
+
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
-                <td>
+<td>
                     @Html.DisplayFor(modelItem => item.UserEmail)
                 </td>
             }
