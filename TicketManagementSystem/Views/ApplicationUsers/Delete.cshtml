@@ -95,7 +95,7 @@ else if (@ViewBag.formhide == "Admin")
     {
         <form asp-action="Delete">
             <input type="hidden" asp-for="Id" asp-route-name=@ViewData["PageName"] />
-            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            <input type="submit" value="Radera" class="btn btn-danger" /> |
             <a asp-action="Index" asp-route-name=@ViewData["PageName"]>Tillbaka till listan</a>
         </form>
     }

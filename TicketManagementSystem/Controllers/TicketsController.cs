@@ -675,7 +675,7 @@ namespace TicketManagementSystem.Controllers
             }
 
             newTicket.LastUpdated = DateTime.Now;
-
+            var callbackUrl1 = Url.Action("Details", "Tickets", new { id = newTicket.Id }, protocol: Request.Scheme);
 
             /*Update database*/
             try
@@ -696,7 +696,7 @@ namespace TicketManagementSystem.Controllers
                                $" Prioritetsändring för ärende {ticketRefNo}!",
                                $"Hej {createdUser.FirstName}," +
                                $"<br/><br/>Prioriteten för ärendet {ticketRefNo} har ändrats från {previousPriority}  till {RelPriority} av { loggedInUser}. " +
-                               //$"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>." +
+                               $"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl1)}'> {ticketRefNo} </a>." +
                                $"<br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet</a>." +
                                $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
                     }
@@ -715,7 +715,7 @@ namespace TicketManagementSystem.Controllers
                     {
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
-                               $"Ärendenummer {ticketRefNo} avslutat.",
+                               $"Ärende {ticketRefNo} avslutat.",
                                $"Hej {createdUser.FirstName}," +
                                $"<br/><br/>Ärendet med nummer {ticketRefNo} har avslutats av { loggedInUser}." +
                                $"<br/><br/>Klicka här för att se ärendet:<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>" +
