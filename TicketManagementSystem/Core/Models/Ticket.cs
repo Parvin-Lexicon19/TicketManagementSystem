@@ -27,6 +27,8 @@ namespace TicketManagementSystem.Core.Models
         [DisplayName("Tilldelats")]
         public string AssignedTo { get; set; }
         [DisplayName("Tim")]
+        //[RegularExpression(@"^\d{1,15}$", ErrorMessage = "Please enter up to 15 digits for a contact number")]
+        //[RegularExpression("([0-9]*[,|.])?[0-9]+")]
         public double HoursSpent { get; set; }
         [Required]
         public Status Status { get; set; }

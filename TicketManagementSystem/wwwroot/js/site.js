@@ -22,7 +22,7 @@ function FillCustomers() {
         success: function (customers) {
             $("#customerDropDownList").html("");   //clear before appending new list
             $("#customerDropDownList").append(
-                $('<option value="">Select Customer</option>'));
+                $('<option value="">Välj Användare</option>'));
             $.each(customers, function (i, customer) {
                 $("#customerDropDownList").append(
                     $('<option value="' + customer.value + '">' + customer.text + '</option>'));
@@ -41,7 +41,7 @@ function FillProjects() {
         success: function (projects) {
             $("#projectDropDownList").html("");   //clear before appending new list
             $("#projectDropDownList").append(
-                $('<option value="">Select Project</option>'));
+                $('<option value="">Välj Lösning</option>'));
             $.each(projects, function (i, project) {
                 $("#projectDropDownList").append(
                     $('<option value="' + project.value + '">' + project.text + '</option>'));

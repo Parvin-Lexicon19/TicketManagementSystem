@@ -10,7 +10,8 @@ namespace TicketManagementSystem.Core.Models
     {
         public int Id { get; set; }
         [Required]
-        [StringLength(5)]
+        [MinLength(5)]
+        [MaxLength(5)]
         [Display(Name = "Kunder Förkortning")]
         public string CompanyAbbr { get; set; }
         [Required]

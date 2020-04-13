@@ -154,7 +154,7 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
 
                 var user = new ApplicationUser {
                     UserName = Input.Email, Email = Input.Email,CompanyId = userCompanyName.Id,PhoneNumber = Input.PhoneNumber,
-                    Country = Input.Country,FirstName = Input.FirstName,LastName = Input.LastName,JobTitle = Input.JobTitle
+                    Country = Input.Country,FirstName = Input.FirstName,LastName = Input.LastName,JobTitle = Input.JobTitle, ActiveUser = true
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

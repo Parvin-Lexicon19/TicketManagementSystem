@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <label asp-for="Ticket.CreatedBy" class="control-label">Användare</label>
                     <select id="customerDropDownList" asp-for="Ticket.CreatedBy" class="form-control" asp-items="ViewBag.CreatedBy" onchange="FillProjects()" required>
-                        <option value="">Välj användare</option>
+                        <option value="">Välj Användare</option>
                     </select>
                     <span asp-validation-for="Ticket.CreatedBy" class="text-danger"></span>
                 </div>

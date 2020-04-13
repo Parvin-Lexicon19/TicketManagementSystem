@@ -499,7 +499,7 @@ namespace TicketManagementSystem.Controllers
                       $"Hej {loggedInUser.FirstName}," +
                       $"<br/><br/>Ditt nya ärende med ärendenummer <b>{ticketRefNo}</b> har mottagits. " +
                       $"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>." +
-                      $"<br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet</a>." +
+                      $"<br/><br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet." +
                       $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
             }
             foreach (var developer in ticketProjectDevelopers)
@@ -510,7 +510,7 @@ namespace TicketManagementSystem.Controllers
                   $"Hej {developer.FirstName}," +
                   $"<br/><br/>Ett ny ärende med ärendenummer <b>{ticketRefNo}</b> insänd av {loggedInUser.Email} från <b>{loggedInUserCompany.CompanyName}</b> Kunder. " +
                   $"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>." +
-                  $"<br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet</a>." +
+                  $"<br/><br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet." +
                   $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
             }
 
@@ -706,8 +706,7 @@ namespace TicketManagementSystem.Controllers
 
                 /*Generate Email while closing Ticket*/
                 if (Status == Status.Avslutad)
-                {
-                    
+                {                    
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = newTicket.Id }, protocol: Request.Scheme);
                     var ticketRefNo = newTicket.RefNo;
 
