@@ -479,7 +479,10 @@ namespace TicketManagementSystem.Controllers
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
                     var ticketRefNo = model.Ticket.RefNo;
 
-                    return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo, model.NotifyCustomer);
+                    if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+                        return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo, model.NotifyCustomer);
+                    else if (User.IsInRole("Customer"))
+                        return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo, true);
                 }
 
                 return RedirectToAction(nameof(Index));
