@@ -15,7 +15,7 @@ namespace TicketManagementSystem.Core.Models
         public int CompanyId { get; set; }
         [Required]
         [StringLength(70)]
-        [Display(Name = "Lösning Namn")]
+        [Display(Name = "Namn")]
         public string Name { get; set; }
 
         [Display(Name = "Utvecklare1")]
@@ -23,11 +23,11 @@ namespace TicketManagementSystem.Core.Models
         [Display(Name = "Utvecklare2")]
         public string Developer2 { get; set; }
 
-        [Display(Name = "Utgivningsdatum")]
+        [Display(Name = "Första Driftsättningsdatum")]
         [DataType(DataType.Date)] 
         [Required]
         public DateTime ReleaseDate { get; set; }
-        [Display(Name = "Release Datum")]
+        [Display(Name = "Senaste Driftsättningsdatum")]
         [DataType(DataType.Date)]
         [Remote(action: "CheckLastUpdate", controller: "Projects", AdditionalFields = "ReleaseDate")]
         public DateTime? LastUpdate { get; set; }
@@ -38,7 +38,7 @@ namespace TicketManagementSystem.Core.Models
         [StringLength(100)]
         public string SystemsUsed { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
-        [Display(Name = "Kunder")]
+        [Display(Name = "Kund")]
         public Company Company { get; set; }
         public virtual ApplicationUser Developer1User { get; set; }
         public virtual ApplicationUser Developer2User { get; set; }

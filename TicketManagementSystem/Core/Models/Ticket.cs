@@ -49,14 +49,14 @@ namespace TicketManagementSystem.Core.Models
         public DateTime LastUpdated { get; set; }
         [DisplayName("Svarstyp")]
         public ResponseType ResponseType { get; set; }
-        [DisplayName("Svarbeskrivning")]
+        [DisplayName("Svar")]
         public string ResponseDesc { get; set; }
         public ICollection<Document> Documents { get; set; }
         [DisplayName("kommentarer")]
         public ICollection<Comment> Comments { get; set; }
         [DisplayName("Lösning")]
         public Project Project { get; set; }
-        [DisplayName("Skapad Användare")]
+        [DisplayName("Skapat Av Användare")]
         public virtual ApplicationUser CreatedUser { get; set; }
         [DisplayName("Tilldelad Användare")]
         public virtual ApplicationUser AssignedUser { get; set; }

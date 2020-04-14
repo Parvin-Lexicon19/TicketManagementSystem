@@ -226,7 +226,7 @@ namespace TicketManagementSystem.Controllers
         {
             if (LastUpdate < ReleaseDate)
             {
-                return Json($"{LastUpdate} is not valid.Should be greater than release date");
+                return Json($"{LastUpdate} är inte giltig. Borde vara större än släppdatum.");
             }
 
             return Json(true);

@@ -44,7 +44,7 @@ namespace TicketManagementSystem.Core.ViewModels
         public ResponseType ResponseType { get; set; }
 
         [Required]
-        [DisplayName("Tilldelats")]
+        [DisplayName("Ansvarig")]
         public string UserEmail { get; set; }
 
         [DisplayName("Lösning")]

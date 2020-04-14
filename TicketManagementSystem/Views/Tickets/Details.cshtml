@@ -17,14 +17,16 @@
             <dd class="col-sm-4">
                 @Html.DisplayFor(model => model.Ticket.RefNo)
             </dd>
-
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
-            </dt>
-            <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
-            </dd>
-        </dl>
+            @if (User.IsInRole("Admin"))
+            {
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
+                </dt>
+                <dd class="col-sm-4">
+                    @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
+                </dd>
+            }
+            </dl>
 
 
         <dl class="row">
