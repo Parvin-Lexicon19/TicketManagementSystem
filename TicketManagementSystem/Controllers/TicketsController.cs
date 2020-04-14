@@ -240,7 +240,7 @@ namespace TicketManagementSystem.Controllers
 
             if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
-                //ViewData["Companies"] = new SelectList(_context.Companies, "Id", "CompanyName");
+                ViewData["CompanyName"] = new SelectList(_context.Companies, "Id", "CompanyName");
 
                 ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             }
