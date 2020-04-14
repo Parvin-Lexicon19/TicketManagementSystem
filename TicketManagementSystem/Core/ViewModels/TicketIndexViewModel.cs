@@ -11,6 +11,10 @@ namespace TicketManagementSystem.Core.ViewModels
     public class TicketIndexViewModel
     {
 
+       // public Ticket Ticket { get; set; }
+
+        //public Company CustomerCompany { get; }
+
         public Int64 Id { get; set; }
         [Required]
         [DisplayName("Ärendenummer")]
@@ -23,6 +27,10 @@ namespace TicketManagementSystem.Core.ViewModels
         public int ProjectId { get; set; }
         [DisplayName("Lösning")]
         public string ProjectName { get; set; }
+
+        [Display(Name = "Kund")]
+        public string CompanyName { get; set; }
+
         [DisplayName("Prioritet")]
         public Priority? CustomerPriority { get; set; }
         [DisplayName("Bitoreq Prioritet")]
@@ -39,9 +47,14 @@ namespace TicketManagementSystem.Core.ViewModels
         [DisplayName("Tilldelats")]
         public string UserEmail { get; set; }
 
+        [DisplayName("Lösning")]
+        public Project Project { get; set; }
+
         [DisplayName("Förfallodatum")]
         [DataType(DataType.Date), DisplayFormat(DataFormatString = @"{0:dd\/MM\/yyyy HH:mm}",
             ApplyFormatInEditMode = true)]
         public DateTime DueDate { get; set; }
+
+      
     }
 }

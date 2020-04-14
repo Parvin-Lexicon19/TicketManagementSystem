@@ -65,9 +65,9 @@ namespace TicketManagementSystem.Core.Models
     public enum Status
     {
         Utkast,
-        Inkommen,
-        Påbörjad,
-        Avslutad
+        Inskickat,
+        Påbörjat,
+        Avslutat
     }
 
     //public enum Status

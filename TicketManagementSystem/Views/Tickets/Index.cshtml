@@ -6,13 +6,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
        <div class="container">
-           @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+           @if (User.IsInRole("Admin"))
            {
-               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Alla Ärende</h1></a>
+               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Alla Ärenden</h1></a>
            }
            else
            {
-               <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Mina Ärende</h1></a>
+           <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Mina Ärenden</h1></a>
 
            }
            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -49,7 +49,7 @@
                    @*<partial name="_LoginPartial" />*@
                    <ul class="navbar-nav flex-grow-1">
 
-                       <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="IndexCompanyTickets">Kunder Ärende</a>
+                       <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="IndexCompanyTickets">Kunder Ärenden</a>
 
                    </ul>
                </div>
@@ -75,25 +75,36 @@
                             <option value="1">Match</option>
                             <option value="2">Ingen Match</option>
                         </select>
+                        <select name="projectSearch" @*asp-for="Ticket.ProjectId"*@ asp-items="ViewBag.ProjectId" class="form-control">
+                            <option value="">Lösning</option>
+                        </select>
+                        <select name="companySearch" @*asp-for="CustomerCompany"*@ class="form-control" asp-items="ViewBag.Companies">
+                            <option value="">Kund</option>
+                        </select>
+
+
                     }
                     else
                     {
                         <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
                             <option selected="selected" value="">Status</option>
                         </select>
-                            
-                      <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
+
+                        <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
                             <option selected="selected" value="">Prioritet</option>
                         </select>
+                        <select name="projectSearch" @*asp-for="Ticket.ProjectId"*@ asp-items="ViewBag.ProjectId" class="form-control">
+                            <option value="">Lösning</option>
+                        </select>
 
-                          
+
                     }
 
-                        </div>
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-search">&emsp;Sök</i></button>   
                 </div>
-            </div>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search">&emsp;Sök</i></button>
+                        </div>
+                    </div>
         </form>
 
         <partial name="TicketListPartial" />

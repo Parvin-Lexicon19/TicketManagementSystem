@@ -27,9 +27,13 @@
                 @Html.DisplayNameFor(model => model.ProjectName)
                 @*@Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectNameSortParm })*@
             </th>
-            @*@if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-        {*@
-
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+            <th>
+                @Html.DisplayNameFor(model => model.CompanyName)
+                @*@Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectNameSortParm })*@
+            </th>
+            }
             <th>
                 @Html.DisplayNameFor(model => model.Status)
 
@@ -70,12 +74,12 @@
 
                     @*@Html.ActionLink(Html.DisplayNameFor(model => model.UserEmail), "index", new { sortorder = ViewBag.AssignedToSortParm })*@
                 </th>
-                <th >
+                <th>
 
                     @Html.DisplayNameFor(model => model.HoursSpent)
 
                 </th>
-                <th >
+                <th>
 
                     @Html.DisplayNameFor(model => model.ResponseType)
 
@@ -121,9 +125,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ProjectName)
             </td>
-            @*@if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-        {*@
-
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyName)
+            </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
@@ -171,7 +178,7 @@
                 </td>
 
 
-                @if ((item.Status == Status.Inkommen || item.Status == Status.Påbörjad) && (item.DueDate < DateTime.Now))
+                @if ((item.Status == Status.Inskickat || item.Status == Status.Påbörjat) && (item.DueDate < DateTime.Now))
                 {
                     <td>
                         <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Due Date has expired!">
@@ -190,7 +197,7 @@
 
             @if (User.IsInRole("Customer"))
             {
-                @if (item.Status == Status.Påbörjad || item.Status == Status.Avslutad)
+                @if (item.Status == Status.Påbörjat || item.Status == Status.Avslutat)
                 {
                     <td>
                         @Html.DisplayFor(modelItem => item.DueDate)
@@ -214,12 +221,13 @@
 
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
-                @if (item.Status == Status.Avslutad)
+                @if (item.Status == Status.Avslutat)
                 {
                     <td>
 
                         @Html.DisplayFor(modelItem => item.HoursSpent)
-                    </td>                
+                    </td>
+
                 }
                 else
                 {
@@ -230,8 +238,8 @@
             }
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
-                @if (item.Status == Status.Avslutad)
-                {                 
+                @if (item.Status == Status.Avslutat)
+                {
                     <td>
 
                         @Html.DisplayFor(modelItem => item.ResponseType)

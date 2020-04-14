@@ -12,7 +12,7 @@ namespace TicketManagementSystem.Core.ViewModels
     public class AddTicketViewModel
     {
 
-        public Ticket   Ticket { get; set; }
+        public Ticket  Ticket { get; set; }
         public Company CustomerCompany { get; }
         public bool NotifyCustomer { get; set; }
         public List<IFormFile> File { get; set; }

@@ -100,7 +100,7 @@
             </dd>
 
             @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) ||
-               (User.IsInRole("Customer") && @Model.Ticket.Status != Status.Inkommen))
+               (User.IsInRole("Customer") && @Model.Ticket.Status != Status.Inskickat))
             {
                 <dt class="col-sm-2 hidestatus">
                     @Html.DisplayNameFor(model => model.Ticket.DueDate)
@@ -113,7 +113,7 @@
 
 
         <!--If Ticket status not closed. and want to show the Ticket status -->
-        @if (Model.Ticket.Status != Status.Avslutad)
+        @if (Model.Ticket.Status != Status.Avslutat)
         {
             <dl class="row hidestatus">
                 <dt class="col-sm-2">
@@ -144,7 +144,7 @@
                 @Html.DisplayFor(model => model.Ticket.CreatedUser.Email)
             </dd>
 
-            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (Model.Ticket.Status == Status.Avslutad))
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (Model.Ticket.Status == Status.Avslutat))
             {
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Ticket.RealPriority)
@@ -157,7 +157,7 @@
 
 
         <!--If Ticket status is closed show every details.-->
-        @if (Model.Ticket.Status == Status.Avslutad)
+        @if (Model.Ticket.Status == Status.Avslutat)
         {
             <dl class="row">
                 <dt class="col-sm-2">
@@ -312,7 +312,7 @@
         }
         @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
         {
-            @if (Model.Ticket.Status != Status.Avslutad)
+            @if (Model.Ticket.Status != Status.Avslutat)
             {
                 <div class="text-center">
                     <button class="btn btn-primary center-block" id="SaveEditbtn" data-toggle="collapse" data-target=".hide">Redigera</button>
