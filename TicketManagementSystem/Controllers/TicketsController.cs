@@ -238,18 +238,17 @@ namespace TicketManagementSystem.Controllers
             model :
             model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
 
-            if (User.IsInRole("Developer") || User.IsInRole("Admin"))
-            {
-                ViewData["CompanyName"] = new SelectList(_context.Companies, "Id", "CompanyName");
+            //if (User.IsInRole("Developer") || User.IsInRole("Admin"))
+            //{
+            //    ViewData["CompanyName"] = new SelectList(_context.Companies, "Id", "CompanyName");
+            //    ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+            //}
 
-                ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
-            }
-
-            else if (User.IsInRole("Customer"))
-            {
-                //loggedInUser = await userManager.GetUserAsync(User);
-                ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
-            }
+            //else if (User.IsInRole("Customer"))
+            //{
+            //    //loggedInUser = await userManager.GetUserAsync(User);
+            //    ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
+            //}
 
             // Search by project
             model = projectSearch == null ?
