@@ -58,7 +58,7 @@
 </nav>
 <form asp-action="Filter">
     <div class="input-group mb-3">
-        <input type="text" name="title" class="form-control" placeholder="Sök på Titel" />
+        <input type="text" name="title" class="form-control" placeholder="Sök på Titel" style="width: 150px;" />
         <div class="input-group-append">
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
@@ -100,7 +100,7 @@
 
         </div>
         <div class="input-group-append">
-            <button type="submit" class="btn btn-primary"><i class="fa fa-search">&emsp;Sök</i></button>
+            <button type="submit" class="btn btn-primary "><i class="fa fa-search">&emsp;&emsp;Sök&emsp;&emsp;</i></button>
         </div>
     </div>
 </form>
