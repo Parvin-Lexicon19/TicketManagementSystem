@@ -76,10 +76,10 @@
                     <option value="1">Match</option>
                     <option value="2">Ingen Match</option>
                 </select>
-                @*<select name="projectSearch" asp-for="ProjectId" asp-items="ViewBag.ProjectId" class="form-control">
+                @*<select name="projectSearch"  asp-items="ViewBag.ProjectId" class="form-control">
                         <option value="">Lösning</option>
-                    </select>
-                    <select name="companySearch" asp-for="CustomerCompany" class="form-control" asp-items="ViewBag.Companies">
+                </select>*@
+                    @*<select name="companySearch" asp-for="CustomerCompany" class="form-control" asp-items="ViewBag.Companies">
                         <option value="">Kund</option>
                     </select>*@
 
@@ -94,9 +94,9 @@
                 <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
                     <option selected="selected" value="">Prioritet</option>
                 </select>
-                @*<select name="projectSearch" asp-for="Ticket.ProjectId" asp-items="ViewBag.ProjectId" class="form-control">
-                        <option value="">Lösning</option>
-                    </select>*@
+                @*<select name="projectsearch"  asp-items="ViewBag.ProjectId" class="form-control">
+                        <option value="">lösning</option>
+                </select>*@
 
 
             }
