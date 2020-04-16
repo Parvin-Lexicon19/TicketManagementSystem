@@ -64,6 +64,18 @@ namespace TicketManagementSystem.Controllers
                 model = await TicketViewModelCustomer(model, loggedInUser);
             }
 
+            if (User.IsInRole("Developer") || User.IsInRole("Admin"))
+            {
+                ViewData["Companies"] = new SelectList(_context.Companies, "Id", "CompanyName");
+                ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+            }
+
+            else if (User.IsInRole("Customer"))
+            {
+                //loggedInUser = await userManager.GetUserAsync(User);
+                ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
+            }
+
             // Sort by attributes in the list
             //model = SortList(sortOrder, model);
             return View(model);

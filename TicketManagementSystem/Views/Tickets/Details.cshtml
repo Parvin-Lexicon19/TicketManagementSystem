@@ -17,16 +17,14 @@
             <dd class="col-sm-4">
                 @Html.DisplayFor(model => model.Ticket.RefNo)
             </dd>
-            @if (User.IsInRole("Admin"))
-            {
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
-                </dt>
-                <dd class="col-sm-4">
-                    @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
-                </dd>
-            }
-            </dl>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
+            </dt>
+            <dd class="col-sm-4">
+                @Html.DisplayFor(model => model.Ticket.CreatedDate)
+            </dd>
+        </dl>
 
 
         <dl class="row">
@@ -38,10 +36,10 @@
             </dd>
 
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
+                @Html.DisplayNameFor(model => model.Ticket.LastUpdated)
             </dt>
             <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.CreatedDate)
+                @Html.DisplayFor(model => model.Ticket.LastUpdated)
             </dd>
         </dl>
 
@@ -55,10 +53,11 @@
             </dd>
 
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.LastUpdated)
+                @Html.DisplayNameFor(model => model.Ticket.ClosedDate)
             </dt>
             <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.LastUpdated)
+                @if (Model.Ticket.ClosedDate.Year > 2000)
+                    @Html.DisplayFor(model => model.Ticket.ClosedDate)
             </dd>
         </dl>
 
@@ -82,14 +81,17 @@
                     @Html.DisplayFor(model => model.Ticket.CustomerPriority)
                 </dd>
             }
-
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.ClosedDate)
-            </dt>
-            <dd class="col-sm-4">
-                @if (Model.Ticket.ClosedDate.Year > 2000)
-                    @Html.DisplayFor(model => model.Ticket.ClosedDate)
-            </dd>
+            
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) ||
+            (User.IsInRole("Customer") && @Model.Ticket.Status != Status.Inskickat))
+            {
+                <dt class="col-sm-2 hidestatus">
+                    @Html.DisplayNameFor(model => model.Ticket.DueDate)
+                </dt>
+                <dd class="col-sm-4 hidestatus">
+                    @Html.DisplayFor(model => model.Ticket.DueDate)
+                </dd>
+            }
         </dl>
 
 
@@ -100,15 +102,14 @@
             <dd class="col-sm-4">
                 @Html.DisplayFor(model => model.Ticket.Project.Name)
             </dd>
-
-            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) ||
-               (User.IsInRole("Customer") && @Model.Ticket.Status != Status.Inskickat))
+            
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
-                <dt class="col-sm-2 hidestatus">
-                    @Html.DisplayNameFor(model => model.Ticket.DueDate)
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
                 </dt>
-                <dd class="col-sm-4 hidestatus">
-                    @Html.DisplayFor(model => model.Ticket.DueDate)
+                <dd class="col-sm-4">
+                    @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
                 </dd>
             }
         </dl>

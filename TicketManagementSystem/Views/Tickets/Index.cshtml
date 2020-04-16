@@ -76,15 +76,12 @@
                     <option value="1">Match</option>
                     <option value="2">Ingen Match</option>
                 </select>
-                @*<select name="projectSearch" asp-for="ProjectId" asp-items="ViewBag.ProjectId" class="form-control">
-                        <option value="">Lösning</option>
-                    </select>
-                    <select name="companySearch" asp-for="CustomerCompany" class="form-control" asp-items="ViewBag.Companies">
-                        <option value="">Kund</option>
-                    </select>*@
 
-
+                <select name="companySearch" class="form-control" asp-items="ViewBag.Companies">
+                    <option value="">Kund</option>
+                </select>
             }
+
             else
             {
                 <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
@@ -95,11 +92,13 @@
                     <option selected="selected" value="">Prioritet</option>
                 </select>
                 @*<select name="projectSearch" asp-for="Ticket.ProjectId" asp-items="ViewBag.ProjectId" class="form-control">
-                        <option value="">Lösning</option>
-                    </select>*@
-
-
+                <option value="">Lösning</option>
+            </select>*@
             }
+
+            <select name="projectSearch" asp-items="ViewBag.ProjectId" class="form-control">
+                <option value="">Lösning</option>
+            </select>
 
         </div>
         <div class="input-group-append">

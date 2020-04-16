@@ -28,7 +28,7 @@ namespace TicketManagementSystem.Core.Models
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("no-reply@Bitoreq.com", "Admin User"),
+                From = new EmailAddress("no-reply@bitoreq.se", "Bitoreq Support"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
