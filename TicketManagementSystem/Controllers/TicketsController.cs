@@ -86,6 +86,8 @@ namespace TicketManagementSystem.Controllers
         {
             var loggedInUser = await userManager.GetUserAsync(User);
 
+            ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
+
             // List all the result by Company
             model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
                         .Where(u => u.CreatedUser.CompanyId == loggedInUser.CompanyId)
@@ -130,8 +132,6 @@ namespace TicketManagementSystem.Controllers
                     })
                     .ToListAsync();
 
-
-
             return model;
         }
 
@@ -157,9 +157,7 @@ namespace TicketManagementSystem.Controllers
                 ResponseType = s.ResponseType
             })
                 .ToListAsync();
-
-
-           
+            
                 return model;
         }
 
@@ -203,6 +201,18 @@ namespace TicketManagementSystem.Controllers
             else
             {
                 model = await TicketViewModelCustomer(model, loggedInUser);
+            }
+
+            if (User.IsInRole("Developer") || User.IsInRole("Admin"))
+            {
+                ViewData["Companies"] = new SelectList(_context.Companies, "Id", "CompanyName");
+                ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+            }
+
+            else if (User.IsInRole("Customer"))
+            {
+                //loggedInUser = await userManager.GetUserAsync(User);
+                ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
             }
 
             // List all the result and not show Draft Status 
@@ -255,16 +265,45 @@ namespace TicketManagementSystem.Controllers
             model :
             model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
 
+            var projectsNameListAdmin = new SelectList(_context.Projects, "Id", "Name");
+            var projectsNameListCustomer = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
 
-            // Search by project
-            model = projectSearch == null ?
-            model :
-            model.Where(m => m.Project.Name == projectSearch).ToList();
+            if (User.IsInRole("Developer") || User.IsInRole("Admin"))
+            {
+                // Search by project Admin
+               
+                foreach (var item in projectsNameListAdmin)
+                {
+                    if (item.Value == projectSearch)
+                    {
+                        model = model.Where(m => m.ProjectName == item.Text).ToList();
+                    }
+                }
 
-            //// Search by company
-            //model = companySearch == null ?
-            //model :
-            //model.Where(m => m. == companySearch).ToList();
+            }
+            else 
+            {
+                // Search by project Customer
+
+                foreach (var item in projectsNameListCustomer)
+                {
+                    if (item.Value == projectSearch)
+                    {
+                        model = model.Where(m => m.ProjectName == item.Text).ToList();
+                    }
+                }
+
+            }
+
+            // Search by company
+            var companiesNameList = new SelectList(_context.Companies, "Id", "CompanyName");
+            foreach (var item in companiesNameList)
+            {
+                if (item.Value == companySearch)
+                {
+                    model = model.Where(m => m.CompanyName == item.Text).ToList();
+                }
+            }
 
             // Search by Match or Not-Match Priority Drowpdown
             if (priorities.GetValueOrDefault() == 1)
@@ -281,9 +320,12 @@ namespace TicketManagementSystem.Controllers
         }
 
         //Filter For company Tickets by Title, Status and Priorities
-        public async Task<IActionResult> FilterForCompanyTickets(string title, int? statusSearch, int? customerPriority, int? adminPriority, int? priorities, List<TicketIndexViewModel> model, string sortOrder)
+        public async Task<IActionResult> FilterForCompanyTickets(string projectSearch, string title, int? statusSearch, int? customerPriority, int? adminPriority, int? priorities, List<TicketIndexViewModel> model, string sortOrder)
         {
             var loggedInUser = await userManager.GetUserAsync(User);
+ 
+            ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
+           
 
             // List all the result by CompanyId 
             model = await _context.Tickets.Include(t => t.AssignedUser).Include(t => t.CreatedUser).Include(t => t.Project)
@@ -321,6 +363,17 @@ namespace TicketManagementSystem.Controllers
             model = adminPriority == null ?
             model :
             model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
+
+            // Search by project Customer
+            var projectsNameListCustomer = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
+
+            foreach (var item in projectsNameListCustomer)
+            {
+                if (item.Value == projectSearch)
+                {
+                    model = model.Where(m => m.ProjectName == item.Text).ToList();
+                }
+            }
 
             //model = SortList(sortOrder, model);
             return View(nameof(IndexCompanyTickets), model);
