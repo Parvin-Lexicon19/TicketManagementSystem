@@ -241,7 +241,7 @@ namespace TicketManagementSystem.Controllers
             model :
             model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
-            // Search by Status
+            // Search by Status Drowpdown
             if (User.IsInRole("Admin"))
             {
                 model = statusSearch == null ?
@@ -270,8 +270,7 @@ namespace TicketManagementSystem.Controllers
 
             if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
-                // Search by project Admin
-               
+                // Search by project Admin          
                 foreach (var item in projectsNameListAdmin)
                 {
                     if (item.Value == projectSearch)
@@ -283,8 +282,7 @@ namespace TicketManagementSystem.Controllers
             }
             else 
             {
-                // Search by project Customer
-
+                // Search by project Customer Drowpdown
                 foreach (var item in projectsNameListCustomer)
                 {
                     if (item.Value == projectSearch)
@@ -295,7 +293,7 @@ namespace TicketManagementSystem.Controllers
 
             }
 
-            // Search by company
+            // Search by company Drowpdown
             var companiesNameList = new SelectList(_context.Companies, "Id", "CompanyName");
             foreach (var item in companiesNameList)
             {
@@ -349,7 +347,7 @@ namespace TicketManagementSystem.Controllers
             model :
             model.Where(p => p.Title.ToLower().Contains(title.ToLower())).ToList();
 
-            // Search by Status
+            // Search by Status Drowpdown
             model = statusSearch == null ?
             model :
             model.Where(m => m.Status == (Status)statusSearch).ToList();
@@ -364,7 +362,7 @@ namespace TicketManagementSystem.Controllers
             model :
             model.Where(m => m.RealPriority == (Priority)adminPriority).ToList();
 
-            // Search by project Customer
+            // Search by project Customer Drowpdown
             var projectsNameListCustomer = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
 
             foreach (var item in projectsNameListCustomer)
@@ -615,22 +613,24 @@ namespace TicketManagementSystem.Controllers
                 await _emailSender.SendEmailAsync(
                       loggedInUser.Email,
                       $"Ärende {ticketRefNo} har mottagits.",
+                      $"Du kan inte svara på detta e-postutskick."+
+                      $"Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation i ärendet."+
                       $"Hej {loggedInUser.FirstName}," +
                       $"<br/><br/>Ditt nya ärende med ärendenummer <b>{ticketRefNo}</b> har mottagits. " +
-                      $"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>." +
-                      $"<br/><br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet." +
-                      $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
+                      $"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>." +              
+                      $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Support");
             }
             foreach (var developer in ticketProjectDevelopers)
             {
                 await _emailSender.SendEmailAsync(
                   developer.Email,
                   $"Ärende {ticketRefNo} har skickat.",
+                  $"Du kan inte svara på detta e-postutskick." +
+                  $"Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation i ärendet." +
                   $"Hej {developer.FirstName}," +
                   $"<br/><br/>Ett ny ärende med ärendenummer <b>{ticketRefNo}</b> insänd av {loggedInUser.Email} från <b>{loggedInUserCompany.CompanyName}</b> Kunder. " +
                   $"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>." +
-                  $"<br/><br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet." +
-                  $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
+                  $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Support");
             }
 
             return RedirectToAction(nameof(EmailSent));
@@ -813,11 +813,12 @@ namespace TicketManagementSystem.Controllers
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
                                $" Prioritetsändring för ärende {ticketRefNo}!",
+                               $"Du kan inte svara på detta e-postutskick." +
+                               $"Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation i ärendet." +
                                $"Hej {createdUser.FirstName}," +
                                $"<br/><br/>Prioriteten för ärendet {ticketRefNo} har ändrats från {previousPriority}  till {RelPriority} av { loggedInUser}. " +
-                               $"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl1)}'> {ticketRefNo} </a>." +
-                               $"<br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet</a>." +
-                               $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
+                               $"<br/>Klicka här för att se ärendet: <a href='{HtmlEncoder.Default.Encode(callbackUrl1)}'> {ticketRefNo} </a>." +                             
+                               $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Support");
                     }
 
                 }
@@ -834,11 +835,12 @@ namespace TicketManagementSystem.Controllers
                         _emailSender.SendEmailAsync(
                                createdUser.Email,
                                $"Ärende {ticketRefNo} avslutat.",
+                               $"Du kan inte svara på detta e-postutskick." +
+                               $"Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation i ärendet." +
                                $"Hej {createdUser.FirstName}," +
                                $"<br/><br/>Ärendet med nummer {ticketRefNo} har avslutats av { loggedInUser}." +
                                $"<br/><br/>Klicka här för att se ärendet:<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>" +
-                               $"<br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation om ärendet</a>." +
-                               $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Admin");
+                               $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Support");
                     }   
                 }
                 return "Ärendestatus har uppdaterats!";
