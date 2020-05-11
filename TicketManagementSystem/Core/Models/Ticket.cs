@@ -56,7 +56,7 @@ namespace TicketManagementSystem.Core.Models
         public ICollection<Comment> Comments { get; set; }
         [DisplayName("Lösning")]
         public Project Project { get; set; }
-        [DisplayName("Skapat Av Användare")]
+        [DisplayName("Skapat av")]
         public virtual ApplicationUser CreatedUser { get; set; }
         [DisplayName("Tilldelad Användare")]
         public virtual ApplicationUser AssignedUser { get; set; }

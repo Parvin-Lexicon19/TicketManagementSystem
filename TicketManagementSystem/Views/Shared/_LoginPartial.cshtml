@@ -8,19 +8,20 @@
     <ul class="navbar-nav">
         @if (SignInManager.IsSignedIn(User))
         {
-            var userName = @User.GetFirstName() + @User.GetLastName();
+            var userName = @User.GetFirstName() + " " + @User.GetLastName();
 
-            if (userName == "")
+            if (String.IsNullOrWhiteSpace(userName))
             {
                 userName = User.Identity.Name;
             }
 
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"> Hej @userName!  </a>
-            </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"> Hej @userName!  </a>
+            @*<a class="nav-link text-dark" asp-area="" asp-controller="ApplicationUsers" asp-action="Edit" asp-route-id="@UserManager.GetUserId(User)" asp-route-name="Developer"> Hej @userName!  </a>*@
+        </li>
             <li class="nav-item">
                 <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Tickets", new { area = "" })">
-                    <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                    <button type="submit" class="nav-link btn btn-link text-dark">Logga ut</button>
                 </form>
             </li>
             if (User.IsInRole("Admin"))
