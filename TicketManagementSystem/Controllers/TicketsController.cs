@@ -617,7 +617,7 @@ namespace TicketManagementSystem.Controllers
                       $"<br/>Vänligen använd ärendehanteringssystemet för all skriftlig kommunikation i ärendet." +
                       $"<br/><br/>Hej {loggedInUser.FirstName}," +
                       $"<br/><br/>Ditt nya ärende med ärendenummer <b>{ticketRefNo}</b> har mottagits. " +
-                      $"<br/>Klicka här för att se ärendet:<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {ticketRefNo} </a>" +              
+                      $"<br/>Klicka <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {"här"} </a>" + "för att se ärendet." +
                       $"<br/><br/>Med vänliga hälsningar,<br/>Bitoreq Support");
             }
             foreach (var developer in ticketProjectDevelopers)

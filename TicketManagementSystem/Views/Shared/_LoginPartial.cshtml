@@ -16,8 +16,7 @@
             }
 
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"> Hej @userName!  </a>
-            @*<a class="nav-link text-dark" asp-area="" asp-controller="ApplicationUsers" asp-action="Edit" asp-route-id="@UserManager.GetUserId(User)" asp-route-name="Developer"> Hej @userName!  </a>*@
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Hantera"> Hej @userName!  </a>
         </li>
             <li class="nav-item">
                 <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Tickets", new { area = "" })">
