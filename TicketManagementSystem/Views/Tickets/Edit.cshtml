@@ -6,11 +6,11 @@
     int i = 0;
 }
 
-<h3>Redigera Ärende</h3>
+<h1>Redigera Ärende</h1>
 <hr />
 <div>
-    <div class="row">
-        <div class="col-md-4">
+    @*<div class="row">*@
+        <div class="col-md-8">
             <form asp-action="Edit" id="editform" enctype="multipart/form-data" method="post">
                 @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
                 <input type="hidden" asp-for="Ticket.Id" />
@@ -28,23 +28,25 @@
                     <span asp-validation-for="Ticket.Title" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Ticket.Project" class="control-label"></label>
-                    <select asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
-                        @*(IEnumerable<SelectListItem>)loggedInUserProjects*@
-                        <option value="">Välj projekt</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Ticket.CustomerPriority" class="control-label">Prioritet</label>
-                    <select asp-for="Ticket.CustomerPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control">
-                        <option value="">Välj prioritet</option>
-                    </select>
-                    <span asp-validation-for="Ticket.CustomerPriority" class="text-danger"></span>
-                </div>
-                <div class="form-group">
                     <label asp-for="Ticket.Problem" class="control-label"></label>
-                    <textarea asp-for="Ticket.Problem" rows="8" class="form-control" id="problem"></textarea>
+                    <textarea asp-for="Ticket.Problem" rows="5" class="form-control" id="problem"></textarea>
                     <span asp-validation-for="Ticket.Problem" class="text-danger"></span>
+                </div>
+                <div class="row" style="padding-bottom: 10px">
+                    <div class="form-group col-6">
+                        <label asp-for="Ticket.Project" class="control-label"></label>
+                        <select asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
+                            @*(IEnumerable<SelectListItem>)loggedInUserProjects*@
+                            <option value="">Välj projekt</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-6">
+                        <label asp-for="Ticket.CustomerPriority" class="control-label">Prioritet</label>
+                        <select asp-for="Ticket.CustomerPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control">
+                            <option value="">Välj prioritet</option>
+                        </select>
+                        <span asp-validation-for="Ticket.CustomerPriority" class="text-danger"></span>
+                    </div>
                 </div>
                 @*<div class="form-group">
             <label asp-for="CreatedBy" class="control-label"></label>
@@ -114,6 +116,8 @@
                 @*<div class="form-group">
             <input type="submit" value="Save" class="btn btn-primary" />
         </div>*@
+
+                <hr />
                 @if (Model.Documents != null)
                 {
 
@@ -122,20 +126,19 @@
                         <dl class="row">
                             @if (i == 0)
                             {
-                                <dt class="col-sm-3">
+                                <dt class="col-3" style="padding-left:30px">
                                     @*@Html.DisplayNameFor(model => model.Documents)*@
                                     <label asp-for="Documents"></label>
                                 </dt>
                             }
                             else
                             {
-                                <dt class="col-sm-3">
+                                <dt class="col-3">
                                 </dt>
                             }
 
-                            <dd class="col-sm-3">
+                            <dd class="col-9">
                                 <span class="form-check-inline">
-                                    &nbsp;
                                     <a id="file_@i" asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a> &nbsp;
                                     <a asp-controller="Documents" asp-action="RemoveFile" asp-route-id="@item.Id" onclick="deleteit(i);"><i class="fa fa-remove" style="font-size:24px;color:red"></i></a>
                                 </span>
@@ -154,33 +157,33 @@
                 @for (int j = 0; j < (3 - Model.Documents.Count); j++)
                 {
                     <div class="form-group row">
-
-                        <div class="col-md-3 col-form-label">
-                            @Html.Label("Bifoga Fil" + (j + 1).ToString())
+                        <div class="col-2 col-form-label" style="padding-left:30px">
+                            @Html.Label("Bifoga fil " + (j + 1).ToString())
                         </div>
                         @*<label asp-for="File" class="col-md-2 col-form-label"></label>*@
-                        <div class="col-md-9">
+                        <div class="col-10">
                             <div class="custom-file">
                                 <input asp-for="File" class="form-control custom-file-input" id="file" lang="se">
-                                <label class="custom-file-label" data-label="Bläddra">Välj FIL...</label>
+                                <label class="custom-file-label" data-label="Bläddra">Välj fil...</label>
                             </div>
                         </div>
                     </div>
 
                 }
 
-                <div class="form-group" align="center">
+                <hr />
+                <div class="form-group" align="center" style="padding-top: 10px">
                     <input name="submit" type="submit" id="submit" value="Spara som Utkast" class="btn btn-primary" />
                     <input name="submit" type="submit" id="submit" value="Skicka in" class="btn btn-primary" />
                 </div>
             </form>
         </div>
-    </div>
+    @*</div>*@
 
     <div>
         <a asp-action="Delete" asp-route-id="@Model.Ticket.Id">Radera</a> |
-        <a asp-action="Index">Tillbaka till Mina Ärende listan</a> |
-        <a asp-action="IndexCompanyTickets">Tillbaka till Alla Ärende listan</a>
+        <a asp-action="Index">Tillbaka till Mina Ärenden</a> |
+        <a asp-action="IndexCompanyTickets">Tillbaka till Alla Ärenden</a>
     </div>
 </div>
 

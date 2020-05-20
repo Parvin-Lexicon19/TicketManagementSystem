@@ -14,10 +14,10 @@ namespace TicketManagementSystem.Core.Models
         [DisplayName("Ärendenummer")]
         public string RefNo { get; set; }
         [Required]
+        [StringLength(100)]
         [DisplayName("Titel")]
         public string Title { get; set; }
-        [Required]
-        [StringLength(500)]
+        [Required]        
         [DisplayName("Beskrivning")]
         public string Problem { get; set; }
         [DisplayName("Skapad Av")]

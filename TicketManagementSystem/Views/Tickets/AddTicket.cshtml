@@ -7,8 +7,8 @@
 
 @*<h4>Ticket</h4>*@
 <hr />
-<div class="row">
-    <div class="col-md-4">
+@*<div class="row">*@
+    <div class="col-md-8">
         <form asp-action="AddTicket" enctype="multipart/form-data" method="post">
             @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
             <div class="form-group">
@@ -24,76 +24,79 @@
 
             @if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
-                <div class="form-group">
-                    <label asp-for="CustomerCompany" class="control-label">Kunder</label>
+              <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="CustomerCompany" class="control-label">Kund</label>
                     <select id="companyDropDownList" asp-for="CustomerCompany" class="form-control" asp-items="ViewBag.Companies" onchange="FillCustomers()" required>
                         <option value="">Välj Kund</option>
                     </select>
                     <span asp-validation-for="CustomerCompany" class="text-danger"></span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group col-6">
                     <label asp-for="Ticket.CreatedBy" class="control-label">Användare</label>
                     <select id="customerDropDownList" asp-for="Ticket.CreatedBy" class="form-control" asp-items="ViewBag.CreatedBy" onchange="FillProjects()" required>
                         <option value="">Välj Användare</option>
                     </select>
                     <span asp-validation-for="Ticket.CreatedBy" class="text-danger"></span>
                 </div>
+              </div>
             }
 
-            <div class="form-group">
-                <label asp-for="Ticket.ProjectId" class="control-label"></label>
-                <select id="projectDropDownList" asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
-                    <option value="">Välj Lösning</option>
-                </select>
-                <span asp-validation-for="Ticket.ProjectId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ticket.CustomerPriority" class="control-label">Prioritet</label>
-                <select asp-for="Ticket.CustomerPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control">
-                    <option value="">Välj Prioritet</option>
-                </select>
-                <span asp-validation-for="Ticket.CustomerPriority" class="text-danger"></span>
-            </div>
-
-            <hr />
-            @for (int i = 0; i < 3; i++)
-            {
-                <div class="form-group row">
-                    <div class="col-md-3 col-form-label">
-                        @Html.Label("Bifoga Fil" + (i + 1).ToString())
-                    </div>
-                    @*<label asp-for="File" class="col-md-2 col-form-label"></label>*@
-                    <div class="col-md-9">
-                        <div class="custom-file">
-                            <input asp-for="File" class="form-control custom-file-input" id="file" lang="se">
-                            <label class="custom-file-label" data-label="Bläddra">Välj FIL...</label>
-                        </div>
-                    </div>
+            <div class="row" style="padding-bottom: 10px">
+                <div class="form-group col-6">
+                    <label asp-for="Ticket.ProjectId" class="control-label"></label>
+                    <select id="projectDropDownList" asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
+                        <option value="">Välj Lösning</option>
+                    </select>
+                    <span asp-validation-for="Ticket.ProjectId" class="text-danger"></span>
                 </div>
-            }
-            <hr />
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-                <div class="form-group row">
-                    <div class="col-sm-3 small">Meddela Användaren</div>
-                    <div class="col-sm-9">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" asp-for="NotifyCustomer" id="notifyCustomer" />
-                        </div>
-                    </div>
+                <div class="form-group col-6">
+                    <label asp-for="Ticket.CustomerPriority" class="control-label">Prioritet</label>
+                    <select asp-for="Ticket.CustomerPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control">
+                        <option value="">Välj Prioritet</option>
+                    </select>
+                    <span asp-validation-for="Ticket.CustomerPriority" class="text-danger"></span>
                 </div>
-            }
-            <div class="form-group" align="center" style="padding-top: 10px">
-                @if (User.IsInRole("Customer"))
+            </div>
+                <hr />
+                @for (int i = 0; i < 3; i++)
                 {
-                    <input name="submit" type="submit" id="submit" value="Spara som Utkast" class="btn btn-primary" />
+                    <div class="form-group row">
+                        <div class="col-2 col-form-label" style="padding-left:30px">
+                            @Html.Label("Bifoga fil " + (i + 1).ToString())
+                        </div>
+                        @*<label asp-for="File" class="col-md-2 col-form-label"></label>*@
+                        <div class="col-10">
+                            <div class="custom-file">
+                                <input asp-for="File" class="form-control custom-file-input" id="file" lang="se">
+                                <label class="custom-file-label" data-label="Bläddra">Välj fil...</label>
+                            </div>
+                        </div>
+                    </div>
                 }
-                <input name="submit" type="submit" id="submit" value="Skicka in" class="btn btn-primary" />
-            </div>
+                <hr />
+                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+                {
+                    <div class="form-group row">
+                        <div class="col-2 small" style="padding-left:30px">Meddela Användaren</div>
+                        <div class="col-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="NotifyCustomer" id="notifyCustomer" />
+                            </div>
+                        </div>
+                    </div>
+                } 
+                <div class="form-group" align="center" style="padding-top: 10px">
+                    @if (User.IsInRole("Customer"))
+                    {
+                        <input name="submit" type="submit" id="submit" value="Spara som Utkast" class="btn btn-primary" />
+                    }
+                    <input name="submit" type="submit" id="submit" value="Skicka in" class="btn btn-primary" />
+                </div>
         </form>
     </div>
-</div>
+@*</div>*@
 
 @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
 {
@@ -105,8 +108,8 @@
 @if (User.IsInRole("Customer"))
 {
     <form>
-        <a asp-action="Index">Tillbaka till Mina Ärende listan</a> |
-        <a asp-action="IndexCompanyTickets">Tillbaka till Alla Ärende listan </a>
+        <a asp-action="Index">Tillbaka till Mina Ärenden</a> |
+        <a asp-action="IndexCompanyTickets">Tillbaka till Alla Ärenden </a>
     </form>
 }
 

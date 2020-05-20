@@ -15,7 +15,7 @@ namespace TicketManagementSystem.Core.ViewModels
         public List<IFormFile> File { get; set; }
         public Comment Comment { get; set; }
 
-        [Display(Name = "Bifogade Filer")]
+        [Display(Name = "Bifogade filer")]
         public ICollection<Document> Documents { get; set; }
     }
 }

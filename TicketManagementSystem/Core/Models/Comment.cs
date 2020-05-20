@@ -17,7 +17,6 @@ namespace TicketManagementSystem.Core.Models
         [ForeignKey("ApplicationUser")]
         public string CommentBy { get; set; }
         [Required]
-        [StringLength(500)]
         public string CommentText { get; set; }
         public Int64 TicketId { get; set; }
         public Ticket Ticket { get; set; }

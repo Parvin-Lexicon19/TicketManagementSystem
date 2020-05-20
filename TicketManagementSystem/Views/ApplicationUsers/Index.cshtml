@@ -35,18 +35,18 @@
                 @*<partial name="_LoginPartial" />*@
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Ärende</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Ärenden</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">Kunder</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">Lösning</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">Lösningar</a>
                     </li>
                     @if (@ViewBag.PageName == "Developer")
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Customer">Kundrepresentant</a>
+                            <a class="nav-link text-dark" asp-controller="ApplicationUsers" asp-action="Index" asp-route-name="Customer">Kundrepresentanter</a>
                         </li>
                     }
                     else
