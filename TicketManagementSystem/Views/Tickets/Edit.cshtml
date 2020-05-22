@@ -140,17 +140,13 @@
                             <dd class="col-9">
                                 <span class="form-check-inline">
                                     <a id="file_@i" asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a> &nbsp;
-                                    <a asp-controller="Documents" asp-action="RemoveFile" asp-route-id="@item.Id" onclick="deleteit(i);"><i class="fa fa-remove" style="font-size:24px;color:red"></i></a>
+                                    <a asp-controller="Documents" asp-action="RemoveFile" asp-route-id="@item.Id" onclick="return confirm('Är du säker på att du vill ta bort filen?')"><i class="fa fa-remove" style="font-size:24px;color:red"></i></a>
                                 </span>
-
                             </dd>
-
-
                         </dl>
 
                         i++;
                     }
-
 
                 }
 
@@ -174,7 +170,7 @@
                 <hr />
                 <div class="form-group" align="center" style="padding-top: 10px">
                     <input name="submit" type="submit" id="submit" value="Spara som Utkast" class="btn btn-primary" />
-                    <input name="submit" type="submit" id="submit" value="Skicka in" class="btn btn-primary" />
+                    <input name="submit" type="submit" id="submit" value="Skicka in" class="btn btn-primary" onclick="return confirm('Är du säker på att du vill skicka in ärendet?')" />
                 </div>
             </form>
         </div>

@@ -4,11 +4,8 @@
 // Write your JavaScript code.
 $(document).ready(function () {
     $('.custom-file-input').on("change", function () {
-
-
-            var fileName = $(this).val().split("\\").pop();
-            $(this).next('.custom-file-label').html(fileName);
-        
+        var fileName = $(this).val().split("\\").pop();
+        $(this).next('.custom-file-label').html(fileName);
     });
 });
 
@@ -50,7 +47,18 @@ function FillProjects() {
     });
 }
 
-function deleteit(no) {
-    document.getElementById(this.deleteit)
-}
+//function deleteit(no) {
+//    document.getElementById(this.deleteit)
+//}
+
+//function deleteit(no) {
+//    var retVal = confirm("Är du säker på att du vill ta bort filen?");
+//    if (retVal == true) {
+//        document.getElementById(this.de)
+//        return true;
+//    } else {
+//        document.write("User does not want to continue!");
+//        return false;
+//    }
+//}
 
