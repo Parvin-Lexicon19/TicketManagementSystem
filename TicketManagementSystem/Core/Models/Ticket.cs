@@ -15,7 +15,7 @@ namespace TicketManagementSystem.Core.Models
         public string RefNo { get; set; }
         [Required]
         [StringLength(100)]
-        [DisplayName("Titel")]
+        [DisplayName("Rubrik")]
         public string Title { get; set; }
         [Required]        
         [DisplayName("Beskrivning")]

@@ -20,7 +20,7 @@ namespace TicketManagementSystem.Core.ViewModels
         [DisplayName("Ärendenummer")]
         public string RefNo { get; set; }
         [Required]
-        [DisplayName("Titel")]
+        [DisplayName("Rubrik")]
         public string Title { get; set; }
         [DisplayName("Status")]
         public Status? Status { get; set; }
@@ -49,6 +49,8 @@ namespace TicketManagementSystem.Core.ViewModels
 
         [DisplayName("Lösning")]
         public Project Project { get; set; }
+        [DisplayName("Inskickat datum")]
+        public DateTime CreatedDate { get; set; }
 
         [DisplayName("Förfallodatum")]
         [DataType(DataType.Date), DisplayFormat(DataFormatString = @"{0:dd\/MM\/yyyy HH:mm}",

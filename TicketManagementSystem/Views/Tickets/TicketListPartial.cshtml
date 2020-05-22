@@ -29,10 +29,10 @@
             </th>
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
-            <th>
-                @Html.DisplayNameFor(model => model.CompanyName)
-                @*@Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectNameSortParm })*@
-            </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CompanyName)
+                    @*@Html.ActionLink(Html.DisplayNameFor(model => model.ProjectName), "Index", new { sortOrder = ViewBag.ProjectNameSortParm })*@
+                </th>
             }
             <th>
                 @Html.DisplayNameFor(model => model.Status)
@@ -56,6 +56,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.RealPriority)
                     @*@Html.ActionLink(Html.DisplayNameFor(model => model.RealPriority), "Index", new { sortOrder = ViewBag.RealPrioritySortParm })*@
+                </th>
+                <th scope="col" colspan="2">
+                    @Html.DisplayNameFor(model => model.CreatedDate)
                 </th>
             }
             <th scope="col" colspan="2">
@@ -127,9 +130,9 @@
             </td>
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
-            <td>
-                @Html.DisplayFor(modelItem => item.CompanyName)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyName)
+                </td>
             }
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
@@ -172,16 +175,33 @@
 
             @if ((User.IsInRole("Admin") || User.IsInRole("Developer")))
             {
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                int days = (int)(DateTime.Now - item.CreatedDate).TotalDays;
+                @if ((item.Status == Status.Inskickat) && days >= 1)
+                {
+                    string errMsg = "Ärendet har skickats in för " + days.ToString() + " dag(ar) sedan";
+                    <td>
+                        <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title= "@errMsg" >
+                            <i class="fa fa-exclamation-circle text-danger"></i>
+                        </button>                        
+                    </td>
+                }
+                else
+                {
+                    <td>
+                    </td>
+                }
 
                 <td>
                     @Html.DisplayFor(modelItem => item.DueDate)
                 </td>
 
-
                 @if ((item.Status == Status.Inskickat || item.Status == Status.Påbörjat) && (item.DueDate < DateTime.Now))
                 {
                     <td>
-                        <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Due Date has expired!">
+                        <button type="button" class="btn  btn-lg" data-placement="right" data-toggle="tooltip" title="Förfallodatum har löpt ut!">
                             <i class="fa fa-exclamation-circle text-danger"></i>
                         </button>
 

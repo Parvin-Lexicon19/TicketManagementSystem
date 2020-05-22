@@ -100,6 +100,7 @@ namespace TicketManagementSystem.Controllers
                             ProjectName = s.Project.Name,
                             CustomerPriority = s.CustomerPriority,
                             RealPriority = s.RealPriority,
+                            CreatedDate = s.CreatedDate,
                             DueDate = s.DueDate,
                             UserEmail = s.AssignedUser.Email,
                             HoursSpent = s.HoursSpent
@@ -126,6 +127,7 @@ namespace TicketManagementSystem.Controllers
                         ProjectName = s.Project.Name,
                         CustomerPriority = s.CustomerPriority,
                         RealPriority = s.RealPriority,
+                        CreatedDate = s.CreatedDate,
                         DueDate = s.DueDate,
                         UserEmail = s.AssignedUser.Email,
                        
@@ -151,6 +153,7 @@ namespace TicketManagementSystem.Controllers
                 CompanyName = s.Project.Company.CompanyName,
                 CustomerPriority = s.CustomerPriority,
                 RealPriority = s.RealPriority,
+                CreatedDate = s.CreatedDate,
                 DueDate = s.DueDate,
                 UserEmail = s.AssignedUser.Email,
                 HoursSpent = s.HoursSpent,
@@ -175,6 +178,7 @@ namespace TicketManagementSystem.Controllers
                    CompanyName = s.Project.Company.CompanyName,
                    CustomerPriority = s.CustomerPriority,
                    RealPriority = s.RealPriority,
+                   CreatedDate = s.CreatedDate,
                    DueDate = s.DueDate,
                    UserEmail = s.AssignedUser.Email,
                    HoursSpent = s.HoursSpent,
@@ -229,6 +233,7 @@ namespace TicketManagementSystem.Controllers
                            CustomerPriority = s.CustomerPriority,
                            RealPriority = s.RealPriority,
                            DueDate = s.DueDate,
+                           CreatedDate = s.CreatedDate,
                            UserEmail = s.AssignedUser.Email,
                            HoursSpent = s.HoursSpent,
                            ResponseType = s.ResponseType
@@ -337,6 +342,7 @@ namespace TicketManagementSystem.Controllers
                             ProjectName = s.Project.Name,
                             CustomerPriority = s.CustomerPriority,
                             RealPriority = s.RealPriority,
+                            CreatedDate = s.CreatedDate,
                             DueDate = s.DueDate,
                             UserEmail = s.AssignedUser.Email
                         })

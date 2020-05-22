@@ -27,7 +27,7 @@
 </nav>
 <form asp-action="FilterForCompanyTickets">
     <div class="input-group mb-3">
-        <input type="text" name="title" class="form-control" placeholder="Sök på Titel" />
+        <input type="text" name="title" class="form-control" placeholder="Sök på Rubrik" />
         <div class="input-group-append">
 
             <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
