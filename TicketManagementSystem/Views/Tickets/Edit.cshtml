@@ -171,13 +171,16 @@
                 <div class="form-group" align="center" style="padding-top: 10px">
                     <input name="submit" type="submit" id="submit" value="Spara som Utkast" class="btn btn-primary" />
                     <input name="submit" type="submit" id="submit" value="Skicka in" class="btn btn-primary" onclick="return confirm('Är du säker på att du vill skicka in ärendet?')" />
+                    <div align="right">
+                        <a asp-action="Delete" asp-route-id="@Model.Ticket.Id" class="btn btn-danger">Radera</a>
+                    </div>
                 </div>
             </form>
         </div>
     @*</div>*@
 
     <div>
-        <a asp-action="Delete" asp-route-id="@Model.Ticket.Id">Radera</a> |
+        @*<a asp-action="Delete" asp-route-id="@Model.Ticket.Id">Radera</a> |*@
         <a asp-action="Index">Tillbaka till Mina Ärenden</a> |
         <a asp-action="IndexCompanyTickets">Tillbaka till Alla Ärenden</a>
     </div>
