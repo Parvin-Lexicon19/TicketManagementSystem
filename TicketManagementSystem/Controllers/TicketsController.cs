@@ -592,7 +592,7 @@ namespace TicketManagementSystem.Controllers
                 await _context.SaveChangesAsync();
 
                 if (model.File != null)
-                    Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
+                    Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, companyAbbr);
                
                 if (model.Ticket.Status.Equals(Status.Inskickat))
                 {
@@ -715,7 +715,11 @@ namespace TicketManagementSystem.Controllers
                     await _context.SaveChangesAsync();
 
                     if (model.File != null)
-                        Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, model.Ticket.RefNo);
+                    {
+                        Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
+                        var companyAbbr = loggedInUserCompany.CompanyAbbr;
+                        Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, companyAbbr);
+                    }                        
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -948,18 +952,20 @@ namespace TicketManagementSystem.Controllers
             return RedirectToAction("Details", new { id = comment.TicketId });
         }
 
-        private void Fileupload(List<IFormFile> inputFiles, long ticketid, string userid, string ticketRfno)
+        private void Fileupload(List<IFormFile> inputFiles, long ticketid, string userid, string companyAbbr)
         {
             string FileName = null;
             string filePath = null;
+            
             foreach (var inputFile in inputFiles)
             {
+                Guid filePrefix = Guid.NewGuid();
                 if (inputFile != null)
                 {
                     string projectDir = System.IO.Directory.GetCurrentDirectory();
-                    var uploadsFolder = Path.Combine(projectDir, "wwwroot/Docs");
-                    FileName = Path.GetFileName(inputFile.FileName);
-                    filePath = Path.Combine(uploadsFolder, ticketRfno + "_" + FileName);
+                    var uploadsFolder = Path.Combine(projectDir, $"wwwroot/Docs/{companyAbbr}");
+                    FileName = Path.GetFileName(inputFile.FileName);                    
+                    filePath = Path.Combine(uploadsFolder, filePrefix + "_" + FileName);
 
                     if (!Directory.Exists(uploadsFolder))
                         Directory.CreateDirectory(uploadsFolder);
@@ -971,7 +977,7 @@ namespace TicketManagementSystem.Controllers
                     }
                 }
 
-                var filename = ticketRfno + "_" + FileName;
+                var filename = filePrefix + "_" + FileName;
                 var document = new Document
                 {
                     Name = filename,

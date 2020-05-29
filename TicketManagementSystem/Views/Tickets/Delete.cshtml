@@ -126,7 +126,7 @@
                     </dt>
                 }
                 <dd class="col-sm-10">
-                    <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                    <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.GetName)</a>
                 </dd>
 
 
