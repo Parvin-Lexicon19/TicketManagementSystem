@@ -188,5 +188,15 @@ namespace TicketManagementSystem.Controllers
         {
             return _context.Companies.Any(e => e.Id == id);
         }
+
+        public IActionResult CheckAbbr(string CompanyAbbr)
+        {
+            if (_context.Companies.Any(c => c.CompanyAbbr == CompanyAbbr))
+            {
+                return Json($"{CompanyAbbr} används");
+            }
+
+            return Json(true);
+        }
     }
 }

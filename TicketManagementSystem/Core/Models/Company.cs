@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace TicketManagementSystem.Core.Models
         [MinLength(5)]
         [MaxLength(5)]
         [Display(Name = "Kunder Förkortning")]
+        [Remote(action: "CheckAbbr", controller: "Companies")]
         public string CompanyAbbr { get; set; }
         [Required]
         [Display(Name = "Kundersnamn")]

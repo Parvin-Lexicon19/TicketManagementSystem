@@ -12,6 +12,8 @@
     <Compile Remove="Data\Migrations\20200302102833_TicketProjectIdIsRequired.Designer.cs" />
     <Compile Remove="Data\Migrations\20200401104033_addactiveusers.cs" />
     <Compile Remove="Data\Migrations\20200401104033_addactiveusers.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200529093336_CompanyAbrrUnique.cs" />
+    <Compile Remove="Data\Migrations\20200529093336_CompanyAbrrUnique.Designer.cs" />
   </ItemGroup>
 
 
