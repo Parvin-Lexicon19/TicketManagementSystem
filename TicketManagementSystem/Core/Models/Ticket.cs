@@ -81,8 +81,11 @@ namespace TicketManagementSystem.Core.Models
     /*Assigned numbers are number of work days, you may change them if you want*/
     public enum Priority
     {
+        [Display(Name = "A: 2dgr")]
         A = 2,
+        [Display(Name = "B: 5dgr")]
         B = 5,
+        [Display(Name = "C: 9dgr")]
         C = 9
     }
 

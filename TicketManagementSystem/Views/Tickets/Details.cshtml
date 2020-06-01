@@ -169,13 +169,16 @@
                 <dd class="col-sm-4">
                     @Html.DisplayFor(model => model.Ticket.Status)
                 </dd>
-
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
-                </dt>
-                <dd class="col-sm-4">
-                    @Html.DisplayFor(model => model.Ticket.HoursSpent)
-                </dd>
+                @if (User.IsInRole("Admin") || User.IsInRole("Developer")) 
+                {
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
+                    </dt>
+                    <dd class="col-sm-4">
+                        @Html.DisplayFor(model => model.Ticket.HoursSpent)
+                    </dd>
+                }
+                
             </dl>
         }
 
