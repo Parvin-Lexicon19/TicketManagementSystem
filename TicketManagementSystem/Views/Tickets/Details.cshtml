@@ -82,8 +82,8 @@
                 </dd>
             }
             
-            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) ||
-            (User.IsInRole("Customer") && @Model.Ticket.Status != Status.Inskickat))
+            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) @*||
+            (User.IsInRole("Customer") && @Model.Ticket.Status != Status.Inskickat)*@)
             {
                 <dt class="col-sm-2 hidestatus">
                     @Html.DisplayNameFor(model => model.Ticket.DueDate)

@@ -22,7 +22,7 @@ namespace TicketManagementSystem.Core.Models
         public string Problem { get; set; }
         [DisplayName("Skapad Av")]
         public string CreatedBy { get; set; }
-        [DisplayName("Skapat Datum")]
+        [DisplayName("Inskickat datum")]
         public DateTime CreatedDate { get; set; }
         [DisplayName("Tilldelats")]
         public string AssignedTo { get; set; }
@@ -43,9 +43,9 @@ namespace TicketManagementSystem.Core.Models
         [Required]
         [DisplayName("Förfallodatum")]
         public DateTime DueDate { get; set; }
-        [DisplayName("Stängt Datum")]
+        [DisplayName("Avslutat datum")]
         public DateTime ClosedDate { get; set; }
-        [DisplayName("Senast Uppdaterad")]
+        [DisplayName("Senast uppdaterat")]
         public DateTime LastUpdated { get; set; }
         [DisplayName("Svarstyp")]
         public ResponseType ResponseType { get; set; }
@@ -81,11 +81,11 @@ namespace TicketManagementSystem.Core.Models
     /*Assigned numbers are number of work days, you may change them if you want*/
     public enum Priority
     {
-        [Display(Name = "A: 2dgr")]
+        //[Display(Name = "A: 2dgr")]
         A = 2,
-        [Display(Name = "B: 5dgr")]
+        //[Display(Name = "B: 5dgr")]
         B = 5,
-        [Display(Name = "C: 9dgr")]
+        //[Display(Name = "C: 9dgr")]
         C = 9
     }
 
