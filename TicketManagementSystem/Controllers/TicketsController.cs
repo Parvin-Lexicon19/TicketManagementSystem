@@ -29,8 +29,6 @@ namespace TicketManagementSystem.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ApplicationDbContext _context;
-        private static ApplicationUser loggedInUser;
-        private static IEnumerable<ApplicationUser> confirmedCustomers;
         private List<ApplicationUser> ticketProjectDevelopers;        
         private readonly IEmailSender _emailSender;
 
@@ -500,7 +498,7 @@ namespace TicketManagementSystem.Controllers
                 }
             };
             //Pass the LoggedInUser when closing the Ticket.
-            loggedInUser = await userManager.GetUserAsync(User);
+            var loggedInUser = await userManager.GetUserAsync(User);
             TempData["loggedInUser"] = loggedInUser.Email;
 
             return View(model);
@@ -514,9 +512,7 @@ namespace TicketManagementSystem.Controllers
             if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
                 ViewData["Companies"] = new SelectList(_context.Companies, "Id", "CompanyName");
-
-                var customers = await userManager.GetUsersInRoleAsync("Customer");
-                confirmedCustomers = customers.Where(a => a.EmailConfirmed == true);
+                var confirmedCustomers = await GetConfirmedCustomers();
                 ViewData["CreatedBy"] = new SelectList(confirmedCustomers, "Id", "Email").OrderBy(m => m.Text);
 
                 ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
@@ -524,11 +520,18 @@ namespace TicketManagementSystem.Controllers
 
             else if (User.IsInRole("Customer"))
             {
-                loggedInUser = await userManager.GetUserAsync(User);
+                var loggedInUser = await userManager.GetUserAsync(User);
                 ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
             }
 
             return View(model);
+        }
+
+        private async Task<IEnumerable<ApplicationUser>> GetConfirmedCustomers()
+        {
+            var customers = await userManager.GetUsersInRoleAsync("Customer");
+            var confirmedCustomers = customers.Where(a => a.EmailConfirmed == true);
+            return confirmedCustomers;
         }
 
         // POST: Tickets/AddTicket
@@ -538,6 +541,8 @@ namespace TicketManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddTicket(AddTicketViewModel model, string submit)
         {
+            var loggedInUser = await userManager.GetUserAsync(User);
+
             if (User.IsInRole("Developer") || User.IsInRole("Admin"))
                 loggedInUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == model.Ticket.CreatedBy);
             else if (User.IsInRole("Customer"))
@@ -600,9 +605,9 @@ namespace TicketManagementSystem.Controllers
                     var ticketRefNo = model.Ticket.RefNo;
 
                     if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-                        return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo, model.NotifyCustomer);
+                        return await SubmittedTicketEmail(loggedInUser, loggedInUserCompany, callbackUrl, ticketRefNo, model.NotifyCustomer);
                     else if (User.IsInRole("Customer"))
-                        return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo, true);
+                        return await SubmittedTicketEmail(loggedInUser, loggedInUserCompany, callbackUrl, ticketRefNo, true);
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -612,7 +617,7 @@ namespace TicketManagementSystem.Controllers
         }
 
         /*Ticket has been assigned to developer1, but emails sent to both developer1 and developer2*/
-        private async Task<IActionResult> SubmittedTicketEmail(Company loggedInUserCompany, string callbackUrl, string ticketRefNo, bool notifyCustomer)
+        private async Task<IActionResult> SubmittedTicketEmail(ApplicationUser loggedInUser, Company loggedInUserCompany, string callbackUrl, string ticketRefNo, bool notifyCustomer)
         {
             if (notifyCustomer == true)
             {
@@ -663,7 +668,7 @@ namespace TicketManagementSystem.Controllers
                 Documents = ticket.Documents,
             };
 
-            loggedInUser = await userManager.GetUserAsync(User);
+            var loggedInUser = await userManager.GetUserAsync(User);
             ViewData["ProjectId"] = new SelectList(_context.Projects.Where(g => g.CompanyId == loggedInUser.CompanyId), "Id", "Name");
 
             return View(model);
@@ -676,6 +681,8 @@ namespace TicketManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, TicketDetailsViewModel model, string submit)
         {
+            var loggedInUser = await userManager.GetUserAsync(User);
+
             model.Ticket.RealPriority = model.Ticket.CustomerPriority;
             model.Ticket.LastUpdated = DateTime.Now;            
 
@@ -735,7 +742,7 @@ namespace TicketManagementSystem.Controllers
                     var callbackUrl = Url.Action("Details", "Tickets", new { id = model.Ticket.Id }, protocol: Request.Scheme);
                     var ticketRefNo = model.Ticket.RefNo;
 
-                    return await SubmittedTicketEmail(loggedInUserCompany, callbackUrl, ticketRefNo, true);
+                    return await SubmittedTicketEmail(loggedInUser, loggedInUserCompany, callbackUrl, ticketRefNo, true);
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -940,7 +947,7 @@ namespace TicketManagementSystem.Controllers
         public async Task<IActionResult> AddComment([Bind("Id,CommentTime,CommentBy,CommentText,TicketId")] Comment comment)
         {
             comment.CommentTime = DateTime.Now;
-            loggedInUser = await userManager.GetUserAsync(User);
+            var loggedInUser = await userManager.GetUserAsync(User);
             comment.CommentBy = loggedInUser.Id;
 
             if (ModelState.IsValid)
@@ -996,9 +1003,9 @@ namespace TicketManagementSystem.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetCustomers(string companyId)
+        public async Task<JsonResult> GetCustomers(string companyId)
         {
-            var compCustomers = confirmedCustomers;
+            var compCustomers = await GetConfirmedCustomers();
             var selectedCompanyCustomers= string.IsNullOrEmpty(companyId) ?
                 compCustomers
                 : compCustomers.Where(g => g.CompanyId.ToString() == companyId);

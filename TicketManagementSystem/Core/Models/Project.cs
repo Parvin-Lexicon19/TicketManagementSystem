@@ -11,13 +11,13 @@ namespace TicketManagementSystem.Core.Models
     public class Project
     {
         public int Id { get; set; }
-        [Display(Name = "Kunder")]
+        [Display(Name = "Kund")]
         public int CompanyId { get; set; }
         [Required]
         [StringLength(70)]
         [Display(Name = "Namn")]
         public string Name { get; set; }
-
+        [Required]
         [Display(Name = "Utvecklare1")]
         public string Developer1 { get; set; }
         [Display(Name = "Utvecklare2")]
