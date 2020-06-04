@@ -14,7 +14,7 @@ namespace TicketManagementSystem.Core.Models
         [MinLength(5)]
         [MaxLength(5)]
         [Display(Name = "Kunder Förkortning")]
-        [Remote(action: "CheckAbbr", controller: "Companies")]
+        [Remote(action: "CheckAbbr", controller: "Companies", AdditionalFields = "Id")]
         public string CompanyAbbr { get; set; }
         [Required]
         [Display(Name = "Kundersnamn")]

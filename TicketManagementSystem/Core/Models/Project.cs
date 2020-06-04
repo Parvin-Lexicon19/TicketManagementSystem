@@ -23,9 +23,9 @@ namespace TicketManagementSystem.Core.Models
         [Display(Name = "Utvecklare2")]
         public string Developer2 { get; set; }
 
-        [Display(Name = "Första Driftsättningsdatum")]
-        [DataType(DataType.Date)] 
         [Required]
+        [Display(Name = "Första Driftsättningsdatum")]
+        [DataType(DataType.Date)]         
         public DateTime ReleaseDate { get; set; }
         [Display(Name = "Senaste Driftsättningsdatum")]
         [DataType(DataType.Date)]

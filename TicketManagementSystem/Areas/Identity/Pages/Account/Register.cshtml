@@ -15,13 +15,11 @@
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Input.Email"></label>
-                    <span class="text-danger">*</span>
                     <input asp-for="Input.Email" class="form-control" />
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Input.Password"></label>
-                    <span class="text-danger">*</span>
                     <input asp-for="Input.Password" class="form-control" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
@@ -33,13 +31,11 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Input.FirstName"></label>
-                    <span class="text-danger">*</span>
                     <input asp-for="Input.FirstName" class="form-control" />
                     <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Input.LastName"></label>
-                    <span class="text-danger">*</span>
                     <input asp-for="Input.LastName" class="form-control" />
                     <span asp-validation-for="Input.LastName" class="text-danger"></span>
                 </div>
@@ -60,7 +56,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Input.Role"></label>
-                    <span class="text-danger field-validation-error">*</span>
+                    @*<span class="text-danger field-validation-error">*</span>*@
                     <select asp-for="Input.Role" class="form-control" asp-items='new SelectList(roles,"Id","Name")'>
                         <option value=""> Välj en roll </option>
                     </select>
@@ -73,7 +69,6 @@
                 <br />
                 <div class="form-group">
                     <label asp-for="Input.CompanyName"></label>
-                    <span class="text-danger">*</span>
                     <select asp-for="Input.CompanyName" class="form-control" asp-items="Model.CompanyOption">
                         <option value=""> Välj ett företag </option>
 

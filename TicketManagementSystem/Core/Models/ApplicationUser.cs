@@ -20,8 +20,10 @@ namespace TicketManagementSystem.Core.Models
 
         [Display(Name = "Kund Förkortning")]
         public int CompanyId { get; set; }
+        [Required]
         [Display(Name = "Förnamn")]
         public String FirstName { get; set; }
+        [Required]
         [Display(Name = "Efternamn")]
         public String LastName { get; set; }
         public String FullName { get => FirstName + " " + LastName; }
@@ -31,7 +33,7 @@ namespace TicketManagementSystem.Core.Models
         [Display(Name = "Land")]
         public String Country { get; set; }
 
-        [Required(ErrorMessage ="Email Required")]
+        [Required(ErrorMessage ="Email is required")]
         [EmailAddress(ErrorMessage ="Enter Valid Email")]
         [Remote(action: "EmailExist", controller: "ApplicationUsers" , AdditionalFields = "Id")]
         [Display(Name = "E-post")]

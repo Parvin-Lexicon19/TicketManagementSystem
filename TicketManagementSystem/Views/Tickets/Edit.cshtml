@@ -29,16 +29,19 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Ticket.Problem" class="control-label"></label>
+                    <span class="text-danger">*</span>
                     <textarea asp-for="Ticket.Problem" rows="5" class="form-control" id="problem"></textarea>
                     <span asp-validation-for="Ticket.Problem" class="text-danger"></span>
                 </div>
                 <div class="row" style="padding-bottom: 10px">
                     <div class="form-group col-6">
                         <label asp-for="Ticket.Project" class="control-label"></label>
+                        <span class="text-danger">*</span>
                         <select asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
                             @*(IEnumerable<SelectListItem>)loggedInUserProjects*@
                             <option value="">Välj projekt</option>
                         </select>
+                        <span asp-validation-for="Ticket.ProjectId" class="text-danger"></span>
                     </div>
                     <div class="form-group col-6">
                         <label asp-for="Ticket.CustomerPriority" class="control-label">Prioritet</label>

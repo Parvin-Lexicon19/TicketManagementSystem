@@ -25,27 +25,30 @@
             @if (User.IsInRole("Developer") || User.IsInRole("Admin"))
             {
               <div class="row">
-                <div class="form-group col-6">
-                    <label asp-for="CustomerCompany" class="control-label">Kund</label>
-                    <select id="companyDropDownList" asp-for="CustomerCompany" class="form-control" asp-items="ViewBag.Companies" onchange="FillCustomers()" required>
-                        <option value="">Välj Kund</option>
-                    </select>
-                    <span asp-validation-for="CustomerCompany" class="text-danger"></span>
-                </div>
+                  <div class="form-group col-6">
+                      <label asp-for="CustomerCompany" class="control-label">Kund</label>
+                      <span class="text-danger">*</span>
+                      <select id="companyDropDownList" asp-for="CustomerCompany" class="form-control" asp-items="ViewBag.Companies" onchange="FillCustomers()" required>
+                          <option value="">Välj Kund</option>
+                      </select>
+                      <span asp-validation-for="CustomerCompany" class="text-danger"></span>
+                  </div>
 
-                <div class="form-group col-6">
-                    <label asp-for="Ticket.CreatedBy" class="control-label">Användare</label>
-                    <select id="customerDropDownList" asp-for="Ticket.CreatedBy" class="form-control" asp-items="ViewBag.CreatedBy" onchange="FillProjects()" required>
-                        <option value="">Välj Användare</option>
-                    </select>
-                    <span asp-validation-for="Ticket.CreatedBy" class="text-danger"></span>
-                </div>
+                  <div class="form-group col-6">
+                      <label asp-for="Ticket.CreatedBy" class="control-label">Användare</label>
+                      <span class="text-danger">*</span>
+                      <select id="customerDropDownList" asp-for="Ticket.CreatedBy" class="form-control" asp-items="ViewBag.CreatedBy" onchange="FillProjects()" required>
+                          <option value="">Välj Användare</option>
+                      </select>
+                      <span asp-validation-for="Ticket.CreatedBy" class="text-danger"></span>
+                  </div>
               </div>
             }
 
             <div class="row" style="padding-bottom: 10px">
                 <div class="form-group col-6">
                     <label asp-for="Ticket.ProjectId" class="control-label"></label>
+                    <span class="text-danger">*</span>
                     <select id="projectDropDownList" asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
                         <option value="">Välj Lösning</option>
                     </select>

@@ -23,6 +23,7 @@
                 <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyName">
                     <option value="">Välj Kund</option>
                 </select>
+                <span asp-validation-for="CompanyId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SystemsUsed" class="control-label"></label>
