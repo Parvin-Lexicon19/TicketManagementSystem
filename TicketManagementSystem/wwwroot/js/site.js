@@ -38,7 +38,7 @@ function FillProjects() {
         success: function (projects) {
             $("#projectDropDownList").html("");   //clear before appending new list
             $("#projectDropDownList").append(
-                $('<option value="">Välj Lösning</option>'));
+                $('<option value="">--Välj Lösning--</option>'));
             $.each(projects, function (i, project) {
                 $("#projectDropDownList").append(
                     $('<option value="' + project.value + '">' + project.text + '</option>'));
@@ -46,6 +46,59 @@ function FillProjects() {
         }
     });
 }
+
+function FillCompanyProjects() {
+    var companyId = $('#companyDDL').val();
+    $.ajax({
+        url: 'Tickets/GetCompanyProjects',
+        type: "POST",
+        dataType: "JSON",
+        data: { companyId: companyId },
+        success: function (projects) {
+            $("#projectDDL").html("");   //clear before appending new list
+            $("#projectDDL").append(
+                $('<option value="">Välj Lösning</option>'));
+            $.each(projects, function (i, project) {
+                $("#projectDDL").append(
+                    $('<option value="' + project.value + '">' + project.text + '</option>'));
+            });
+        }
+    });
+}
+
+//function getOption() {
+//    //var status = $('#statusSearchId').val();
+//    //if (status != null) {
+//    //    $("#statusSearchId").val(status);
+//    //}
+//    var status = localStorage.getItem("statusSearchId");
+//    if (status != null) {
+//        $("select[name=statusSearch]").val(status);
+//    }
+//    //$("statusSearchId").on("change", function () {
+//    //    $("#statusSearchId").val($(this).val());
+//    //});
+//}
+
+
+
+
+//function KeepSearch() {
+//    $('#searchupdate').text(response.);
+//};
+//function KeepSearch() {
+//    $(".keepdata").value = "Hi";
+//};
+
+//function getOption() {
+//    selectElement =
+//        document.querySelector('#stausSearch1');
+
+//    output = selectElement.value;
+
+//    document.querySelector('.output').textContent
+//        = output;
+//} 
 
 //function deleteit(no) {
 //    document.getElementById(this.deleteit)

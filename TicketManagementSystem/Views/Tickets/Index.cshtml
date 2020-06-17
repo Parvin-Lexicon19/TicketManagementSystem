@@ -1,20 +1,23 @@
-﻿@model IEnumerable<TicketIndexViewModel>
+﻿@inject TicketManagementSystem.Data.ApplicationDbContext _context
+@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<TicketIndexViewModel>
+@*@model IEnumerable<TicketIndexViewModel>*@
 @*@model TicketManagementSystem.Core.ViewModels.TicketIndexViewModel*@
-
 @{
     ViewData["Title"] = "Index";
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+@*<script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>*@
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
         @if (User.IsInRole("Admin"))
         {
             <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Alla Ärenden</h1></a>
         }
-        else
+        else if (User.IsInRole("Developer"))
         {
             <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Mina Ärenden</h1></a>
-
         }
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -45,63 +48,173 @@
         }
         @if (User.IsInRole("Customer"))
         {
+            @if (true != ViewBag.customerCompanyTickets)
+            {
+                <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Mina Ärenden</h1></a>                 
 
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                @*<partial name="_LoginPartial" />*@
-                <ul class="navbar-nav flex-grow-1">
-                    <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="IndexCompanyTickets">Alla Ärenden</a>
-                </ul>
-            </div>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    @*<partial name="_LoginPartial" />*@
+                    <ul class="navbar-nav flex-grow-1">
+                        <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-route-customerCompanyTickets="true" asp-action="Index">Alla Ärenden</a>
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index"><h1>Alla Ärenden</h1></a>                
+
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    @*<partial name="_LoginPartial" />*@
+                    <ul class="navbar-nav flex-grow-1">
+                        <a class="navbar-brand" asp-area="" asp-controller="Tickets" asp-action="Index">Mina Ärenden</a>
+                    </ul>
+                </div>
+            }
         }
-     </div>
+    </div>
 </nav>
-<form asp-action="Filter">
+
+<form asp-action="Index">
     <div class="input-group mb-3">
-        <input type="text" name="title" class="form-control" placeholder="Sök på Rubrik" style="width: 150px;" />
-        <div class="input-group-append">
+        <div class="input-group-append" style="width: inherit">
             @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text != "Utkast"))" class="form-control">
-                    <option selected="selected" value="">Status</option>
+                    @if (null != ViewBag.statusSearch)
+                    {
+                        //var st = (int)Enum.Parse(typeof(Status), ViewBag.statusSearch);
+                        //var st = (Status)Enum.Parse(typeof(Status), ViewBag.statusSearch);
+                        //var st = (string)Enum.Parse(typeof(Status), "1");
+                        var st = (Status)ViewBag.statusSearch;
+                        <option selected="selected" value="@ViewBag.statusSearch">@st</option>
+
+                    }
+                    <option value="">-----Status-----</option>
                 </select>
+
                 <select name="customerPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
-                    <option selected="selected" value="">Prioritet</option>
+                    @if (null != ViewBag.customerPriority)
+                    {
+                        var cusPr = (Priority)ViewBag.customerPriority;
+                        <option selected="selected" value="@ViewBag.customerPriority">@cusPr</option>
+                    }
+                    <option value="">-----Prioritet-----</option>
                 </select>
-                <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
-                    <option selected="selected" value="">BitoreqPrioritet</option>
+
+                <select name="bitoreqPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
+                    @if (null != ViewBag.bitoreqPriority)
+                    {
+                        var bitPr = (Priority)ViewBag.bitoreqPriority;
+                        <option selected="selected" value="@ViewBag.bitoreqPriority">@bitPr</option>
+                    }
+                    <option value="">--BitoreqPrioritet--</option>
                 </select>
-                <select name="priorities" class="form-control">
-                    <option selected="selected" value="">PrioMatch</option>
+
+                <select name="priorityMatch" class="form-control">
+                    @if (null != ViewBag.priorityMatch)
+                    {
+                        @if (ViewBag.priorityMatch == 1)
+                        {
+                            <option selected="selected" value="1">Match</option>
+                        }
+                        else if (ViewBag.priorityMatch == 2)
+                        {
+                            <option selected="selected" value="2">Ingen Match</option>
+                        }
+                    }
+                    <option value="">-----PrioMatch-----</option>
                     <option value="1">Match</option>
                     <option value="2">Ingen Match</option>
+                    @*@if (null == ViewBag.priorityMatch)
+                    {
+                        <option value="1">Match</option>
+                        <option value="2">Ingen Match</option>
+                    }
+
+                    else
+                    {
+                        @if (ViewBag.priorityMatch == 1)
+                        {
+                            <option selected="selected" value="1">Match</option>
+                            <option value="2">Ingen Match</option>
+                        }
+                        else if (ViewBag.priorityMatch == 2)
+                        {
+                            <option value="1">Match</option>
+                            <option selected="selected" value="2">Ingen Match</option>
+                        }
+                    }*@
+
                 </select>
 
-                <select name="companySearch" class="form-control" asp-items="ViewBag.Companies">
-                    <option value="">Kund</option>
+                <select id="companyDDL" name="companySearch" class="form-control" asp-items="ViewBag.Companies" onchange="FillCompanyProjects()">
+                    @if (null != ViewBag.companySearch)
+                    {
+                        Company selectedCompName = _context.Companies.Find(int.Parse(@ViewBag.companySearch));
+                        <option selected="selected" value="@ViewBag.companySearch">@selectedCompName.CompanyName</option>
+                    }
+                    <option value="">-----Kund-----</option>
                 </select>
             }
 
-            else
+            else /*Customer*/
             {
                 <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>())" class="form-control">
-                    <option selected="selected" value="">Status</option>
+                    @if (null != ViewBag.statusSearch)
+                    {
+                        var st = (Status)ViewBag.statusSearch;
+                        <option selected="selected" value="@ViewBag.statusSearch">@st</option>
+
+                    }
+                    <option value="">-----Status-----</option>
                 </select>
 
-                <select name="adminPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
-                    <option selected="selected" value="">Prioritet</option>
+                <select name="bitoreqPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control">
+                    @if (null != ViewBag.bitoreqPriority)
+                    {
+                        var bitPr = (Priority)ViewBag.bitoreqPriority;
+                        <option selected="selected" value="@ViewBag.bitoreqPriority">@bitPr</option>
+                    }
+                    <option value="">--BitoreqPrioritet--</option>
                 </select>
-               
+
             }
 
-            <select name="projectSearch" asp-items="ViewBag.ProjectId" class="form-control">
-                <option value="">Lösning</option>
+            <select id="projectDDL" name="projectSearch" asp-items="ViewBag.ProjectId" class="form-control">
+                @if (null != ViewBag.projectSearch)
+                {
+                    Project selectedPrjName = _context.Projects.Find(int.Parse(@ViewBag.projectSearch));
+                    <option selected="selected" value="@ViewBag.projectSearch">@selectedPrjName.Name</option>
+                }
+                <option value="">-----Lösning-----</option>
             </select>
-
         </div>
-        <div class="input-group-append">
-            <button type="submit" class="btn btn-primary "><i class="fa fa-search">&emsp;&emsp;Sök&emsp;&emsp;</i></button>
-        </div>
+        @*<div class="input-group-append">*@
+        <input type="text" name="title" class="form-control" placeholder="Sök på Rubrik" style="width: 150px;" value="@ViewBag.searchTitle" />
+       
+        @if (null != ViewBag.customerCompanyTickets)
+        {
+           <input type="checkbox" hidden name="customerCompanyTickets" checked="checked" value="true" />
+        }
+            
+        <button type="submit" class="btn btn-primary"><i class="fa fa-search">&emsp;&emsp;Sök&emsp;&emsp;</i></button>
+        @*</div>*@
     </div>
 </form>
 
 <partial name="TicketListPartial" />
+
+
+
+@*<script type="text/javascript">
+
+    document.onload = function() {
+        var selItem = document.getItem("SelItem");
+        $('#SelItem').val(selItem);
+        }
+        $('#SelItem').change(function() {
+            var selVal = $(this).val();
+            document.setItem("SelItem", selVal);
+        });
+
+    </script>*@
