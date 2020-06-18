@@ -243,7 +243,7 @@ namespace TicketManagementSystem.Controllers
 
             // Sort by attributes in the list
             //model = SortList(sortOrder, model);
-            return View(model.OrderByDescending(i => i.Id).ToPagedList(pageIndex, pageSize));
+            return View(model.OrderByDescending(i => i.CreatedDate).ToPagedList(pageIndex, pageSize));
         }
 
         // Admin tickets, returns list of all tickets except Draft tickets
