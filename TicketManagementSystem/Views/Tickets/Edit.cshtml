@@ -185,7 +185,7 @@
     <div>
         @*<a asp-action="Delete" asp-route-id="@Model.Ticket.Id">Radera</a> |*@
         <a asp-action="Index">Tillbaka till Mina Ärenden</a> |
-        <a asp-action="IndexCompanyTickets">Tillbaka till Alla Ärenden</a>
+        <a asp-action="Index" asp-route-customerCompanyTickets="true">Tillbaka till Alla Ärenden</a>
     </div>
 </div>
 
