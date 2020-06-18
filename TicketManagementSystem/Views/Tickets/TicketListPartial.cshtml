@@ -7,34 +7,6 @@
 @model X.PagedList.IPagedList<TicketIndexViewModel>
 
 
-    @*<style type="text/css">
-        /*body {
-            font-family: Arial;
-            font-size: 10pt;
-        }*/
-
-        .GridPager a, .GridPager span {
-            display: block;
-            height: 25px;
-            width: 25px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        .GridPager a {
-            background-color: #f5f5f5;
-            color: #969696;
-            border: 1px solid #969696;
-        }
-
-        .GridPager span {
-            background-color: #A1DCF2;
-            color: #000;
-            border: 1px solid #3AC0F2;
-        }
-    </style>*@
-
 @using (Html.BeginForm())
 {
     <p>
@@ -47,7 +19,6 @@
                 <th class="border-right active">
                     @Html.DisplayNameFor(model => model[0].RefNo)
                     @*@Html.ActionLink(Html.DisplayNameFor(model => model.RefNo), "Index", new { sortorder = ViewBag.RefNoSortParm })*@
-
                 </th>
                 <th class="border-right active">
                     @Html.DisplayNameFor(model => model[0].Title)

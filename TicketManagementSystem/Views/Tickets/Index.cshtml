@@ -8,7 +8,7 @@
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 @*<script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>*@
+  <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>*@
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
         @if (User.IsInRole("Admin"))
@@ -82,12 +82,8 @@
                 <select name="statusSearch" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text != "Utkast"))" class="form-control">
                     @if (null != ViewBag.statusSearch)
                     {
-                        //var st = (int)Enum.Parse(typeof(Status), ViewBag.statusSearch);
-                        //var st = (Status)Enum.Parse(typeof(Status), ViewBag.statusSearch);
-                        //var st = (string)Enum.Parse(typeof(Status), "1");
                         var st = (Status)ViewBag.statusSearch;
                         <option selected="selected" value="@ViewBag.statusSearch">@st</option>
-
                     }
                     <option value="">-----Status-----</option>
                 </select>
@@ -177,7 +173,6 @@
                     }
                     <option value="">--BitoreqPrioritet--</option>
                 </select>
-
             }
 
             <select id="projectDDL" name="projectSearch" asp-items="ViewBag.ProjectId" class="form-control">
@@ -203,18 +198,3 @@
 </form>
 
 <partial name="TicketListPartial" />
-
-
-
-@*<script type="text/javascript">
-
-    document.onload = function() {
-        var selItem = document.getItem("SelItem");
-        $('#SelItem').val(selItem);
-        }
-        $('#SelItem').change(function() {
-            var selVal = $(this).val();
-            document.setItem("SelItem", selVal);
-        });
-
-    </script>*@
