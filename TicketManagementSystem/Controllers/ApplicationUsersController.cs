@@ -104,7 +104,6 @@ namespace TicketManagementSystem.Controllers
                 ViewData["CompanyId"] = companies;
             }
 
-
             
             ViewData["PageName"] = name;
             return View(user);
@@ -306,11 +305,38 @@ namespace TicketManagementSystem.Controllers
             return Json(true);
         }
 
-
             private bool ApplicationUserExists(string id)
         {
             return userManager.Users.Any(e => e.Id == id);
         }
 
+
+        //[HttpPost]
+        //public JsonResult GetRoleCompanies(string roleId)
+        //{
+        //    //Customer companies
+        //    var roleCompanies = _context.Companies.Where(c => c.CompanyName != BITOREQNAME);
+
+        //    //Admin or Developer company
+        //    if (roleId == "Developer" || roleId == "Admin")
+        //        roleCompanies = _context.Companies.Where(c => c.CompanyName == BITOREQNAME);
+
+        //    //ViewData["CompanyOption"] = new SelectList(companies, "CompanyName", "CompanyName");
+
+
+        //    List<SelectListItem> selectListCompanies = new List<SelectListItem>();
+
+        //    foreach (var company in roleCompanies)
+        //    {
+        //        var selectItem = new SelectListItem
+        //        {
+        //            Text = company.CompanyName,
+        //            Value = company.CompanyName
+        //            //Value = project.Id.ToString()                    
+        //        };
+        //        selectListCompanies.Add(selectItem);
+        //    }
+        //    return Json(selectListCompanies);
+        //}
     }
 }

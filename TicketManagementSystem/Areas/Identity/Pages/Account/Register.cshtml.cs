@@ -108,12 +108,6 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Företagsnamn")]
             public string CompanyName { get; set; }
-
-      
-
-
-
-
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -121,21 +115,15 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-
             // pass the Role List using ViewData
             var getAllRoles = _context.Roles.OrderBy(x => x.Name);
-
 
             ViewData["roles"] = getAllRoles.ToList();
 
             // pass the Company List.Sort by company Name.
-
             var getAllCompanyName = _context.Companies.OrderBy(x => x.CompanyName);
-
-            
-            CompanyOption = new SelectList(getAllCompanyName.Select(x => x.CompanyName));
-
-
+            //CompanyOption = new SelectList(getAllCompanyName.Select(x => x.CompanyName));
+            ViewData["CompanyOption"] = new SelectList(getAllCompanyName, "CompanyName", "CompanyName");
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -151,20 +139,19 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
                 var userCompanyName = _context.Companies.FirstOrDefault(c => c.CompanyName == Input.CompanyName);
               
                 // Assign the company id when you create user.
-
                 var user = new ApplicationUser {
                     UserName = Input.Email, Email = Input.Email,CompanyId = userCompanyName.Id,PhoneNumber = Input.PhoneNumber,
                     Country = Input.Country,FirstName = Input.FirstName,LastName = Input.LastName,JobTitle = Input.JobTitle, ActiveUser = true
                 };
-                var result = await _userManager.CreateAsync(user, Input.Password);
 
-                // Add First Name and last name to claims to access in _login partial view.
-
-                await _userManager.AddClaimAsync(user, new Claim("FirstName", user.FirstName));
-                await _userManager.AddClaimAsync(user, new Claim("LastName", user.LastName));
+                var result = await _userManager.CreateAsync(user, Input.Password);                               
 
                 if (result.Succeeded)
                 {
+                    // Add First Name and last name to claims to access in _login partial view.
+                    await _userManager.AddClaimAsync(user, new Claim("FirstName", user.FirstName));
+                    await _userManager.AddClaimAsync(user, new Claim("LastName", user.LastName));
+
                     _logger.LogInformation("Användaren skapade ett nytt konto med lösenord.");
                     // Assign Role to the user.
                     await _userManager.AddToRoleAsync(user, role.Name);
@@ -192,11 +179,8 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
                     }
                 }
                 foreach (var error in result.Errors)
-
                 {
-
                     ModelState.AddModelError(string.Empty, error.Description);
-
                 }
             }
 

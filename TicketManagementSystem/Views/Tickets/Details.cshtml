@@ -257,15 +257,19 @@
                     @Html.DisplayNameFor(model => model.Ticket.ResponseDesc)
                 </dt>
                 <dd class="col-sm-4 hide collapse">
-                    <textarea class="form-control RespDesc" asp-for="Ticket.ResponseDesc" rows="5" id="comment"></textarea>
+                    <div class="row">
+                        <textarea class="form-control RespDesc" asp-for="Ticket.ResponseDesc" rows="5" id="comment"></textarea>
+                    </div>
                 </dd>
 
                 <dt class="col-sm-2 hidden">
                     @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
                 </dt>
                 <dd class="col-sm-3 hidden">
-                    <input type="text" asp-for="Ticket.HoursSpent" class="form-control hours" />
-                    @*<span asp-validation-for="Ticket.HoursSpent" class="text-danger"></span>*@
+                    <div class="row">
+                        <input type="text" asp-for="Ticket.HoursSpent" class="form-control hours" />
+                        @*<span asp-validation-for="Ticket.HoursSpent" class="text-danger"></span>*@
+                    </div>
                 </dd>
             </dl>
         </div>
@@ -365,7 +369,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modul för @Model.Ticket.Title</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">kommentar för @Model.Ticket.RefNo</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

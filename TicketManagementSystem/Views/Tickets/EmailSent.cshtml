@@ -7,17 +7,17 @@
     <p>
         @if (User.IsInRole("Customer"))
         {
-        <h6 style="color:forestgreen">
-            <br />Tack för att du skickade in ärendet.
-            <br />Ansvariga utvecklare har blivit notifierade om ditt ärende. Du kan följa och kommentera ärendet i Bitoreqs Ärendehanteringssystem.<br /><br />
-        </h6>
+            <h6 style="color:forestgreen">
+                <br />Tack för att du skickade in ärendet.
+                <br />Ansvariga utvecklare har blivit notifierade om ditt ärende. Du kan följa och kommentera ärendet i Bitoreqs Ärendehanteringssystem.<br /><br />
+            </h6>
         }
         else if (User.IsInRole("Admin") || User.IsInRole("Developer"))
         {
-    <h6 style="color:forestgreen">
-        <br />Tack för att du skickade in ärendet.
-        <br />Ansvariga utvecklare har blivit notifierade om ditt ärende.<br /><br />
-    </h6>
+            <h6 style="color:forestgreen">
+                <br />Tack för att du skickade in ärendet.
+                <br />Ansvariga utvecklare har blivit notifierade om ärendet.<br /><br />
+            </h6>
         }
     </p>
 

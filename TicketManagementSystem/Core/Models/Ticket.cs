@@ -58,7 +58,8 @@ namespace TicketManagementSystem.Core.Models
         public Project Project { get; set; }
         [DisplayName("Skapat av")]
         public virtual ApplicationUser CreatedUser { get; set; }
-        [DisplayName("Tilldelad Användare")]
+        //[DisplayName("Tilldelad Användare")]
+        [DisplayName("Ansvarig")]
         public virtual ApplicationUser AssignedUser { get; set; }
     }
 

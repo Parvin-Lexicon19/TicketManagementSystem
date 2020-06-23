@@ -19,7 +19,7 @@ function FillCustomers() {
         success: function (customers) {
             $("#customerDropDownList").html("");   //clear before appending new list
             $("#customerDropDownList").append(
-                $('<option value="">Välj Användare</option>'));
+                $('<option value="">-----Välj Användare-----</option>'));
             $.each(customers, function (i, customer) {
                 $("#customerDropDownList").append(
                     $('<option value="' + customer.value + '">' + customer.text + '</option>'));
@@ -38,7 +38,7 @@ function FillProjects() {
         success: function (projects) {
             $("#projectDropDownList").html("");   //clear before appending new list
             $("#projectDropDownList").append(
-                $('<option value="">--Välj Lösning--</option>'));
+                $('<option value="">-----Välj Lösning-----</option>'));
             $.each(projects, function (i, project) {
                 $("#projectDropDownList").append(
                     $('<option value="' + project.value + '">' + project.text + '</option>'));
@@ -57,7 +57,7 @@ function FillCompanyProjects() {
         success: function (projects) {
             $("#projectDDL").html("");   //clear before appending new list
             $("#projectDDL").append(
-                $('<option value="">Välj Lösning</option>'));
+                $('<option value="">-----Välj Lösning-----</option>'));
             $.each(projects, function (i, project) {
                 $("#projectDDL").append(
                     $('<option value="' + project.value + '">' + project.text + '</option>'));
@@ -65,6 +65,25 @@ function FillCompanyProjects() {
         }
     });
 }
+
+//function FillRoleCompanies() {
+//    var roleId = $('#rolesDDL').val();
+//    $.ajax({
+//        url: 'ApplicationUsers/GetRoleCompanies',
+//        type: "POST",
+//        dataType: "JSON",
+//        data: { roleId: roleId },
+//        success: function (companies) {
+//            $("#companiesDDL").html("");   //clear before appending new list
+//            $("#companiesDDL").append(
+//                $('<option value="">-----Välj Företag-----</option>'));
+//            $.each(companies, function (i, company) {
+//                $("#companiesDDL").append(
+//                    $('<option value="' + company.value + '">' + company.text + '</option>'));
+//            });
+//        }
+//    });
+//}
 
 //this will add * next to required label
 //$(':input').each(function () { //for all input types
