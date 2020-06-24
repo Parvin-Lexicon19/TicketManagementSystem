@@ -165,7 +165,7 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Bekräfta din email",
-                        $"Bekräfta ditt konto med <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>klicka här</a>.");
+                        $"Bekräfta ditt konto med att <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>klicka här</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedEmail)
                     {
