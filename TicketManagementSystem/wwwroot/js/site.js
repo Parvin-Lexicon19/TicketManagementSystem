@@ -66,10 +66,30 @@ function FillCompanyProjects() {
     });
 }
 
+function FillRoleCompanies() {
+    //var roleId = $('#rolesDDL').val();
+    var roleId = $('#rolesDDL option:selected').text();
+    $.ajax({
+        url: '/ApplicationUsers/GetRoleCompanies',
+        type: "POST",
+        dataType: "JSON",
+        data: { roleId: roleId },
+        success: function (companies) {
+            $("#companiesDDL").html("");   //clear before appending new list
+            $("#companiesDDL").append(
+                $('<option value="">-----Välj Företag-----</option>'));
+            $.each(companies, function (i, company) {
+                $("#companiesDDL").append(
+                    $('<option value="' + company.value + '">' + company.text + '</option>'));
+            });
+        }
+    });
+}
+
 //function FillRoleCompanies() {
 //    var roleId = $('#rolesDDL').val();
 //    $.ajax({
-//        url: 'ApplicationUsers/GetRoleCompanies',
+//        url: '../Controllers/ApplicationUsers/GetRoleCompanies',
 //        type: "POST",
 //        dataType: "JSON",
 //        data: { roleId: roleId },

@@ -57,8 +57,8 @@
                 <div class="form-group">
                     <label asp-for="Input.Role"></label>
                     @*<span class="text-danger field-validation-error">*</span>*@
-                    @*<select id="rolesDDL" asp-for="Input.Role" class="form-control" asp-items='new SelectList(roles,"Id","Name")' onchange="FillRoleCompanies()">*@
-                    <select asp-for="Input.Role" class="form-control" asp-items='new SelectList(roles,"Id","Name")'>
+                    <select id="rolesDDL" asp-for="Input.Role" class="form-control" asp-items='new SelectList(roles,"Id","Name")' onchange="FillRoleCompanies()">
+                    @*<select asp-for="Input.Role" class="form-control" asp-items='new SelectList(roles,"Id","Name")'>*@
                         <option value=""> Välj en roll </option>
                     </select>
                     <span class="field-validation-valid text-danger"
@@ -69,8 +69,8 @@
                 <br />
                 <div class="form-group">
                     <label asp-for="Input.CompanyName"></label>
-                    @*<select id="companiesDDL" asp-for="Input.CompanyName" class="form-control" asp-items="ViewBag.CompanyOption">*@
-                    <select asp-for="Input.CompanyName" class="form-control" asp-items="ViewBag.CompanyOption">
+                    <select id="companiesDDL" asp-for="Input.CompanyName" class="form-control" asp-items="ViewBag.CompanyOption">
+                    @*<select asp-for="Input.CompanyName" class="form-control" asp-items="ViewBag.CompanyOption">*@
                         <option value=""> Välj ett företag </option>
                     </select>
                     <span class="field-validation-valid text-danger"

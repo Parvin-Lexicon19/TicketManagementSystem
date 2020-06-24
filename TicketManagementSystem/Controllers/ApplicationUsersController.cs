@@ -29,8 +29,8 @@ namespace TicketManagementSystem.Controllers
         [Route("ApplicationUsers/Index/{name}")]
         public async Task<IActionResult> Index(string name)
         {
-            
-            var users = from u in userManager.Users.Include(c=>c.Company).Where(u=>u.EmailConfirmed).Where(u=>u.ActiveUser)
+
+            var users = from u in userManager.Users.Include(c => c.Company).Where(u => u.EmailConfirmed).Where(u => u.ActiveUser)
                         join ur in _context.UserRoles on u.Id equals ur.UserId
                         join r in _context.Roles on ur.RoleId equals r.Id
                         select new ApplicationUserwithRole
@@ -40,13 +40,13 @@ namespace TicketManagementSystem.Controllers
                         };
 
 
-            string indexname="";
-            if(name=="Developer")
+            string indexname = "";
+            if (name == "Developer")
             {
-                users = users.Where(u => u.Role.Equals("Admin")|| u.Role.Equals("Developer"));
-                 indexname = "Admin/Developers";
+                users = users.Where(u => u.Role.Equals("Admin") || u.Role.Equals("Developer"));
+                indexname = "Admin/Developers";
             }
-            else if(name=="Customer")
+            else if (name == "Customer")
             {
                 users = users.Where(u => u.Role.Equals("Customer"));
                 indexname = "Customer";
@@ -69,7 +69,7 @@ namespace TicketManagementSystem.Controllers
 
         [Route("Edit/{id}/{name}")]
         // GET: ApplicationUser/Edit/5
-        public async Task<IActionResult> Edit(string id,string name)
+        public async Task<IActionResult> Edit(string id, string name)
         {
             if (id == null)
             {
@@ -82,9 +82,9 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
-            
 
-            if (name=="Developer")
+
+            if (name == "Developer")
             {
                 var companies = _context.Companies.Where(c => c.CompanyName == BITOREQNAME).Select(i => new SelectListItem()
                 {
@@ -94,7 +94,7 @@ namespace TicketManagementSystem.Controllers
                 ViewData["CompanyId"] = companies;
 
             }
-            else if(name == "Customer")
+            else if (name == "Customer")
             {
                 var companies = _context.Companies.Where(c => c.CompanyName != BITOREQNAME).Select(i => new SelectListItem()
                 {
@@ -104,7 +104,7 @@ namespace TicketManagementSystem.Controllers
                 ViewData["CompanyId"] = companies;
             }
 
-            
+
             ViewData["PageName"] = name;
             return View(user);
         }
@@ -138,7 +138,7 @@ namespace TicketManagementSystem.Controllers
                     user.PhoneNumber = applicationuser.PhoneNumber;
                     user.CompanyId = applicationuser.CompanyId;
                     user.ActiveUser = applicationuser.ActiveUser;
-                    
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -156,7 +156,7 @@ namespace TicketManagementSystem.Controllers
                 if (name == "Developer")
                 {
 
-                    return RedirectToAction("Index","ApplicationUsers", new { name = "Developer" });
+                    return RedirectToAction("Index", "ApplicationUsers", new { name = "Developer" });
                 }
                 else if (name == "Customer")
                 {
@@ -164,7 +164,7 @@ namespace TicketManagementSystem.Controllers
                 }
 
                 return RedirectToAction(nameof(Index));
-                
+
             }
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "CompanyAbbr", applicationuser.CompanyId);
             ViewData["PageName"] = name;
@@ -172,7 +172,7 @@ namespace TicketManagementSystem.Controllers
         }
 
         [Route("Details/{id}/{name}")]
-        public async Task<IActionResult> Details(string id,string name)
+        public async Task<IActionResult> Details(string id, string name)
         {
             if (id == null)
             {
@@ -193,7 +193,7 @@ namespace TicketManagementSystem.Controllers
         }
 
         [Route("Delete/{id}/{name}")]
-        public async Task<IActionResult> Delete(string id,string name)
+        public async Task<IActionResult> Delete(string id, string name)
         {
             if (id == null)
             {
@@ -207,21 +207,21 @@ namespace TicketManagementSystem.Controllers
             }
             ViewData["PageName"] = name;
 
-            if(name=="Developer")
+            if (name == "Developer")
             {
-                var anyprojects = _context.Projects.Where(p => p.Developer1==id || p.Developer2 == id).Count();
+                var anyprojects = _context.Projects.Where(p => p.Developer1 == id || p.Developer2 == id).Count();
                 var adminroleid = _context.Roles.Where(r => r.Name == "Admin").Select(r => r.Id).FirstOrDefault();
 
                 var adminusersid = _context.UserRoles.Where(ur => ur.RoleId == adminroleid).Select(ur => ur.UserId).ToList();
 
 
-                ViewData["formhide"] = (anyprojects == 0) ?  (adminusersid.Contains(id)) ? "Admin" :  "Show" :  "Hide";
+                ViewData["formhide"] = (anyprojects == 0) ? (adminusersid.Contains(id)) ? "Admin" : "Show" : "Hide";
             }
             else if (name == "Customer")
             {
                 var anytickets = _context.Tickets.Where(t => t.CreatedBy == id).Count();
-                var t= (anytickets == 0) ? "Show" : "Hide";
-                ViewData["formhide"] =(anytickets == 0) ? "Show" : "Hide";
+                var t = (anytickets == 0) ? "Show" : "Hide";
+                ViewData["formhide"] = (anytickets == 0) ? "Show" : "Hide";
             }
 
             return View(user);
@@ -230,7 +230,7 @@ namespace TicketManagementSystem.Controllers
         [Route("Delete/{id}/{name}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id,string name)
+        public async Task<IActionResult> DeleteConfirmed(string id, string name)
         {
             var user = await userManager.FindByIdAsync(id);
             _context.Remove(user);
@@ -259,7 +259,6 @@ namespace TicketManagementSystem.Controllers
 
             if (name == "Developer")
             {
-
                 return RedirectToAction("Index", "ApplicationUsers", new { name = "Developer" });
             }
             else if (name == "Customer")
@@ -291,13 +290,13 @@ namespace TicketManagementSystem.Controllers
 
         //    return users;
         //}
-        public IActionResult EmailExist(string Email,string id)
+        public IActionResult EmailExist(string Email, string id)
         {
             var existingemail = userManager.Users.Where(u => u.Id == id).FirstOrDefault().Email;
 
-            var  emailexists = userManager.Users.Where(u=>u.Email!= existingemail).Where(u => u.Email == Email).Count();
-            
-            if (emailexists !=0)
+            var emailexists = userManager.Users.Where(u => u.Email != existingemail).Where(u => u.Email == Email).Count();
+
+            if (emailexists != 0)
             {
                 return Json($"E-post finns redan. Uppdatera till ett annat e-post-id");
             }
@@ -305,38 +304,40 @@ namespace TicketManagementSystem.Controllers
             return Json(true);
         }
 
-            private bool ApplicationUserExists(string id)
+        private bool ApplicationUserExists(string id)
         {
             return userManager.Users.Any(e => e.Id == id);
         }
 
+        //Returns either Bitoreq or customer companies based on selected Role while registering a user
+        [HttpPost]
+        public JsonResult GetRoleCompanies(string roleId)
+        {
+            //Customer companies
+            var roleCompanies = _context.Companies.Select(c => c);
 
-        //[HttpPost]
-        //public JsonResult GetRoleCompanies(string roleId)
-        //{
-        //    //Customer companies
-        //    var roleCompanies = _context.Companies.Where(c => c.CompanyName != BITOREQNAME);
+            //Admin or Developer company
+            if (roleId == "Developer" || roleId == "Admin")
+                roleCompanies = _context.Companies.Where(c => c.CompanyName == BITOREQNAME);
 
-        //    //Admin or Developer company
-        //    if (roleId == "Developer" || roleId == "Admin")
-        //        roleCompanies = _context.Companies.Where(c => c.CompanyName == BITOREQNAME);
-
-        //    //ViewData["CompanyOption"] = new SelectList(companies, "CompanyName", "CompanyName");
+            //Customer companies
+            if (roleId == "Customer")
+                roleCompanies = _context.Companies.Where(c => c.CompanyName != BITOREQNAME);
 
 
-        //    List<SelectListItem> selectListCompanies = new List<SelectListItem>();
+            List<SelectListItem> selectListCompanies = new List<SelectListItem>();
 
-        //    foreach (var company in roleCompanies)
-        //    {
-        //        var selectItem = new SelectListItem
-        //        {
-        //            Text = company.CompanyName,
-        //            Value = company.CompanyName
-        //            //Value = project.Id.ToString()                    
-        //        };
-        //        selectListCompanies.Add(selectItem);
-        //    }
-        //    return Json(selectListCompanies);
-        //}
+            foreach (var company in roleCompanies)
+            {
+                var selectItem = new SelectListItem
+                {
+                    Text = company.CompanyName,
+                    Value = company.CompanyName
+                    //Value = project.Id.ToString()                    
+                };
+                selectListCompanies.Add(selectItem);
+            }
+            return Json(selectListCompanies);
+        }
     }
 }
