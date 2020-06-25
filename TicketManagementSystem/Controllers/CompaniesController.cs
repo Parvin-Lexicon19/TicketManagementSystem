@@ -24,14 +24,14 @@ namespace TicketManagementSystem.Controllers
             this.userManager = userManager;
         }
 
-        
+
         // GET: Companies
         public async Task<IActionResult> Index()
         {
             return View(await _context.Companies.ToListAsync());
         }
 
-        
+
         // GET: Companies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -50,7 +50,7 @@ namespace TicketManagementSystem.Controllers
             return View(company);
         }
 
-        
+
         // GET: Companies/Create
         public IActionResult AddCompany()
         {
@@ -60,7 +60,7 @@ namespace TicketManagementSystem.Controllers
         // POST: Companies/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddCompany([Bind("Id,CompanyAbbr,CompanyName,ContactPerson,Email,Address,City,PostalCode,Country,PhoneNumber")] Company company)
@@ -74,7 +74,7 @@ namespace TicketManagementSystem.Controllers
             return View(company);
         }
 
-        
+
         // GET: Companies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -89,10 +89,10 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
-            var projects = _context.Projects.Where(p => p.CompanyId == id).Select(p=>p.Id).ToList();
+            var projects = _context.Projects.Where(p => p.CompanyId == id).Select(p => p.Id).ToList();
             var tickets = _context.Tickets.Where(t => projects.Contains(t.ProjectId)).Count();
 
-            if(tickets==0)
+            if (tickets == 0)
             {
                 ViewData["companyabbr"] = "show";
             }
@@ -100,17 +100,17 @@ namespace TicketManagementSystem.Controllers
             {
                 ViewData["companyabbr"] = "hide";
             }
-            
+
 
             return View(company);
 
-            
+
         }
 
         // POST: Companies/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyAbbr,CompanyName,ContactPerson,Email,Address,City,PostalCode,Country,PhoneNumber")] Company company)
@@ -160,7 +160,7 @@ namespace TicketManagementSystem.Controllers
             var anyprojects = _context.Projects.Where(p => p.CompanyId == id).Count();
             var anycompanyusers = userManager.Users.Where(u => u.CompanyId == id).Count();
 
-            if(anyprojects==0 && anycompanyusers ==0 )
+            if (anyprojects == 0 && anycompanyusers == 0)
             {
                 ViewData["formhide"] = "Show";
             }

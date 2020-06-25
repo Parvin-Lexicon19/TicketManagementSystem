@@ -16,6 +16,8 @@
     <Compile Remove="Data\Migrations\20200529093336_CompanyAbrrUnique.Designer.cs" />
     <Compile Remove="Data\Migrations\20200602110126_updateProjectDeveloper1.cs" />
     <Compile Remove="Data\Migrations\20200602110126_updateProjectDeveloper1.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200624141956_test.cs" />
+    <Compile Remove="Data\Migrations\20200624141956_test.Designer.cs" />
   </ItemGroup>
 
 
