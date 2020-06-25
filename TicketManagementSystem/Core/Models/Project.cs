@@ -15,7 +15,7 @@ namespace TicketManagementSystem.Core.Models
         public int CompanyId { get; set; }
         [Required]
         [StringLength(70)]
-        [Display(Name = "Namn")]
+        [Display(Name = "Lösningsnamn")]
         public string Name { get; set; }
         [Required]
         [Display(Name = "Utvecklare1")]

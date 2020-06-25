@@ -11,7 +11,7 @@
 }
 else
 {
-    <div id="deletemsg"><p> Den här kunden kan inte raderas. Den innehåller lösning(ar) eller användare eller båda. </p></div>    
+    <div id="deletemsg"><p> Den här kunden kan inte raderas. Den innehåller lösning(ar), användare eller båda. </p></div>    
 }
 
 <div>
@@ -69,9 +69,9 @@ else
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.PhoneNumber)
         </dt>
-        @*<dd class="col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>*@
+        </dd>
     </dl>
     @if (@ViewBag.formhide == "Show")
     {

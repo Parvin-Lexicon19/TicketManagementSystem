@@ -127,7 +127,7 @@ namespace TicketManagementSystem.Controllers
 
             IEnumerable<SelectListItem> developers = GetDevelopersList();
 
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "CompanyAbbr", project.CompanyId);
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "CompanyName", project.CompanyId);
             ViewData["Developer1"] = developers;
             ViewData["Developer2"] = developers;
 

@@ -28,40 +28,16 @@ else
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ReleaseDate)
+            @Html.DisplayNameFor(model => model.Company.CompanyName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ReleaseDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastUpdate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastUpdate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SystemsUsed)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SystemsUsed)
+            @Html.DisplayFor(model => model.Company.CompanyName)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Company.CompanyAbbr)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Company.CompanyAbbr)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Company.CompanyName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Company.CompanyName)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Developer1)
@@ -74,6 +50,30 @@ else
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Developer2User.UserName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastUpdate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastUpdate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SystemsUsed)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SystemsUsed)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
 

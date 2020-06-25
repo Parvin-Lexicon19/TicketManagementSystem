@@ -13,31 +13,29 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
             @if (ViewBag.company == "show")
             {
                 <div class="form-group">
                     <label asp-for="CompanyId" class="control-label"></label>
                     <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId">
-
                     </select>
                     <span asp-validation-for="CompanyId" class="text-danger"></span>
                 </div>
             }
             else
             {
-        <div class="form-group">
-            <label asp-for="Company.CompanyAbbr" class="control-label"></label>
-            <input asp-for="Company.CompanyAbbr" class="form-control" readonly />
-            <p class="text-danger"><small>This company has tickets, so its Abbr. is not editable</small></p>
-
-        </div>
+                <div class="form-group">
+                    <label asp-for="CompanyId" class="control-label"></label>
+                    <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId" readonly>
+                    </select>
+                    <p class="text-danger"><small>The solution has ticket(s) connected to, so its company cannot be changed</small></p>
+                </div>
             }
-
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <label asp-for="Developer1" class="control-label"></label>
                 <select asp-for="Developer1" class="form-control" asp-items="ViewBag.Developer1">
@@ -47,7 +45,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Developer2" class="control-label"></label>
-                <select asp-for="Developer2" class="form-control"  asp-items="ViewBag.Developer2">
+                <select asp-for="Developer2" class="form-control" asp-items="ViewBag.Developer2">
                     <option value="">Välj Utvecklare 2</option>
                 </select>
                 <span asp-validation-for="Developer2" class="text-danger"></span>
@@ -63,14 +61,15 @@
                 <span asp-validation-for="LastUpdate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="SystemsUsed" class="control-label"></label>
                 <input asp-for="SystemsUsed" class="form-control" />
                 <span asp-validation-for="SystemsUsed" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                @*<input asp-for="Description" class="form-control" />*@
+                @Html.TextAreaFor(model => model.Description, 5, 1, new { @class = "form-control" })
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Spara" class="btn btn-primary" />
