@@ -137,7 +137,8 @@ namespace TicketManagementSystem.Controllers
                     user.Country = applicationuser.Country;
                     user.PhoneNumber = applicationuser.PhoneNumber;
                     user.CompanyId = applicationuser.CompanyId;
-                    user.ActiveUser = applicationuser.ActiveUser;
+                    //user.ActiveUser = applicationuser.ActiveUser;
+                    user.ActiveUser = true;
 
                     await _context.SaveChangesAsync();
                 }
@@ -167,6 +168,7 @@ namespace TicketManagementSystem.Controllers
 
             }
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "CompanyAbbr", applicationuser.CompanyId);
+            //ViewData["CompanyName"] = new SelectList(_context.Companies, "Id", "CompanyName", applicationuser.Company.CompanyName);
             ViewData["PageName"] = name;
             return View(applicationuser);
         }
@@ -200,7 +202,9 @@ namespace TicketManagementSystem.Controllers
                 return NotFound();
             }
 
-            var user = await userManager.FindByIdAsync(id);
+            var user = await userManager.Users
+                .Include(p => p.Company)
+                .FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
             {
                 return NotFound();

@@ -19,6 +19,11 @@
             <span asp-validation-for="UserName" class="text-danger"></span>
         </div>*@
             <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" readonly />
+                @*<span asp-validation-for="UserName" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
@@ -30,11 +35,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <input asp-for="Email" class="form-control" readonly/>
+                @*<span asp-validation-for="Email" class="text-danger"></span>*@
             </div>
             <div class="form-group">
-                <label asp-for="CompanyId" class="control-label"></label>
+                @*<label asp-for="Company.CompanyName" class="control-label"></label>*@
+                <label asp-for="Company.CompanyAbbr" class="control-label"></label>
                 <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId">
                     <option value="">Välj Kund</option>
                 </select>
@@ -60,14 +66,14 @@
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ActiveUser" class="control-label"></label>
-                <select  asp-for="ActiveUser" class="form-control">
-                    <option value='true'>Aktiva</option>
-                    <option value='false'>Inaktiv</option>
-                </select>
-                <span asp-validation-for="ActiveUser" class="text-danger"></span>
-            </div>
+            @*<div class="form-group">
+            <label asp-for="ActiveUser" class="control-label"></label>
+            <select  asp-for="ActiveUser" class="form-control">
+                <option value='true'>Aktiva</option>
+                <option value='false'>Inaktiv</option>
+            </select>
+            <span asp-validation-for="ActiveUser" class="text-danger"></span>
+        </div>*@
 
             <div class="form-group">
                 <input type="submit" value="Spara" class="btn btn-primary" />

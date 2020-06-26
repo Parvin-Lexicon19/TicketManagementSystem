@@ -17,14 +17,14 @@ else if (@ViewBag.formhide == "Hide")
     @if (@ViewBag.PageName == "Developer")
     {
 
-        <p id="deletemsg"><b>Den här användaren kan inte raderas. Det finns några relaterade projekt till denna utvecklare.</b></p>
-        <h3>Vill du fortfarande göra användaren inaktiv??</h3>
+        <p id="deletemsg"><b>Den här användaren kan inte raderas. Det finns relaterade lösning(ar) till denna utvecklare.</b></p>
+        <h3>Vill du fortfarande göra användaren inaktiv?</h3>
     }
     else
     {
 
-        <p id="deletemsg"><b>Den här användaren kan inte raderas. Det finns relaterade ärende för den här användare.</b></p>
-        <h3>Vill du fortfarande göra användaren inaktiv??</h3>
+        <p id="deletemsg"><b>Den här användaren kan inte raderas. Det finns relaterade ärende till den här användaren.</b></p>
+        <h3>Vill du fortfarande göra användaren inaktiv?</h3>
 
     }
 
@@ -67,7 +67,13 @@ else if (@ViewBag.formhide == "Admin")
             @Html.DisplayFor(model => model.Email)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Company)
+            @Html.DisplayNameFor(model => model.Company.CompanyName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Company.CompanyName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Company.CompanyAbbr)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Company.CompanyAbbr)
