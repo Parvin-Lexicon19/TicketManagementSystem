@@ -22,7 +22,6 @@ namespace TicketManagementSystem.Data
             var options = services.GetRequiredService<DbContextOptions<ApplicationDbContext>>();
             using (var context = new ApplicationDbContext(options))
             {
-
                 //seed BITOREQ company data to database
                 var foundcompany = await context.Companies.CountAsync(c => c.CompanyName == BITOREQNAME);
                 if (foundcompany == 0)
@@ -36,37 +35,37 @@ namespace TicketManagementSystem.Data
                     context.SaveChanges();
                 }
 
-                //Seed 2 companies data to database
-                var companies = await context.Companies.CountAsync(c => c.CompanyName != BITOREQNAME);
-                var fake = new Faker();
-                var random = new Random();
+                ////Seed 2 companies data to database
+                //var companies = await context.Companies.CountAsync(c => c.CompanyName != BITOREQNAME);
+                //var fake = new Faker();
+                //var random = new Random();
 
 
-                if (companies == 0)
-                {
-                    var newcompanies = new List<Company>();
-                    for (int i = 0; i < 2; i++)
-                    {
-                        var companyname = fake.Company.CompanyName();
-                        Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-                        var companyabbr = rgx.Replace(companyname, "");
-                        var company = new Company
-                        {
+                //if (companies == 0)
+                //{
+                //    var newcompanies = new List<Company>();
+                //    for (int i = 0; i < 2; i++)
+                //    {
+                //        var companyname = fake.Company.CompanyName();
+                //        Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+                //        var companyabbr = rgx.Replace(companyname, "");
+                //        var company = new Company
+                //        {
                             
-                            CompanyName = companyname,
-                            CompanyAbbr = companyabbr.Substring(0,5).ToUpper(),
-                            Email = fake.Internet.Email(companyname),
-                            Address = fake.Address.StreetAddress(),
-                            City = fake.Address.City(),
-                            Country = "Sweden"
+                //            CompanyName = companyname,
+                //            CompanyAbbr = companyabbr.Substring(0,5).ToUpper(),
+                //            Email = fake.Internet.Email(companyname),
+                //            Address = fake.Address.StreetAddress(),
+                //            City = fake.Address.City(),
+                //            Country = "Sweden"
 
-                        };
-                        newcompanies.Add(company);
-                    }
+                //        };
+                //        newcompanies.Add(company);
+                //    }
 
-                        context.AddRange(newcompanies);
-                        context.SaveChanges();
-                }
+                //        context.AddRange(newcompanies);
+                //        context.SaveChanges();
+                //}
 
 
                 var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
@@ -122,88 +121,86 @@ namespace TicketManagementSystem.Data
                         {
                             throw new Exception(string.Join("\n", addToRoleResult.Errors));
                         }
-
-                    }
-
-                }
-
-                //creating Developers
-                var developersEmails = new[] { "developer1@bitoreq.se", "developer2@bitoreq.se", "developer3@bitoreq.se", "developer4@bitoreq.se" };
-
-                foreach (var email in developersEmails)
-                {
-                    var foundUser = await userManager.FindByEmailAsync(email);
-                    var companyid = await context.Companies.FirstOrDefaultAsync(c => c.CompanyName == BITOREQNAME);
-                    if (foundUser != null) continue;
-                    else
-                    {
-                        await NewUser(adminPW, userManager, email, companyid.Id);
                     }
                 }
 
+                ////creating Developers
+                //var developersEmails = new[] { "developer1@bitoreq.se", "developer2@bitoreq.se", "developer3@bitoreq.se", "developer4@bitoreq.se" };
 
-                foreach (var email in developersEmails)
-                {
-                    var developerUser = await userManager.FindByEmailAsync(email);
-                    var developerUserRole = await userManager.GetRolesAsync(developerUser);
-                    if (developerUserRole.Count > 0) continue;
-                    else
-                    {
-
-                        var addToRoleResult = await userManager.AddToRoleAsync(developerUser, "Developer");
-
-                        if (!addToRoleResult.Succeeded)
-                        {
-                            throw new Exception(string.Join("\n", addToRoleResult.Errors));
-                        }
-
-                    }
-
-                }
+                //foreach (var email in developersEmails)
+                //{
+                //    var foundUser = await userManager.FindByEmailAsync(email);
+                //    var companyid = await context.Companies.FirstOrDefaultAsync(c => c.CompanyName == BITOREQNAME);
+                //    if (foundUser != null) continue;
+                //    else
+                //    {
+                //        await NewUser(adminPW, userManager, email, companyid.Id);
+                //    }
+                //}
 
 
-                //Creating Customers
-                var CustomersEmails = new[] { "Customer1@bitoreq.se", "Customer2@bitoreq.se", "Customer3@bitoreq.se", "Customer4@bitoreq.se" };
-                var getCompanyIds = context.Companies.Where(c => c.CompanyName != BITOREQNAME).Select(v => v.Id).ToList();
+                //foreach (var email in developersEmails)
+                //{
+                //    var developerUser = await userManager.FindByEmailAsync(email);
+                //    var developerUserRole = await userManager.GetRolesAsync(developerUser);
+                //    if (developerUserRole.Count > 0) continue;
+                //    else
+                //    {
+
+                //        var addToRoleResult = await userManager.AddToRoleAsync(developerUser, "Developer");
+
+                //        if (!addToRoleResult.Succeeded)
+                //        {
+                //            throw new Exception(string.Join("\n", addToRoleResult.Errors));
+                //        }
+
+                //    }
+
+                //}
+
+
+                ////Creating Customers
+                //var CustomersEmails = new[] { "Customer1@bitoreq.se", "Customer2@bitoreq.se", "Customer3@bitoreq.se", "Customer4@bitoreq.se" };
+                //var getCompanyIds = context.Companies.Where(c => c.CompanyName != BITOREQNAME).Select(v => v.Id).ToList();
 
                 
-                foreach (var email in CustomersEmails)
-                {
-                    var foundUser = await userManager.FindByEmailAsync(email);
+                //foreach (var email in CustomersEmails)
+                //{
+                //    var foundUser = await userManager.FindByEmailAsync(email);
 
 
                     
-                    if (foundUser != null) continue;
-                    else
-                    {
+                //    if (foundUser != null) continue;
+                //    else
+                //    {
                         
-                        var randomCompanyId = getCompanyIds.OrderBy(x => random.Next()).Take(1).FirstOrDefault();
+                //        var randomCompanyId = getCompanyIds.OrderBy(x => random.Next()).Take(1).FirstOrDefault();
 
-                        await NewUser(adminPW, userManager, email, randomCompanyId);
-                    }
-                }
+                //        await NewUser(adminPW, userManager, email, randomCompanyId);
+                //    }
+                //}
 
 
-                //Assigning Customers Roles
-                foreach (var email in CustomersEmails)
-                {
-                    var CustomerUser = await userManager.FindByEmailAsync(email);
-                    var CustomerUserRole = await userManager.GetRolesAsync(CustomerUser);
-                    if (CustomerUserRole.Count > 0) continue;
-                    else
-                    {
+                ////Assigning Customers Roles
+                //foreach (var email in CustomersEmails)
+                //{
+                //    var CustomerUser = await userManager.FindByEmailAsync(email);
+                //    var CustomerUserRole = await userManager.GetRolesAsync(CustomerUser);
+                //    if (CustomerUserRole.Count > 0) continue;
+                //    else
+                //    {
 
-                        var addToRoleResult = await userManager.AddToRoleAsync(CustomerUser, "Customer");
+                //        var addToRoleResult = await userManager.AddToRoleAsync(CustomerUser, "Customer");
 
-                        if (!addToRoleResult.Succeeded)
-                        {
-                            throw new Exception(string.Join("\n", addToRoleResult.Errors));
-                        }
-                    }
+                //        if (!addToRoleResult.Succeeded)
+                //        {
+                //            throw new Exception(string.Join("\n", addToRoleResult.Errors));
+                //        }
+                //    }
 
-                }
+                //}
 
-                ////updating existing users with activeuserflag
+                //updating existing users with activeuserflag
                 var userscount = userManager.Users.Count();
 
                 var users = userManager.Users.Where(u => u.ActiveUser != true).ToList();
@@ -218,54 +215,55 @@ namespace TicketManagementSystem.Data
                     }
                 }
 
-                //Seed 4 Projects
-                var Projects = await context.Projects.CountAsync();
-                string roleid = context.Roles.Where(r => r.Name == "Developer").FirstOrDefault().Id;
-                //var getCompanyIds = context.Companies.Where(c => c.CompanyName != BITOREQNAME).Select(v => v.Id).ToList();
+                ////Seed 4 Projects
+                //var Projects = await context.Projects.CountAsync();
+                //string roleid = context.Roles.Where(r => r.Name == "Developer").FirstOrDefault().Id;
+                ////var getCompanyIds = context.Companies.Where(c => c.CompanyName != BITOREQNAME).Select(v => v.Id).ToList();
 
-                if (Projects == 0)
-                {
-                    var newprojects = new List<Project>();
-                    foreach (var company in getCompanyIds)
-                    {
-                        for (int j = 1; j < 3; j++)
-                        {
-                            var getcopantabbr = context.Companies.Where(c => c.Id == company).Select(c => c.CompanyAbbr).FirstOrDefault();
-                            List<string> deverlopers =await context.UserRoles.Where(r => r.RoleId == roleid).Select(r => r.UserId).ToListAsync();
+                //if (Projects == 0)
+                //{
+                //    var newprojects = new List<Project>();
+                //    foreach (var company in getCompanyIds)
+                //    {
+                //        for (int j = 1; j < 3; j++)
+                //        {
+                //            var getcopantabbr = context.Companies.Where(c => c.Id == company).Select(c => c.CompanyAbbr).FirstOrDefault();
+                //            List<string> deverlopers =await context.UserRoles.Where(r => r.RoleId == roleid).Select(r => r.UserId).ToListAsync();
 
-                            int index = random.Next(deverlopers.Count);
-                            string developeerid = deverlopers[index];
+                //            int index = random.Next(deverlopers.Count);
+                //            string developeerid = deverlopers[index];
 
-                            var project = new Project
-                            {
-                                Name = getcopantabbr + "Solution" + j,
-                                CompanyId = company,
-                                ReleaseDate = fake.Date.Past(),
-                                Developer1 = developeerid
-                            };
-                            newprojects.Add(project);
-                        }
-                    }
+                //            var project = new Project
+                //            {
+                //                Name = getcopantabbr + "Solution" + j,
+                //                CompanyId = company,
+                //                ReleaseDate = fake.Date.Past(),
+                //                Developer1 = developeerid
+                //            };
+                //            newprojects.Add(project);
+                //        }
+                //    }
 
-                    context.AddRange(newprojects);
-                    context.SaveChanges();
-                }
+                //    context.AddRange(newprojects);
+                //    context.SaveChanges();
+                //}
             }
         }
 
 
         private static async Task NewUser(string adminPW, UserManager<ApplicationUser> userManager, string email, int companyid)
         {
-
-            var fake = new Faker();
+            //var fake = new Faker();
             var user = new ApplicationUser
             {
                 UserName = email,
                 Email = email,
                 CompanyId = companyid,
                 EmailConfirmed = true,
-                FirstName = fake.Person.FirstName,
-                LastName= fake.Person.LastName
+                //FirstName = fake.Person.FirstName,
+                //LastName= fake.Person.LastName
+                FirstName = "Admin",
+                LastName = "Admin"
             };
 
 
