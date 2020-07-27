@@ -8,115 +8,117 @@
 <h2 style="text-align:center">@ViewData["Title"]</h2>
 
 <div class="row justify-content-center table-bordered">
-        <div class="col-md-4  align-center">
-            <form asp-route-returnUrl="@Model.ReturnUrl" asp-route-companyId="@Model.CompanyOption" asp-route-RoleName="@Model.RoleOption" method="post">
+    <div class="col-md-6 align-center">
+        <form asp-route-returnUrl="@Model.ReturnUrl" asp-route-companyId="@Model.CompanyOption" asp-route-RoleName="@Model.RoleOption" method="post">
 
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Input.Email"></label>
-                    <input asp-for="Input.Email" class="form-control" />
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.Password"></label>
-                    <input asp-for="Input.Password" class="form-control" />
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.ConfirmPassword"></label>
-                    <span class="text-danger">*</span>
-                    <input asp-for="Input.ConfirmPassword" class="form-control" />
-                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.FirstName"></label>
-                    <input asp-for="Input.FirstName" class="form-control" />
-                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.LastName"></label>
-                    <input asp-for="Input.LastName" class="form-control" />
-                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.PhoneNumber"></label>
-                    <input asp-for="Input.PhoneNumber" class="form-control" />
-                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.Country"></label>
-                    <input asp-for="Input.Country" class="form-control" />
-                    <span asp-validation-for="Input.Country" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.JobTitle"></label>
-                    <input asp-for="Input.JobTitle" class="form-control" />
-                    <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.Role"></label>
-                    @*<span class="text-danger field-validation-error">*</span>*@
-                    <select id="rolesDDL" asp-for="Input.Role" class="form-control" asp-items='new SelectList(roles,"Id","Name")' onchange="FillRoleCompanies()">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="form-control" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword"></label>
+                <span class="text-danger">*</span>
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.FirstName"></label>
+                <input asp-for="Input.FirstName" class="form-control" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.LastName"></label>
+                <input asp-for="Input.LastName" class="form-control" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Country"></label>
+                <input asp-for="Input.Country" class="form-control" />
+                <span asp-validation-for="Input.Country" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.JobTitle"></label>
+                <input asp-for="Input.JobTitle" class="form-control" />
+                <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Role"></label>
+                @*<span class="text-danger field-validation-error">*</span>*@
+                <select id="rolesDDL" asp-for="Input.Role" class="form-control" asp-items='new SelectList(roles,"Id","Name")' onchange="FillRoleCompanies()">
                     @*<select asp-for="Input.Role" class="form-control" asp-items='new SelectList(roles,"Id","Name")'>*@
-                        <option value=""> Välj en roll </option>
-                    </select>
-                    <span class="field-validation-valid text-danger"
-                          data-valmsg-for="Input.Role"
-                          data-valmsg-replace="true">
-                    </span>
-                </div>
-                <br />
-                <div class="form-group">
-                    <label asp-for="Input.CompanyName"></label>
-                    <select id="companiesDDL" asp-for="Input.CompanyName" class="form-control" asp-items="ViewBag.CompanyOption">
+                    <option value=""> Välj en roll </option>
+                </select>
+                <span class="field-validation-valid text-danger"
+                      data-valmsg-for="Input.Role"
+                      data-valmsg-replace="true">
+                </span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.CompanyName"></label>
+                <select id="companiesDDL" asp-for="Input.CompanyName" class="form-control" asp-items="ViewBag.CompanyOption">
                     @*<select asp-for="Input.CompanyName" class="form-control" asp-items="ViewBag.CompanyOption">*@
-                        <option value=""> Välj ett företag </option>
-                    </select>
-                    <span class="field-validation-valid text-danger"
-                          data-valmsg-for="Input.CompanyName"
-                          data-valmsg-replace="true">
-                    </span>
-                </div>
-                <br />
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Registrera</button>
-                </div>
-                <br />
-            </form>
+                    <option value=""> Välj ett företag </option>
+                </select>
+                <span class="field-validation-valid text-danger"
+                      data-valmsg-for="Input.CompanyName"
+                      data-valmsg-replace="true">
+                </span>
+            </div>
+            <br />
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Registrera</button>
+            </div>
+            <br />
+        </form>
     </div>
     @* Not Needed now *@
-   @* <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h4>Use another service to register.</h4>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+    @* <div class="col-md-6 col-md-offset-2">
+            <section>
+                <h4>Use another service to register.</h4>
+                <hr />
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
                         <div>
                             <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
+                                There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                                for details on setting up this ASP.NET application to support logging in via external services.
                             </p>
                         </div>
-                    </form>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
                 }
-            }
-        </section>
-    </div>*@
+            </section>
+        </div>*@
 </div>
+<partial name="_ValidationScriptsPartial" />
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <script src ="~/js/site.js" asp-append-version="true"></script>
 }
+
