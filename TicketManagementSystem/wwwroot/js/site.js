@@ -12,7 +12,7 @@ $(document).ready(function () {
 function FillCustomers() {
     var companyId = $('#companyDropDownList').val();
     $.ajax({
-        url: 'GetCustomers',
+        url: '/Tickets/GetCustomers',
         type: "POST",
         dataType: "JSON",
         data: { companyId: companyId },
@@ -50,10 +50,10 @@ function FillProjects() {
 function FillCompanyProjects() {
     var companyId = $('#companyDDL').val();
     $.ajax({
-        url: 'Tickets/GetCompanyProjects',
+        url: window.bitoreq.GetCompanyProjects,
+        data: {companyId: companyId},
         type: "POST",
         dataType: "JSON",
-        data: { companyId: companyId },
         success: function (projects) {
             $("#projectDDL").html("");   //clear before appending new list
             $("#projectDDL").append(
@@ -70,10 +70,10 @@ function FillRoleCompanies() {
     //var roleId = $('#rolesDDL').val();
     var roleId = $('#rolesDDL option:selected').text();
     $.ajax({
-        url: '/ApplicationUsers/GetRoleCompanies',
+        url: window.bitoreq.FillRoleCompaniesURL,
+        data: {roleId: roleId},
         type: "POST",
         dataType: "JSON",
-        data: { roleId: roleId },
         success: function (companies) {
             $("#companiesDDL").html("");   //clear before appending new list
             $("#companiesDDL").append(

@@ -120,5 +120,9 @@
 
 @section Scripts {
     <script src ="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        window.bitoreq = window.bitoreq || {};
+        window.bitoreq.FillRoleCompaniesURL = '@Url.Action("GetRoleCompanies", "ApplicationUsers", new { }, Request.Scheme)';
+    </script>
 }
 

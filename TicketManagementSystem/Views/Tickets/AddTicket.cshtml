@@ -118,4 +118,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        window.bitoreq = window.bitoreq || {};
+        window.bitoreq.GetCompanyProjectsURL = '@Url.Action("GetCompanyProjects")';
+    </script>
 }
