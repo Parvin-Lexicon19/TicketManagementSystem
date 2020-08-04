@@ -21,6 +21,7 @@ namespace TicketManagementSystem
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILogger<Program>>();
 
                 var context = services.GetRequiredService<ApplicationDbContext>();
                 context.Database.Migrate();
@@ -30,18 +31,18 @@ namespace TicketManagementSystem
                 // Example: dotnet user-secrets set "KEY" "YourPassword!"
                 // Sets up that key and value in the secrets.json file
                 var adminPW = config["KEY"];
-
+                var strEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                logger.LogInformation("Current environment: " + strEnvironment);
                 try
                 { 
                    SeedData.InitializeAsync(services, adminPW).Wait();
                 }
                 catch (Exception ex)
                 {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex.Message, "Seed Fail");
                 }
             }
-
+              
               host.Run();
         }
 

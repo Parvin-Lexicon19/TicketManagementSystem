@@ -197,4 +197,12 @@
     </div>
 </form>
 
+@section Scripts {
+    <script>
+            window.bitoreq = window.bitoreq || {};
+            window.bitoreq.GetCompanyProjectsURL = '@Url.Action("GetCompanyProjects", "Tickets")';
+    </script>
+
+}
 <partial name="TicketListPartial" />
+

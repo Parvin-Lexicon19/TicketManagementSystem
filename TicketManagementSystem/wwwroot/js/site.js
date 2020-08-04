@@ -12,7 +12,7 @@ $(document).ready(function () {
 function FillCustomers() {
     var companyId = $('#companyDropDownList').val();
     $.ajax({
-        url: '/Tickets/GetCustomers',
+        url: window.bitoreq.GetCustomersURL,
         type: "POST",
         dataType: "JSON",
         data: { companyId: companyId },
@@ -31,7 +31,7 @@ function FillCustomers() {
 function FillProjects() {
     var customerId = $('#customerDropDownList').val();
     $.ajax({
-        url: 'GetProjects',
+        url: window.bitoreq.GetProjectsURL,
         type: "POST",
         dataType: "JSON",
         data: { customerId: customerId },
@@ -50,7 +50,7 @@ function FillProjects() {
 function FillCompanyProjects() {
     var companyId = $('#companyDDL').val();
     $.ajax({
-        url: window.bitoreq.GetCompanyProjects,
+        url: window.bitoreq.GetCompanyProjectsURL,
         data: {companyId: companyId},
         type: "POST",
         dataType: "JSON",
@@ -107,7 +107,8 @@ function FillRoleCompanies() {
 
 //this will add * next to required label
 //$(':input').each(function () { //for all input types
-$('input[type=text],input[type=radio],textarea,select,input[type=email],input[type=number],input[type=password],input[type=date]').each(function () {
+
+ $('input[type=text],input[type=radio],textarea,select,input[type=email],input[type=number],input[type=password],input[type=date]').each(function () {
     var req = $(this).attr('data-val-required');
     var exclude = $(this).attr('data-exclude');
     if (undefined != req && undefined == exclude) {

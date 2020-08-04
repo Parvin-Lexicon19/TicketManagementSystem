@@ -78,7 +78,6 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
-
             [Display(Name = "Roll")]
             public string Role { get; set; }
             [Required]
@@ -90,16 +89,13 @@ namespace TicketManagementSystem.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Efternamn")]
             [StringLength(50)]
-
             public string LastName { get; set; }
 
             [Display(Name = "Land")]
-
             public string Country { get; set; }
 
             [Display(Name = "Telefonnummer")]
             [StringLength(30)]
-
             public string PhoneNumber { get; set; }
 
             [Display(Name = "Jobbtitel")]
