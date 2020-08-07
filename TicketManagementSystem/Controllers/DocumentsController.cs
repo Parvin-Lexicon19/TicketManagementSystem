@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TicketManagementSystem.Data;
@@ -20,7 +21,7 @@ namespace TicketManagementSystem.Controllers
             _context = context;
         }
    
-
+        [Authorize]
         public async Task<IActionResult> Download(int? id)
         {
             if (id == null)
@@ -36,9 +37,10 @@ namespace TicketManagementSystem.Controllers
                 await stream.CopyToAsync(memory);
             }
             memory.Position = 0;
-            return File(memory, GetContentType(filepath), Path.GetFileName(filepath));
+            return File(memory, GetContentType(filepath), Path.GetFileName(filepath).Substring(37)); //Shave off the GUID before delivery.
         }
 
+        [Authorize]
         public async Task<IActionResult> RemoveFile(int? id)
         {
             if (id == null)
