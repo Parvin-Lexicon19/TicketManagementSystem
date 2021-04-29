@@ -1,17 +1,35 @@
-﻿@model TicketManagementSystem.Core.Models.Comment
+﻿@*@model TicketManagementSystem.Core.Models.Comment*@
+@model TicketManagementSystem.Core.ViewModels.CommentViewModel
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="AddComment">
+        <form asp-action="AddComment" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="TicketId" />            
+            <input type="hidden" asp-for="Comment.TicketId" />
             <div class="form-group">
                 @*<label asp-for="CommentText" class="control-label"></label>*@
-                <textarea asp-for="CommentText" rows="4" class="form-control"></textarea>
-                <span asp-validation-for="CommentText" class="text-danger"></span>
-            </div>  
-            <div class="form-group" align="center">
-                <input type="submit" value="Lägg till kommentar" class="btn btn-primary" />
+                <textarea asp-for="Comment.CommentText" rows="8" class="form-control" placeholder="Skriv din kommentar här"></textarea>
+                <span asp-validation-for="Comment.CommentText" class="text-danger"></span>
+            </div>
+            <hr />
+            @for (int i = 0; i < 3; i++)
+            {
+                <div class="form-group row">
+                    <div class="col-2 col-form-label" style="padding-left:30px">
+                        @Html.Label("Bifoga fil " + (i + 1).ToString())
+                    </div>
+                    @*<label asp-for="File" class="col-md-2 col-form-label"></label>*@
+                    <div class="col-10">
+                        <div class="custom-file">
+                            <input asp-for="File" class="form-control custom-file-input" id="file" lang="se">
+                            <label class="custom-file-label" data-label="Bläddra">Välj fil...</label>
+                        </div>
+                    </div>
+                </div>
+            }
+            <hr />
+            <div class="form-group" align="center" style="margin-top:50px">
+                <input type="submit" value="Spara" class="btn btn-primary" />
             </div>
         </form>
         <div class="modal-footer">

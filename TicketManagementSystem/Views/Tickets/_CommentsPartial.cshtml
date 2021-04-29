@@ -6,24 +6,37 @@
     <tbody>
         @foreach (var item in Model.OrderByDescending(i => i.Id))
         {
-            <tr class="row"> 
+            <tr class="row">
                 <td class="col-sm-2 font-weight-lighter small border active ml-1">
                     @*@if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+                           @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
+                        else if (User.IsInRole("Customer"))
+                        {*@
+                    @if (await userManager.IsInRoleAsync(item.ApplicationUser, "Customer"))
                         @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
-                     else if (User.IsInRole("Customer"))
-                     {*@
-                         @if (await userManager.IsInRoleAsync(item.ApplicationUser, "Customer"))
-                             @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
-                          else
-                             @Html.Label("Bitoreq Support")
-                     @*}*@
+                        else
+                            @Html.Label("Bitoreq Support")
+                    @*}*@
                     <br />
                     @Html.DisplayFor(modelItem => item.CommentTime)
                 </td>
 
-                <td class="col-sm-8 border active">
-                    @Html.DisplayFor(modelItem => item.CommentText)
+                <td class="col-sm-6 border active border-right-0">
+                    @Html.DisplayFor(modelItem => item.CommentText)                   
                 </td>
+
+                <td class="col-sm-2 border active border-left-0">
+                    @if (item.Documents.Count != 0)
+                    {
+                        @foreach (var docItem in item.Documents)
+                        {
+                            <div>
+                                <a asp-controller="Documents" asp-action="Download" asp-route-id="@docItem.Id">@Html.DisplayFor(modelItem => docItem.GetName)</a>
+                            </div>
+                        }
+                    }
+                </td>
+
             </tr>
         }
     </tbody>

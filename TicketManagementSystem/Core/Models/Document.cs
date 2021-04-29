@@ -13,10 +13,12 @@ namespace TicketManagementSystem.Core.Models
         public string GetName { get { return Name.Split('_', 2)[1]; }}
         public string Path { get; set; }
         public Int64 TicketId { get; set; }
+        public Int64? CommentId { get; set; }
         public DateTime UploadTime { get; set; }
         public string Description { get; set; }
         public  string ApplicationUserId { get; set; }
         public Ticket Ticket { get; set; }
+        public Comment Comment { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
     }
 }

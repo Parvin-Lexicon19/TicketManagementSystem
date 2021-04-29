@@ -400,16 +400,19 @@ namespace TicketManagementSystem.Controllers
             {
                 return NotFound();
             }
-            ticket.Comments = await _context.Comments.Where(m => m.TicketId == id).Include(c => c.ApplicationUser).ToListAsync();
+            ticket.Comments = await _context.Comments.Where(m => m.TicketId == id).Include(c => c.ApplicationUser).Include(c => c.Documents).ToListAsync();
             ticket.Documents = await _context.Documents.Where(d => d.TicketId == id).ToListAsync();
 
             var model = new TicketDetailsViewModel
             {
                 Ticket = ticket,
                 Documents = ticket.Documents,
-                Comment = new Comment
+                CommentVM = new CommentViewModel
                 {
-                    TicketId = ticket.Id,
+                    Comment = new Comment
+                    {
+                        TicketId = ticket.Id,
+                    }
                 }
             };
             //Pass the LoggedInUser when closing the Ticket.
@@ -512,7 +515,7 @@ namespace TicketManagementSystem.Controllers
                 await _context.SaveChangesAsync();
 
                 if (model.File != null)
-                    Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, companyAbbr);
+                    Fileupload(model.File, model.Ticket.Id, null, model.Ticket.CreatedBy, companyAbbr);
                
                 if (model.Ticket.Status.Equals(Status.Inskickat))
                 {
@@ -641,7 +644,7 @@ namespace TicketManagementSystem.Controllers
                     {
                         Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
                         var companyAbbr = loggedInUserCompany.CompanyAbbr;
-                        Fileupload(model.File, model.Ticket.Id, model.Ticket.CreatedBy, companyAbbr);
+                        Fileupload(model.File, model.Ticket.Id, null, model.Ticket.CreatedBy, companyAbbr);
                     }                        
                 }
                 catch (DbUpdateConcurrencyException)
@@ -862,22 +865,30 @@ namespace TicketManagementSystem.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AddComment([Bind("Id,CommentTime,CommentBy,CommentText,TicketId")] Comment comment)
+        [HttpPost]
+        public async Task<IActionResult> AddComment(CommentViewModel model)
         {
-            comment.CommentTime = DateTime.Now;
+            model.Comment.CommentTime = DateTime.Now;
             var loggedInUser = await userManager.GetUserAsync(User);
-            comment.CommentBy = loggedInUser.Id;
+            model.Comment.CommentBy = loggedInUser.Id;
 
             if (ModelState.IsValid)
             {
-                _context.Add(comment);
+                _context.Add(model.Comment);
                 await _context.SaveChangesAsync();
+
+                if (model.File != null)
+                {
+                    Company loggedInUserCompany = _context.Companies.Find(loggedInUser.CompanyId);
+                    var companyAbbr = loggedInUserCompany.CompanyAbbr;
+                    Fileupload(model.File, model.Comment.TicketId, model.Comment.Id, model.Comment.CommentBy, companyAbbr);
+                }                    
             }
 
-            return RedirectToAction("Details", new { id = comment.TicketId });
+            return RedirectToAction("Details", new { id = model.Comment.TicketId });
         }
 
-        private void Fileupload(List<IFormFile> inputFiles, long ticketid, string userid, string companyAbbr)
+        private void Fileupload(List<IFormFile> inputFiles, long ticketid, long? commentid, string userid, string companyAbbr)
         {
             string FileName = null;
             string filePath = null;
@@ -909,7 +920,8 @@ namespace TicketManagementSystem.Controllers
                     UploadTime = DateTime.Now,
                     Path = filePath,
                     ApplicationUserId = userid,
-                    TicketId = ticketid
+                    TicketId = ticketid,
+                    CommentId = commentid
                 };
 
                 if (ModelState.IsValid)

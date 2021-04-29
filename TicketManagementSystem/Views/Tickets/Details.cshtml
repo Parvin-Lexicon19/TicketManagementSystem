@@ -6,148 +6,127 @@
     int i = 0;
 }
 
-    <h1>Detaljer</h1>
+<h1>Detaljer</h1>
 
-    <div>
+<div>
 
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.RefNo)
-            </dt>
-            <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.RefNo)
-            </dd>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.RefNo)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Ticket.RefNo)
+        </dd>
 
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
-            </dt>
-            <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.CreatedDate)
-            </dd>
-        </dl>
-
-
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.Title)
-            </dt>
-            <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.Title)
-            </dd>
-
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.LastUpdated)
-            </dt>
-            <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.LastUpdated)
-            </dd>
-        </dl>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.CreatedDate)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Ticket.CreatedDate)
+        </dd>
+    </dl>
 
 
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.Problem)
-            </dt>
-            <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.Problem)
-            </dd>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.Title)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Ticket.Title)
+        </dd>
 
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.ClosedDate)
-            </dt>
-            <dd class="col-sm-4">
-                @if (Model.Ticket.ClosedDate.Year > 2000)
-                    @Html.DisplayFor(model => model.Ticket.ClosedDate)
-            </dd>
-        </dl>
-
-
-        <dl class="row">
-            @if (User.IsInRole("Customer"))
-            {
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Ticket.CustomerPriority)
-                </dt>
-                <dd class="col-sm-4">
-                    @Html.DisplayFor(model => model.Ticket.RealPriority)
-                </dd>
-            }
-            else
-            {
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Ticket.CustomerPriority)
-                </dt>
-                <dd class="col-sm-4">
-                    @Html.DisplayFor(model => model.Ticket.CustomerPriority)
-                </dd>
-            }
-            
-            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) @*||
-            (User.IsInRole("Customer") && @Model.Ticket.Status != Status.Inskickat)*@)
-            {
-                <dt class="col-sm-2 hidestatus">
-                    @Html.DisplayNameFor(model => model.Ticket.DueDate)
-                </dt>
-                <dd class="col-sm-4 hidestatus">
-                    @Html.DisplayFor(model => model.Ticket.DueDate)
-                </dd>
-            }
-        </dl>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.LastUpdated)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Ticket.LastUpdated)
+        </dd>
+    </dl>
 
 
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.Project)
-            </dt>
-            <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.Project.Name)
-            </dd>
-            
-            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-            {
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
-                </dt>
-                <dd class="col-sm-4">
-                    @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
-                </dd>
-            }
-        </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.Problem)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Ticket.Problem)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.ClosedDate)
+        </dt>
+        <dd class="col-sm-4">
+            @if (Model.Ticket.ClosedDate.Year > 2000)
+                @Html.DisplayFor(model => model.Ticket.ClosedDate)
+        </dd>
+    </dl>
 
 
-        <!--If Ticket status not closed. and want to show the Ticket status -->
-        @if (Model.Ticket.Status != Status.Avslutat)
+    <dl class="row">
+        @if (User.IsInRole("Customer"))
         {
-            <dl class="row hidestatus">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Ticket.Status)
-                </dt>
-                <dd class="col-sm-4">
-                    @Html.DisplayFor(model => model.Ticket.Status)
-                </dd>
-
-                @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-                {
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Ticket.RealPriority)
-                    </dt>
-                    <dd class="col-sm-4">
-                        @Html.DisplayFor(model => model.Ticket.RealPriority)
-                    </dd>
-                }
-            </dl>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticket.CustomerPriority)
+            </dt>
+            <dd class="col-sm-4">
+                @Html.DisplayFor(model => model.Ticket.RealPriority)
+            </dd>
+        }
+        else
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticket.CustomerPriority)
+            </dt>
+            <dd class="col-sm-4">
+                @Html.DisplayFor(model => model.Ticket.CustomerPriority)
+            </dd>
         }
 
+        @if ((User.IsInRole("Admin") || User.IsInRole("Developer"))@*||
+            (User.IsInRole("Customer") && @Model.Ticket.Status != Status.Inskickat)*@)
+{
+<dt class="col-sm-2 hidestatus">
+    @Html.DisplayNameFor(model => model.Ticket.DueDate)
+</dt>
+<dd class="col-sm-4 hidestatus">
+    @Html.DisplayFor(model => model.Ticket.DueDate)
+</dd>
+}
+    </dl>
 
-        <dl class="row">
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.Project)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Ticket.Project.Name)
+        </dd>
+
+        @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+        {
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticket.CreatedUser)
+                @Html.DisplayNameFor(model => model.Ticket.AssignedUser)
             </dt>
             <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Ticket.CreatedUser.Email)
+                @Html.DisplayFor(model => model.Ticket.AssignedUser.Email)
+            </dd>
+        }
+    </dl>
+
+
+    <!--If Ticket status not closed. and want to show the Ticket status -->
+    @if (Model.Ticket.Status != Status.Avslutat)
+    {
+        <dl class="row hidestatus">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticket.Status)
+            </dt>
+            <dd class="col-sm-4">
+                @Html.DisplayFor(model => model.Ticket.Status)
             </dd>
 
-            @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (Model.Ticket.Status == Status.Avslutat))
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
             {
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Ticket.RealPriority)
@@ -157,128 +136,151 @@
                 </dd>
             }
         </dl>
+    }
 
 
-        <!--If Ticket status is closed show every details.-->
-        @if (Model.Ticket.Status == Status.Avslutat)
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.CreatedUser)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.Ticket.CreatedUser.Email)
+        </dd>
+
+        @if ((User.IsInRole("Admin") || User.IsInRole("Developer")) && (Model.Ticket.Status == Status.Avslutat))
         {
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Ticket.Status)
-                </dt>
-                <dd class="col-sm-4">
-                    @Html.DisplayFor(model => model.Ticket.Status)
-                </dd>
-                @if (User.IsInRole("Admin") || User.IsInRole("Developer")) 
-                {
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
-                    </dt>
-                    <dd class="col-sm-4">
-                        @Html.DisplayFor(model => model.Ticket.HoursSpent)
-                    </dd>
-                }
-                
-            </dl>
-        }
-
-
-        <dl class="row">
-            <dt class="col-sm-2 hidestatus">
-                @Html.DisplayNameFor(model => model.Ticket.ResponseType)
-            </dt>
-            <dd class="col-sm-4 hidestatus">
-                @if (Model.Ticket.ResponseType > 0)
-                    @Html.DisplayFor(model => model.Ticket.ResponseType)
-            </dd>
-
-            <dt class="col-sm-2 hidestatus">
-                @Html.DisplayNameFor(model => model.Ticket.ResponseDesc)
-            </dt>
-            <dd class="col-sm-4 hidestatus">
-                @Html.DisplayFor(model => model.Ticket.ResponseDesc)
-            </dd>
-        </dl>
-
-
-        <!-- If Ticket status is not closed Hide the fields below and show them only when Edit button is clicked .-->
-        <dl class="row hide collapse">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Ticket.RealPriority)
             </dt>
             <dd class="col-sm-4">
-                <div class="row hide collapse">
-                    <select name="bitoreqPriority" asp-for="@Model.Ticket.RealPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control RealPriority">
-                    </select>
-                </div>
+                @Html.DisplayFor(model => model.Ticket.RealPriority)
             </dd>
+        }
+    </dl>
 
+
+    <!--If Ticket status is closed show every details.-->
+    @if (Model.Ticket.Status == Status.Avslutat)
+    {
+        <dl class="row">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Ticket.Status)
             </dt>
-            <dd class="col-sm-3">
-                <div class="row hide collapse">
-                    <select id='statusselect' asp-for="@Model.Ticket.Status" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Utkast" ))" class="form-control  status">
-                    </select>
-                </div>
-                <p class="text-danger">
-                    @ViewBag.Statuscheck
-                </p>
+            <dd class="col-sm-4">
+                @Html.DisplayFor(model => model.Ticket.Status)
             </dd>
+            @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            {
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
+                </dt>
+                <dd class="col-sm-4">
+                    @Html.DisplayFor(model => model.Ticket.HoursSpent)
+                </dd>
+            }
+
         </dl>
+    }
 
 
+    <dl class="row">
+        <dt class="col-sm-2 hidestatus">
+            @Html.DisplayNameFor(model => model.Ticket.ResponseType)
+        </dt>
+        <dd class="col-sm-4 hidestatus">
+            @if (Model.Ticket.ResponseType > 0)
+                @Html.DisplayFor(model => model.Ticket.ResponseType)
+        </dd>
+
+        <dt class="col-sm-2 hidestatus">
+            @Html.DisplayNameFor(model => model.Ticket.ResponseDesc)
+        </dt>
+        <dd class="col-sm-4 hidestatus">
+            @Html.DisplayFor(model => model.Ticket.ResponseDesc)
+        </dd>
+    </dl>
+
+
+    <!-- If Ticket status is not closed Hide the fields below and show them only when Edit button is clicked .-->
+    <dl class="row hide collapse">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.RealPriority)
+        </dt>
+        <dd class="col-sm-4">
+            <div class="row hide collapse">
+                <select name="bitoreqPriority" asp-for="@Model.Ticket.RealPriority" asp-items="@Html.GetEnumSelectList<Priority>()" class="form-control RealPriority">
+                </select>
+            </div>
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket.Status)
+        </dt>
+        <dd class="col-sm-3">
+            <div class="row hide collapse">
+                <select id='statusselect' asp-for="@Model.Ticket.Status" asp-items="@(Html.GetEnumSelectList<Status>().Where(x => x.Text!= "Utkast" ))" class="form-control  status">
+                </select>
+            </div>
+            <p class="text-danger">
+                @ViewBag.Statuscheck
+            </p>
+        </dd>
+    </dl>
+
+
+    <dl class="row">
+        <dt class="col-sm-2 hide collapse">
+            @Html.DisplayNameFor(model => model.Ticket.DueDate)
+        </dt>
+        <dd class="col-sm-4 hide collapse">
+            <div class="row">
+                <input asp-for="@Model.Ticket.DueDate" class="form-control dueD" required />
+            </div>
+        </dd>
+
+        <dt class="col-sm-2 hide collapse">
+            @Html.DisplayNameFor(model => model.Ticket.ResponseType)
+        </dt>
+        <dd class="col-sm-3 hide collapse">
+            <div class="row">
+                <select name="ResType" asp-for="@Model.Ticket.ResponseType" asp-items="@(Html.GetEnumSelectList<ResponseType>())" class="form-control  ResType">
+                    <option selected="selected" value="">Svarstyp</option>
+                </select>
+            </div>
+        </dd>
+    </dl>
+
+
+    <div>
         <dl class="row">
             <dt class="col-sm-2 hide collapse">
-                @Html.DisplayNameFor(model => model.Ticket.DueDate)
+                @Html.DisplayNameFor(model => model.Ticket.ResponseDesc)
             </dt>
             <dd class="col-sm-4 hide collapse">
                 <div class="row">
-                    <input asp-for="@Model.Ticket.DueDate" class="form-control dueD" required />
+                    <textarea class="form-control RespDesc" asp-for="Ticket.ResponseDesc" rows="5" id="comment"></textarea>
                 </div>
             </dd>
 
-            <dt class="col-sm-2 hide collapse">
-                @Html.DisplayNameFor(model => model.Ticket.ResponseType)
+            <dt class="col-sm-2 hidden">
+                @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
             </dt>
-            <dd class="col-sm-3 hide collapse">
+            <dd class="col-sm-3 hidden">
                 <div class="row">
-                    <select name="ResType" asp-for="@Model.Ticket.ResponseType" asp-items="@(Html.GetEnumSelectList<ResponseType>())" class="form-control  ResType">
-                        <option selected="selected" value="">Svarstyp</option>
-                    </select>
+                    <input type="text" asp-for="Ticket.HoursSpent" class="form-control hours" />
+                    @*<span asp-validation-for="Ticket.HoursSpent" class="text-danger"></span>*@
                 </div>
             </dd>
         </dl>
-
-        
-        <div>
-            <dl class="row">
-                <dt class="col-sm-2 hide collapse">
-                    @Html.DisplayNameFor(model => model.Ticket.ResponseDesc)
-                </dt>
-                <dd class="col-sm-4 hide collapse">
-                    <div class="row">
-                        <textarea class="form-control RespDesc" asp-for="Ticket.ResponseDesc" rows="5" id="comment"></textarea>
-                    </div>
-                </dd>
-
-                <dt class="col-sm-2 hidden">
-                    @Html.DisplayNameFor(model => model.Ticket.HoursSpent)
-                </dt>
-                <dd class="col-sm-3 hidden">
-                    <div class="row">
-                        <input type="text" asp-for="Ticket.HoursSpent" class="form-control hours" />
-                        @*<span asp-validation-for="Ticket.HoursSpent" class="text-danger"></span>*@
-                    </div>
-                </dd>
-            </dl>
-        </div>
-
     </div>
 
-    @if (Model.Documents.Count != 0)
+</div>
+
+@if (Model.Documents.Count != 0)
+{
+    @foreach (var item in Model.Documents)
     {
-        @foreach (var item in Model.Documents)
+        if (item.CommentId.Equals(null))
         {
             <dl class="row">
                 @if (i == 0)
@@ -292,95 +294,96 @@
                     <dt class="col-sm-2">
                     </dt>
                 }
-    
+
                 <dd class="col-sm-4">
                     <a asp-controller="Documents" asp-action="Download" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.GetName)</a>
                 </dd>
-    
+
             </dl>
             i++;
         }
     }
-    
-    else
+}
+
+else
+{
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Documents)
+        </dt>
+    </dl>
+}
+
+<br />
+<div>
+    @*Show this option only for Admin and Developer Roles|*@
+    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
     {
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Documents)
-            </dt>
-        </dl>
+        <div class="text-center">
+            <input type="button" value="Spara" id="Save" class="btn btn-primary hide collapse" />
+        </div>
     }
-    
-    <br />
-    <div>
-        @*Show this option only for Admin and Developer Roles|*@
-        @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+    {
+        @if (Model.Ticket.Status != Status.Avslutat)
         {
             <div class="text-center">
-                <input type="button" value="Spara" id="Save" class="btn btn-primary hide collapse" />
+                <button class="btn btn-primary center-block" id="SaveEditbtn" data-toggle="collapse" data-target=".hide">Redigera</button>
             </div>
         }
-        @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-        {
-            @if (Model.Ticket.Status != Status.Avslutat)
-            {
-                <div class="text-center">
-                    <button class="btn btn-primary center-block" id="SaveEditbtn" data-toggle="collapse" data-target=".hide">Redigera</button>
-                </div>
-            }
-        }
-    
-        @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
-        {
-            <a asp-action="Index">Tillbaka till listan</a>
-        }
-    
-        @if (User.IsInRole("Customer"))
-        {
-            <form >
-                <a asp-action="Index">Tillbaka till Mina Ärenden</a> |
-                <a asp-action="Index" asp-route-customerCompanyTickets="true">Tillbaka till Alla Ärenden</a>
-            </form>
-         }
-    
-         <br />
-         <br />
-         <span id="msg" class="text-danger"></span>
-    
+    }
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+    {
+        <a asp-action="Index">Tillbaka till listan</a>
+    }
+
+    @if (User.IsInRole("Customer"))
+    {
+        <form>
+            <a asp-action="Index">Tillbaka till Mina Ärenden</a> |
+            <a asp-action="Index" asp-route-customerCompanyTickets="true">Tillbaka till Alla Ärenden</a>
+        </form>
+    }
+
+    <br />
+    <br />
+    <span id="msg" class="text-danger"></span>
+</div>
+
+<br />
+<br />
+
+<div class="form-group">
+    <!--Button trigger modal-->
+    <div>
+        <button type="button" id="commentPopUp" class="btn btn-primary" data-toggle="modal" data-target="commentModalCenter">Lägg till kommentar</button>
+        <p class="text-info"><small>Du kan även lägga till en bilaga när du lägger till en kommentar.</small></p>
     </div>
-    
-   <br />
-   <br />
-   
-   <div class="form-group">
-       <!--Button trigger modal-->
-       <div>
-           <button type="button" id="commentPopUp" class="btn btn-primary" data-toggle="modal" data-target="commentModalCenter">Lägg till kommentar</button>
-       </div>
-       <br />
-       <b><label asp-for="Ticket.Comments" class="control-label"></label></b>
-       <div style="height: 55vh; overflow:auto;">
-           @await Html.PartialAsync("_CommentsPartial", Model.Ticket.Comments)
-       </div>
+    <br />
+    <b><label asp-for="Ticket.Comments" class="control-label"></label></b>
+    <div style="height: 55vh; overflow:auto;">
+        @await Html.PartialAsync("_CommentsPartial", Model.Ticket.Comments)
     </div>
-   
-    <!--Modal-->
-    <div class="modal fade" id="commentModalCenter" tabindex="-1" role="dialog" aria-labelledby="commentModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">kommentar för @Model.Ticket.RefNo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @await Html.PartialAsync("CommentModalPopUpPartial", Model.Comment)
-                </div>
-   
+</div>
+
+<!--Modal-->
+<div class="modal fade" id="commentModalCenter" tabindex="-1" role="dialog" aria-labelledby="commentModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Kommentar för @Model.Ticket.RefNo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("CommentModalPopUpPartial", Model.CommentVM)
+            </div>
+
         </div>
     </div>
+</div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -390,22 +393,22 @@
     $("#commentPopUp").click(function () {
     $("#commentModalCenter").modal('show');
     });
-    
+
     $("#btnHideModal").click(function () {
     $("#commentModalCenter").modal('hide');
     });
     @* Toggle between Edit and Save button *@
     $("#SaveEditbtn").click(function () {
-    
+
     if ($(this).text() == "Redigera") {
     $('.hidestatus').hide();
     $('#SaveEditbtn').hide();
     }
-    
+
     });
     $('#statusselect').on('change', function () {
         var status = $('.status').val();
-    
+
         if(status == "3"){
             $(".hidden").show();
         } else {
@@ -488,11 +491,11 @@
     //{
     //    alert("Om du ska avsluta ärendet, vänligen fyll i Timmarna.");
     //    isValid = false;
-    //}    
+    //}
 
 
     // If validation is passed update the Ticket.
-    if (isValid == true) {        
+    if (isValid == true) {
          $.post(url, { id: idOfTicket, HoursSpent: hours, Status: status, RespDesc: resDesc, RespType: resType, RelPriority: relPriority, DueD: dueD }, function (data) {
 
             alert("Ärendet Uppdaterades!");

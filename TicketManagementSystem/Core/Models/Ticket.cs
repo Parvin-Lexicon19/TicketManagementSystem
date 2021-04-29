@@ -52,7 +52,7 @@ namespace TicketManagementSystem.Core.Models
         [DisplayName("Svar")]
         public string ResponseDesc { get; set; }
         public ICollection<Document> Documents { get; set; }
-        [DisplayName("kommentarer")]
+        [DisplayName("Kommentarer")]
         public ICollection<Comment> Comments { get; set; }
         [DisplayName("Lösning")]
         public Project Project { get; set; }

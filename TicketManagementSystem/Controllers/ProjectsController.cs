@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TicketManagementSystem.Core.Models;
 using TicketManagementSystem.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace TicketManagementSystem.Controllers
 {
@@ -15,12 +16,14 @@ namespace TicketManagementSystem.Controllers
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public static readonly string BITOREQNAME = "Bitoreq";
 
-        public ProjectsController(ApplicationDbContext context)
+        public ProjectsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            this.userManager = userManager;
         }
 
         // GET: Projects
@@ -67,7 +70,7 @@ namespace TicketManagementSystem.Controllers
             var developerRole = _context.Roles.Where(r => r.Name == "Developer").FirstOrDefault().Id;
             var developersId = _context.UserRoles.Where(ur => ur.RoleId == developerRole).Select(u => u.UserId).ToList();
 
-            IEnumerable<SelectListItem> developers = _context.Users.Where(u => developersId.Contains(u.Id)).Select(i => new SelectListItem()
+            IEnumerable<SelectListItem> developers = userManager.Users.Where(u => developersId.Contains(u.Id) && u.ActiveUser == true).Select(i => new SelectListItem()
             {
                 Text = i.UserName,
                 Value = i.Id

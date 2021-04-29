@@ -13,7 +13,7 @@ namespace TicketManagementSystem.Core.ViewModels
        
         public Ticket Ticket { get; set; }
         public List<IFormFile> File { get; set; }
-        public Comment Comment { get; set; }
+        public CommentViewModel CommentVM { get; set; }
 
         [Display(Name = "Bifogade filer")]
         public ICollection<Document> Documents { get; set; }

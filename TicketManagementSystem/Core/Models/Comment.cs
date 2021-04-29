@@ -21,5 +21,6 @@ namespace TicketManagementSystem.Core.Models
         public Int64 TicketId { get; set; }
         public Ticket Ticket { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+        public ICollection<Document> Documents { get; set; }
     }
 }
