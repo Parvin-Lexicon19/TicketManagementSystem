@@ -287,6 +287,7 @@
                 {
                     <dt class="col-sm-2">
                         @Html.DisplayNameFor(model => model.Documents)
+                        <p class="text-info"><small>Se även ev. bilagor i kommentarerna</small></p>
                     </dt>
                 }
                 else
@@ -310,6 +311,7 @@ else
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Documents)
+            <p class="text-info"><small>Se även ev. bilagor i kommentarerna</small></p>
         </dt>
     </dl>
 }
@@ -361,7 +363,7 @@ else
         <p class="text-info"><small>Du kan även lägga till en bilaga när du lägger till en kommentar.</small></p>
     </div>
     <br />
-    <b><label asp-for="Ticket.Comments" class="control-label"></label></b>
+    @*<b><label asp-for="Ticket.Comments" class="control-label"></label></b>*@
     <div style="height: 55vh; overflow:auto;">
         @await Html.PartialAsync("_CommentsPartial", Model.Ticket.Comments)
     </div>

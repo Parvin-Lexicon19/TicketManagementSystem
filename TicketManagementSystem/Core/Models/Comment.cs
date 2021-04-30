@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -17,10 +18,12 @@ namespace TicketManagementSystem.Core.Models
         [ForeignKey("ApplicationUser")]
         public string CommentBy { get; set; }
         [Required]
+        [DisplayName("Kommentar")]
         public string CommentText { get; set; }
         public Int64 TicketId { get; set; }
         public Ticket Ticket { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+        [DisplayName("Bifogade filer")]
         public ICollection<Document> Documents { get; set; }
     }
 }

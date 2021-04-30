@@ -8,7 +8,7 @@
             <input type="hidden" asp-for="Comment.TicketId" />
             <div class="form-group">
                 @*<label asp-for="CommentText" class="control-label"></label>*@
-                <textarea asp-for="Comment.CommentText" rows="8" class="form-control" placeholder="Skriv din kommentar här"></textarea>
+                <textarea asp-for="Comment.CommentText" rows="8" class="form-control" placeholder="Skriv din kommentar här" required></textarea>
                 <span asp-validation-for="Comment.CommentText" class="text-danger"></span>
             </div>
             <hr />

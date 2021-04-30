@@ -2,42 +2,58 @@
 @inject UserManager<ApplicationUser> userManager
 
 
-<table class="table">
-    <tbody>
-        @foreach (var item in Model.OrderByDescending(i => i.Id))
+    <table class="table">
+        @if (Model.Count() > 0)
         {
-            <tr class="row">
-                <td class="col-sm-2 font-weight-lighter small border active ml-1">
-                    @*@if (User.IsInRole("Admin") || User.IsInRole("Developer"))
+            <thead>
+                <tr class="row">
+                    <th class="col-sm-2 border active ml-1">
+                        @Html.DisplayName("Skapad av och datum")
+                    </th>
+                    <th class="col-sm-6 border active border-right-0">
+                        @Html.DisplayNameFor(model => model.CommentText)
+                    </th>
+                    <th class="col-sm-2 border active border-left-0">
+                        @Html.DisplayNameFor(model => model.Documents)
+                    </th>
+                </tr>
+            </thead>
+        }
+        <tbody>
+            @foreach (var item in Model.OrderByDescending(i => i.Id))
+            {
+                <tr class="row">
+                    <td class="col-sm-2 font-weight-lighter small border active ml-1">
+                        @*@if (User.IsInRole("Admin") || User.IsInRole("Developer"))
                            @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
                         else if (User.IsInRole("Customer"))
                         {*@
-                    @if (await userManager.IsInRoleAsync(item.ApplicationUser, "Customer"))
-                        @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
-                        else
-                            @Html.Label("Bitoreq Support")
-                    @*}*@
-                    <br />
-                    @Html.DisplayFor(modelItem => item.CommentTime)
-                </td>
+                        @if (await userManager.IsInRoleAsync(item.ApplicationUser, "Customer"))
+                            @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
+                            else
+                                @Html.Label("Bitoreq Support")
+                        @*}*@
+                        <br />
+                        @Html.DisplayFor(modelItem => item.CommentTime)
+                    </td>
 
-                <td class="col-sm-6 border active border-right-0">
-                    @Html.DisplayFor(modelItem => item.CommentText)                   
-                </td>
+                    <td class="col-sm-6 border active border-right-0">
+                        @Html.DisplayFor(modelItem => item.CommentText)
+                    </td>
 
-                <td class="col-sm-2 border active border-left-0">
-                    @if (item.Documents.Count != 0)
-                    {
-                        @foreach (var docItem in item.Documents)
+                    <td class="col-sm-2 border active border-left-0">
+                        @if (item.Documents.Count != 0)
                         {
-                            <div>
-                                <a asp-controller="Documents" asp-action="Download" asp-route-id="@docItem.Id">@Html.DisplayFor(modelItem => docItem.GetName)</a>
-                            </div>
+                            @foreach (var docItem in item.Documents)
+                            {
+                                <div>
+                                    <a asp-controller="Documents" asp-action="Download" asp-route-id="@docItem.Id">@Html.DisplayFor(modelItem => docItem.GetName)</a>
+                                </div>
+                            }
                         }
-                    }
-                </td>
+                    </td>
 
-            </tr>
-        }
-    </tbody>
-</table>
+                </tr>
+            }
+        </tbody>
+    </table>
